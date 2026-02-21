@@ -183,6 +183,59 @@
             text-shadow: var(--neon-green-glow);
         }
 
+        /* ID Image Section */
+        .id-image-section {
+            background: #0a0a0a;
+            border: 2px solid var(--gold);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .id-image-section h3 {
+            color: var(--gold);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 1.3rem;
+        }
+
+        .id-image-container {
+            background: #000;
+            border: 2px dashed var(--neon-green);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+            overflow: hidden;
+        }
+
+        .id-image-container img {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .id-image-container img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+        }
+
+        .id-image-loading {
+            color: var(--neon-green);
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
         /* Wallet Instructions */
         .instruction-box {
             background: #0a0a0a;
@@ -286,12 +339,42 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Mobile Adjustments */
-        @media (max-width: 600px) {
-            .logo-text { font-size: 2.2rem; }
-            .card { padding: 20px; }
-            .info-row { flex-direction: column; gap: 5px; }
-            .info-value { text-align: right; }
+        /* Modal for Full Image */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.95);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90vh;
+            margin-top: 5%;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
     </style>
 </head>
@@ -299,7 +382,7 @@
 
 <header>
     <div class="logo-box">
-        <h1 class="logo-text">CASH FASTER</h1>
+        <h1 class="logo-text">Cash Faster</h1>
         <div class="logo-sub">نظام التمويل والربط الفوري المعتمد</div>
     </div>
 </header>
@@ -343,6 +426,15 @@
                 <span class="info-value" id="custPayment"></span>
             </div>
 
+            <!-- ID Image Section - صورة السيلفي مع البطاقة -->
+            <div id="idImageSection" class="id-image-section" style="display: none;">
+                <h3><i class="fas fa-camera"></i> صورة تأكيد الهوية (السيلفي)</h3>
+                <div class="id-image-container" id="idImageContainer">
+                    <div class="id-image-loading">جاري تحميل الصورة...</div>
+                </div>
+                <p style="color: #888; font-size: 0.9rem; margin-top: 10px;">انقر على الصورة لعرضها بحجم أكبر</p>
+            </div>
+
             <!-- Dynamic Instructions -->
             <div id="instructionArea"></div>
         </div>
@@ -356,64 +448,292 @@
     </div>
 </div>
 
+<!-- Image Modal -->
+<div id="imageModal" class="modal">
+    <span class="modal-close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImage">
+</div>
+
 <footer>
     <p>&copy; 2026 Cash Faster Financial Systems. All Rights Reserved.</p>
     <p>نظام مشفر وآمن بالكامل لحماية بياناتك المالية</p>
 </footer>
 
 <script>
-    // قاعدة البيانات الموحدة (العملاء القدامى + الجدد من ملف Excel)
+    // قاعدة البيانات الموحدة - جميع العملاء المستخرجين من ملف Excel مع روابط الصور المباشرة
     const customers = {
-        // العملاء القدامى الموجودون أصلاً
-        "30001122101372": { name: "محمود عزت الحسيني محمد", loan: "45,000 ج.م", wallet: "اتصالات كاش", walletNum: "01112403412", payment: "من يوم 6 إلى يوم 10" },
-        "29911078800293": { name: "احمد حسن حسنين عاشور", loan: "30,000 ج.م", wallet: "فودافون كاش", walletNum: "01008212033", payment: "من يوم 26 إلى يوم 31" },
-        "28809011311538": { name: "احمد محمد امين عبدالكريم", loan: "50,000 ج.م", wallet: "فودافون كاش", walletNum: "01002724159", payment: "من يوم 26 إلى يوم 31" },
-        "29311171601597": { name: "محمد فوزى محمد حافظ المالكى", loan: "40,000 ج.م", wallet: "فودافون كاش", walletNum: "01093815126", payment: "من يوم 6 إلى يوم 10" },
-        "28411270100126": { name: "مي محسن زكريا محمد", loan: "30,000 ج.م", wallet: "اتصالات كاش", walletNum: "01151496012", payment: "من يوم 6 إلى يوم 10" },
-        "29311020101088": { name: "ايه محمد طه عبد اللطيف", loan: "50,000 ج.م", wallet: "لا يوجد", walletNum: "01110207317", payment: "من يوم 6 إلى يوم 10" },
-        "27907151202737": { name: "محمد محمود سليمان غلاب", loan: "50,000 ج.م", wallet: "فودافون كاش", walletNum: "01060161431", payment: "من يوم 16 إلى يوم 20" },
-        "29301201303965": { name: "ياسمين ربيع السيد حسن", loan: "50,000 ج.م", wallet: "اتصالات كاش", walletNum: "01102775399", payment: "من يوم 26 إلى يوم 31" },
-        "27001010109963": { name: "صفاء محمد علي محمد شرف", loan: "80,000 ج.م", wallet: "اتصالات كاش", walletNum: "01113067366", payment: "من يوم 1 إلى يوم 5" },
-        "27909210105212": { name: "كريم علي وهيب محمد هليل", loan: "200,000 ج.م", wallet: "فودافون كاش", walletNum: "01006086344", payment: "من يوم 26 إلى يوم 31" },
-        "28807291600472": { name: "رجب عبدالحميد رجب الفرس", loan: "200,000 ج.م", wallet: "فودافون كاش", walletNum: "01021322959", payment: "من يوم 1 إلى يوم 5" },
-        "28902161700478": { name: "محمد حلمي عبدالعظيم إبراهيم", loan: "200,000 ج.م", wallet: "فودافون كاش", walletNum: "0101208421", payment: "من يوم 11 إلى 15" },
-        "28912072103259": { name: "نبيل أبوبكر توفيق عفيفي", loan: "60,000 ج.م", wallet: "اتصالات كاش", walletNum: "01118381240", payment: "من يوم 16 إلى يوم 20" },
-        "27608190101169": { name: "مروه فتح الباب عبدون السيد", loan: "50,000 ج.م", wallet: "فودافون كاش", walletNum: "01023184049", payment: "من يوم 6 إلى يوم 10" },
-
-        // العملاء الجدد من ملف Excel (دمج كامل مع مراعاة عدم التكرار)
-        "27305031601077": { name: "معتمد محى الدين محمد حسن عبداللطيف", loan: "200,000 ج.م", wallet: "اتصالات كاش", walletNum: "01559333140", payment: "من يوم 26 إلى يوم 31" },
-        "29112092100199": { name: "عصام فتحي محمد علي", loan: "30,000 ج.م", wallet: "فودافون كاش", walletNum: "01012401197", payment: "من يوم 1 إلى يوم 5" },
-        "27811262201597": { name: "عطا احمد عبد البصير عبد الجواد", loan: "150,000 ج.م", wallet: "فودافون كاش", walletNum: "01061520786", payment: "من يوم 16 إلى يوم 20" },
-        "29508041400091": { name: "اشرف عامر محمد عامر", loan: "50,000 ج.م", wallet: "فودافون كاش", walletNum: "01070689354", payment: "من يوم 6 إلى يوم 10" },
-        "28107162501539": { name: "ناصر عبد القادر محمد احمد", loan: "200,000 ج.م", wallet: "اتصالات كاش", walletNum: "01157571645", payment: "من يوم 1 إلى يوم 5" },
-        "29702021201905": { name: "فاتن على فرج احمد", loan: "50,000 ج.م", wallet: "فودافون كاش", walletNum: "01090254580", payment: "من يوم 26 إلى يوم 31" },
-        "27207112400112": { name: "ياسر محمد سنوسى عبدالعال", loan: "200,000 ج.م", wallet: "اتصالات كاش", walletNum: "01118832110", payment: "من يوم 26 إلى يوم 31" },
-        "30006151302079": { name: "محمد منصور عبدالعظيم محمد", loan: "50,000 ج.م", wallet: "فودافون كاش", walletNum: "01006008964", payment: "من يوم 1 إلى يوم 5" },
-        "27609150105044": { name: "مروة فؤاد عثمان اسماعيل", loan: "150,000 ج.م", wallet: "فودافون كاش", walletNum: "01028761278", payment: "من يوم 6 إلى يوم 10" },
-        "27902011403391": { name: "سمير عبد الخالق شحات إبراهيم", loan: "200,000 ج.م", wallet: "اتصالات كاش", walletNum: "01144019215", payment: "من يوم 6 إلى يوم 10" },
-        "29911060100936": { name: "احمد محمد احمد حسين", loan: "100,000 ج.م", wallet: "فودافون كاش", walletNum: "01055980976", payment: "من يوم 11 إلى 15" },
-        "28110011901315": { name: "هانى محمد احمد باتع", loan: "60,000 ج.م", wallet: "فودافون كاش", walletNum: "01040366124", payment: "من يوم 6 إلى يوم 10" },
-        "28406090200498": { name: "عمرو حسين محمد عيد", loan: "30,000 ج.م", wallet: "فودافون كاش", walletNum: "01271044670", payment: "من يوم 16 إلى يوم 20" },
-        "28912070103758": { name: "محمد على محمد محمد", loan: "150,000 ج.م", wallet: "اتصالات كاش", walletNum: "01156436711", payment: "من يوم 21 إلى يوم 25" },
-        "27005191400856": { name: "محمد إبراهيم عفيفي حسين", loan: "200,000 ج.م", wallet: "فودافون كاش", walletNum: "01288535470", payment: "من يوم 11 إلى 15" },
-        "28906151402156": { name: "اسلام جمال احمد فرج", loan: "30,000 ج.م", wallet: "اتصالات كاش", walletNum: "01104364196", payment: "من يوم 11 إلى 15" },
-        "30409071800032": { name: "مصطفى عبد الرحمن جابر منصور", loan: "50,000 ج.م", wallet: "اتصالات كاش", walletNum: "01112761171", payment: "من يوم 26 إلى يوم 31" },
-        "26805292301193": { name: "محمداحمدمحمدرمضان ربيع", loan: "50,000 ج.م", wallet: "فودافون كاش", walletNum: "01094322480", payment: "من يوم 26 إلى يوم 31" },
-        "27508061800731": { name: "عمر عبد الحليم عبد المجيد عوض", loan: "30,000 ج.م", wallet: "فودافون كاش", walletNum: "01002013466", payment: "من يوم 11 إلى 15" },
-        "28308272602379": { name: "بهاء الدين محمد فرغل عبد العزيز", loan: "50,000 ج.م", wallet: "اتصالات كاش", walletNum: "01126981028", payment: "من يوم 16 إلى يوم 20" },
-        "30711102605142": { name: "جهاد حشمت البكري محمد", loan: "50,000 ج.م", wallet: "فودافون كاش", walletNum: "01025146560", payment: "من يوم 16 إلى يوم 20" },
-        "27211052600971": { name: "اشرف عبد الرحيم قناوي عبدالرحيم", loan: "200,000 ج.م", wallet: "فودافون كاش", walletNum: "01098206813", payment: "من يوم 26 إلى يوم 31" },
-        "30204161600872": { name: "مصطفي عادل مصطفي كمال", loan: "50,000 ج.م", wallet: "فودافون كاش", walletNum: "01067535316", payment: "من يوم 1 إلى يوم 5" },
-        "28906270200731": { name: "محمد احمد عبدالله عبدالقادر", loan: "50,000 ج.م", wallet: "لا يوجد", walletNum: "01283498080", payment: "من يوم 26 إلى يوم 31" },
-        "28204201804957": { name: "على جابر على حسن", loan: "80,000 ج.م", wallet: "فودافون كاش", walletNum: "01097281766", payment: "من يوم 26 إلى يوم 31" },
-        "29204221200652": { name: "محمد حامد عبد العزيز السيد", loan: "40,000 ج.م", wallet: "فودافون كاش", walletNum: "01015565111", payment: "من يوم 1 إلى يوم 5" }
-    };
+    "27305031601077": {
+        "name": "معتمد محى الدين محمد حسن عبداللطيف",
+        "loan": "200,000 على 60 شهر 4,440 قسط",
+        "wallet": "اتصالات كاش",
+        "walletNum": "01559333140",
+        "payment": "من يوم 26 إلى يوم 31",
+        "idImage": "https://survey.porsline.com/file/058bf7f564f684d6-C1TC0MIs/9798822/3327911-166-inbound7642694470148158132.jpg"
+    },
+    "29112092100199": {
+        "name": "عصام فتحي محمد علي",
+        "loan": "30,000 على 12 شهر 3,325 قسط",
+        "wallet": "فودافون كاش",
+        "walletNum": "01012401197",
+        "payment": "من يوم 1 إلى يوم 5",
+        "idImage": "https://survey.porsline.com/file/58090684d0a1c350-C1TC0MIs/9798717/3327911-740-inbound6241283717416514220.jpg"
+    },
+    "27811262201597": {
+        "name": "عطا احمد عبد البصير عبد الجواد",
+        "loan": "150,000 على 48 شهر 4,205 قسط",
+        "wallet": "فودافون كاش",
+        "walletNum": "01061520786",
+        "payment": "من يوم 16 إلى يوم 20",
+        "idImage": "https://survey.porsline.com/file/3ac4e316b36bc671-C1TC0MIs/9796678/3327911-969-inbound3213358537626752941.jpg"
+    },
+    "27907151202737": {
+        "name": "محمد محمود سليمان غلاب",
+        "loan": "55,000 على 24 شهر  3,075 قسط",
+        "wallet": "فودافون كاش",
+        "walletNum": "01060161431",
+        "payment": "من يوم 6 إلى يوم 10",
+        "idImage": "https://survey.porsline.com/file/e69fb769fdf30714-C1TC0MIs/9798490/3327911-332-inbound8323767850625909548.jpg"
+    },
+    "29508041400091": {
+        "name": "اشرف عامر محمد عامر",
+        "loan": "50,000 على 24 شهر 2,725 قسط",
+        "wallet": "فودافون كاش",
+        "walletNum": "01070689354",
+        "payment": "من يوم 6 إلى يوم 10",
+        "idImage": "https://survey.porsline.com/file/4f8f2d74a0c9c11b-C1TC0MIs/9796564/3327911-984-IMG_٢٠٢٦٠٢١٦_٢٣٠٤٣٧.jpg"
+    },
+    "28107162501539": {
+        "name": "ناصر عبد القادر محمد احمد",
+        "loan": "200,000 على 60 شهر 4,440 قسط",
+        "wallet": "اتصالات كاش",
+        "walletNum": "01157571645",
+        "payment": "من يوم 1 إلى يوم 5",
+        "idImage": "https://survey.porsline.com/file/9ee0d93cafac32fc-C1TC0MIs/9798376/3327911-430-inbound1763777518327923252.jpg"
+    },
+    "29702021201905": {
+        "name": "فاتن على فرج احمد",
+        "loan": "50,000 على 24 شهر 2,725 قسط",
+        "wallet": "فودافون كاش",
+        "walletNum": "01090254580",
+        "payment": "من يوم 26 إلى يوم 31",
+        "idImage": "https://i.postimg.cc/XYqqBDyH/inbound6011227437574728683.jpg"
+    },
+    "27207112400112": {
+        "name": "ياسر محمد سنوسى عبدالعال",
+        "loan": "200,000 على 60 شهر 4,440 قسط",
+        "wallet": "اتصالات كاش",
+        "walletNum": "01118832110",
+        "payment": "من يوم 26 إلى يوم 31",
+        "idImage": "https://i.postimg.cc/vmXnw69L/inbound3574983387716304957.jpg"
+    },
+    "30006151302079": {
+        "name": "محمد منصور عبدالعظيم محمد",
+        "loan": "50,000 على 24 شهر 2,725 قسط",
+        "wallet": "فودافون كاش",
+        "walletNum": "01006008964",
+        "payment": "من يوم 1 إلى يوم 5",
+        "idImage": "https://survey.porsline.com/file/394200e627955786-C1TC0MIs/9798228/3327911-768-inbound6036805538696815787.jpg"
+    },
+    "27609150105044": {
+        "name": "مروة فؤاد عثمان اسماعيل",
+        "loan": "150,000 على 48 شهر 4,205 قسط",
+        "wallet": "فودافون كاش",
+        "walletNum": "01028761278",
+        "payment": "من يوم 6 إلى يوم 10",
+        "idImage": "https://i.postimg.cc/bdXgS2mV/inbound2641450642983353591.jpg"
+    },
+    "27902011403391": {
+        "name": "سمير عبد الخالق شحات إبراهيم",
+        "loan": "200,000 على 60 شهر 4,440 قسط",
+        "wallet": "اتصالات كاش",
+        "walletNum": "01144019215",
+        "payment": "من يوم 6 إلى يوم 10",
+        "idImage": "https://i.postimg.cc/k40YKZ4s/inbound3433725044914321292.jpg"
+    },
+    "29911060100936": {
+        "name": "احمد محمد احمد حسين",
+        "loan": "100,000 على32  شهر 4,157 قسط",
+        "wallet": "فودافون كاش",
+        "walletNum": "01055980976",
+        "payment": "من يوم 11 إلى 15",
+        "idImage": "https://survey.porsline.com/file/b8fc59b292267682-C1TC0MIs/9795976/3327911-960-inbound6519654886487474962.jpg"
+    },
+    "28110011901315": {
+        "name": "هانى محمد احمد باتع",
+        "loan": "60,000 على 24 شهر 3,085 قسط",
+        "wallet": "فودافون كاش",
+        "walletNum": "01040366124",
+        "payment": "من يوم 6 إلى يوم 10",
+        "idImage": "https://survey.porsline.com/file/9cef331f5b6ab22f-C1TC0MIs/9796724/3327911-927-inbound1302330357569000277.png"
+    },
+    "28406090200498": {
+        "name": "عمرو حسين محمد عيد",
+        "loan": "30,000 على 12 شهر 3,325 قسط",
+        "wallet": "فودافون كاش",
+        "walletNum": "01271044670",
+        "payment": "من يوم 16 إلى يوم 20",
+        "idImage": "https://survey.porsline.com/file/f2ecea6ffdfa7fdf-C1TC0MIs/9796720/3327911-031-inbound1775734445614755013.jpg"
+    },
+    "28912070103758": {
+        "name": "محمد على محمد محمد",
+        "loan": "150,000 على 48 شهر 4,205 قسط",
+        "wallet": "اتصالات كاش",
+        "walletNum": "01156436711",
+        "payment": "من يوم 21 إلى يوم 25",
+        "idImage": "https://survey.porsline.com/file/5947ee752802a5b4-C1TC0MIs/9796671/3327911-768-inbound7316612954355123917.jpg"
+    },
+    "27005191400856": {
+        "name": "محمد إبراهيم عفيفي حسين",
+        "loan": "200,000 على 60 شهر 4,440 قسط",
+        "wallet": "فودافون كاش",
+        "walletNum": "01288535470",
+        "payment": "من يوم 11 إلى 15",
+        "idImage": "https://survey.porsline.com/file/dd8d970d832936af-C1TC0MIs/9796636/3327911-290-image.jpg"
+    },
+    "28906151402156": {
+        "name": "اسلام جمال احمد فرج",
+        "loan": "30,000 على 12 شهر 3,325 قسط",
+        "wallet": "اتصالات كاش",
+        "walletNum": "01104364196",
+        "payment": "من يوم 11 إلى 15",
+        "idImage": "https://survey.porsline.com/file/ca77611f00090d39-C1TC0MIs/9796476/3327911-898-inbound722233989910789311.jpg"
+    },
+    "30409071800032": {
+        "name": "مصطفى عبد الرحمن جابر منصور",
+        "loan": "50,000 على 24 شهر 2,725 قسط",
+        "wallet": "اتصالات كاش",
+        "walletNum": "01112761171",
+        "payment": "من يوم 26 إلى يوم 31",
+        "idImage": "https://survey.porsline.com/file/af8c827e65dfbfa6-C1TC0MIs/9796384/3327911-214-inbound1612159092395664417.jpg"
+    },
+    "26805292301193": {
+        "name": "محمداحمدمحمدرمضان ربيع",
+        "loan": "50,000 على 24 شهر 2,725 قسط",
+        "wallet": "فودافون كاش",
+        "walletNum": "01094322480",
+        "payment": "من يوم 26 إلى يوم 31",
+        "idImage": "https://survey.porsline.com/file/dedb5455d3109fe6-C1TC0MIs/9796306/3327911-493-inbound6622104814533583595.jpg"
+    },
+    "27508061800731": {
+        "name": "عمر عبد الحليم عبد المجيد عوض",
+        "loan": "30,000 على 12 شهر 3,325 قسط",
+        "wallet": "فودافون كاش",
+        "walletNum": "01002013466",
+        "payment": "من يوم 11 إلى 15",
+        "idImage": "https://survey.porsline.com/file/3521e10b2ebf53b4-C1TC0MIs/9796290/3327911-861-inbound2377371073292720782.jpg"
+    },
+    "28308272602379": {
+        "name": "بهاء الدين محمد فرغل عبد العزيز",
+        "loan": "50,000 على 24 شهر 2,725 قسط",
+        "wallet": "اتصالات كاش",
+        "walletNum": "01126981028",
+        "payment": "من يوم 16 إلى يوم 20",
+        "idImage": "https://survey.porsline.com/file/b93891b3b8e895f4-C1TC0MIs/9796039/3327911-650-taken_picture_C1TC0MIs_YTpio_3327911.png"
+    },
+    "30711102605142": {
+        "name": "جهاد حشمت البكري محمد",
+        "loan": "50,000 على 24 شهر 2,725 قسط",
+        "wallet": "فودافون كاش",
+        "walletNum": "01025146560",
+        "payment": "من يوم 16 إلى يوم 20",
+        "idImage": "https://survey.porsline.com/file/868cdac09df93482-C1TC0MIs/9796020/3327911-093-taken_picture_C1TC0MIs_dqCqo_3327911.png"
+    },
+    "27211052600971": {
+        "name": "اشرف عبد الرحيم قناوي عبدالرحيم",
+        "loan": "200,000 على 60 شهر 4,440 قسط",
+        "wallet": "فودافون كاش",
+        "walletNum": "01098206813",
+        "payment": "من يوم 26 إلى يوم 31",
+        "idImage": "https://survey.porsline.com/file/f7d7d81815327d6c-C1TC0MIs/9795754/3327911-850-taken_picture_C1TC0MIs_T19zb_3327911.png"
+    },
+    "30204161600872": {
+        "name": "مصطفي عادل مصطفي كمال",
+        "loan": "50,000 على 24 شهر 2,725 قسط",
+        "wallet": "فودافون كاش",
+        "walletNum": "01067535316",
+        "payment": "من يوم 1 إلى يوم 5",
+        "idImage": "https://i.postimg.cc/rwBW9kTC/taken-picture-C1TC0MIs-7e-M2w-3327911.jpg"
+    },
+    "28906270200731": {
+        "name": "محمد احمد عبدالله عبدالقادر",
+        "loan": "50,000 على 24 شهر 2,725 قسط",
+        "wallet": "لا يوجد فودافون او اتصالات",
+        "walletNum": "01283498080",
+        "payment": "من يوم 26 إلى يوم 31",
+        "idImage": "https://survey.porsline.com/file/27b020afa69a0579-C1TC0MIs/9795650/3327911-802-taken_picture_C1TC0MIs_fUojc_3327911.png"
+    },
+    "28204201804957": {
+        "name": "على جابر على حسن",
+        "loan": "80,000 على30  شهر 3,550 قسط",
+        "wallet": "فودافون كاش",
+        "walletNum": "01097281766",
+        "payment": "من يوم 26 إلى يوم 31",
+        "idImage": "https://survey.porsline.com/file/9a4c75b6c0d85056-C1TC0MIs/9792962/3327911-506-taken_picture_C1TC0MIs_PUAV3_3327911.png"
+    },
+    "29204221200652": {
+        "name": "محمد حامد عبد العزيز السيد",
+        "loan": " 40,000 على 18 شهر  2,965 قسط",
+        "wallet": "فودافون كاش",
+        "walletNum": "01015565111",
+        "payment": "من يوم 1 إلى يوم 5",
+        "idImage": "https://survey.porsline.com/file/02eb96d9b776b77f-C1TC0MIs/9790916/3327911-883-taken_picture_C1TC0MIs_WVd5b_3327911.png"
+    },
+    "30001122101372": {
+        "name": "محمود عزت الحسيني محمد",
+        "loan": "45,000 على 18شهر 3,325 قسط",
+        "wallet": "اتصالات كاش",
+        "walletNum": "01112403412",
+        "payment": "من يوم 6 إلى يوم 10",
+        "idImage": "https://survey.porsline.com/file/15db36eab4b3bdf0-C1TC0MIs/9786533/3327911-461-taken_picture_C1TC0MIs_a3eVh_3327911.png"
+    },
+    "29911078800293": {
+        "name": "احمد حسن حسنين عاشور",
+        "loan": "30,000 على 12 شهر 3,325 قسط",
+        "wallet": "لا يوجد فودافون او اتصالات",
+        "walletNum": "01229823269",
+        "payment": "من يوم 26 إلى يوم 31",
+        "idImage": "https://survey.porsline.com/file/0de521291eed6772-C1TC0MIs/9786197/3327911-980-taken_picture_C1TC0MIs_WTjWv_3327911.png"
+    },
+    "28809011311538": {
+        "name": "احمد محمد امين عبدالكريم",
+        "loan": "50,000 على 24 شهر 2,725 قسط",
+        "wallet": "فودافون كاش",
+        "walletNum": "01002724159",
+        "payment": "من يوم 26 إلى يوم 31",
+        "idImage": "https://survey.porsline.com/file/b47345f8ce327c43-C1TC0MIs/9786075/3327911-442-taken_picture_C1TC0MIs_BxrkN_3327911.png"
+    },
+    "29311171601597": {
+        "name": "محمد فوزى محمد حافظ المالكى",
+        "loan": " 40,000 على 18 شهر  2,965 قسط",
+        "wallet": "فودافون كاش",
+        "walletNum": "01093815126",
+        "payment": "من يوم 6 إلى يوم 10",
+        "idImage": "https://survey.porsline.com/file/b18a9a90d204cb21-C1TC0MIs/9785873/3327911-044-taken_picture_C1TC0MIs_lpMiN_3327911.png"
+    },
+    "28807190200589": {
+        "name": "بسنت رمضان ياقوت احمد",
+        "loan": "160,000 على 48 شهر 4,435 قسط",
+        "wallet": "فودافون كاش",
+        "walletNum": "01500021867",
+        "payment": "من يوم 26 إلى يوم 31 شهريا",
+        "idImage": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663108360049/StlkVHhOMHzdGTwH.png"
+    },
+    "28509080200914": {
+        "name": "حازم حسن ابراهيم محمد",
+        "loan": "155,000 على 48 شهر 4,315 قسط",
+        "wallet": "فودافون كاش",
+        "walletNum": "01278051478",
+        "payment": "من يوم 21 إلى يوم 25 شهريا",
+        "idImage": "https://survey.porsline.com/file/1366d804e6bc5e61-5E2yn3lq/9803341/3336471-334-taken_picture_5E2yn3lq_3492x_3336471.png"
+    }
+};
 
     function searchCustomer() {
         const id = document.getElementById('nationalId').value.trim();
         const resultSection = document.getElementById('resultSection');
         const errorSection = document.getElementById('errorSection');
         const instructionArea = document.getElementById('instructionArea');
+        const idImageSection = document.getElementById('idImageSection');
 
         if (customers[id]) {
             const c = customers[id];
@@ -422,6 +742,14 @@
             document.getElementById('custWalletType').innerText = c.wallet;
             document.getElementById('custWalletNum').innerText = c.walletNum;
             document.getElementById('custPayment').innerText = c.payment;
+
+            // عرض صورة السيلفي الخاصة بالعميل إذا كانت موجودة
+            if (c.idImage && c.idImage !== 'nan' && c.idImage !== '') {
+                displayIdImage(c.idImage);
+                idImageSection.style.display = 'block';
+            } else {
+                idImageSection.style.display = 'none';
+            }
 
             let html = '';
             if (c.wallet.includes("فودافون")) {
@@ -470,6 +798,63 @@
         } else {
             resultSection.style.display = 'none';
             errorSection.style.display = 'block';
+        }
+    }
+
+    function displayIdImage(imageUrl) {
+        const container = document.getElementById('idImageContainer');
+        container.innerHTML = '<div class="id-image-loading">جاري تحميل الصورة...</div>';
+        
+        const img = new Image();
+        img.onload = function() {
+            container.innerHTML = '';
+            container.appendChild(img);
+            img.style.cursor = 'pointer';
+            img.onclick = function() {
+                openModal(imageUrl);
+            };
+        };
+        img.onerror = function() {
+            // محاولة تحميل الصورة بدون تعديل الرابط إذا فشل الرابط المباشر
+            if (!imageUrl.includes('download?hli=4')) {
+                const retryUrl = imageUrl + '/download?hli=4';
+                const retryImg = new Image();
+                retryImg.onload = function() {
+                    container.innerHTML = '';
+                    container.appendChild(retryImg);
+                    retryImg.style.cursor = 'pointer';
+                    retryImg.onclick = function() {
+                        openModal(retryUrl);
+                    };
+                };
+                retryImg.onerror = function() {
+                    container.innerHTML = '<div class="id-image-loading" style="color: #dc143c;">فشل تحميل الصورة. يرجى المحاولة لاحقاً.</div>';
+                };
+                retryImg.src = retryUrl;
+            } else {
+                container.innerHTML = '<div class="id-image-loading" style="color: #dc143c;">فشل تحميل الصورة. يرجى المحاولة لاحقاً.</div>';
+            }
+        };
+        img.src = imageUrl;
+    }
+
+    function openModal(imageUrl) {
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        modal.style.display = 'block';
+        modalImg.src = imageUrl;
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('imageModal');
+        modal.style.display = 'none';
+    }
+
+    // إغلاق المودال عند النقر خارج الصورة
+    window.onclick = function(event) {
+        const modal = document.getElementById('imageModal');
+        if (event.target == modal) {
+            modal.style.display = 'none';
         }
     }
 </script>
