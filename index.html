@@ -2,1376 +2,1033 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CashFaster - منصة التمويل الذكية</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="كاش فاستر - نظام الربط الآلي الآمن للتمويل الفوري">
+    <meta name="theme-color" content="#FFD700">
+    <title>كاش فاستر - بوابة الربط الآلي الآمنة</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
     <style>
-        :root {
-            --gold: #FFD700;
-            --gold-light: #FFF8DC;
-            --black: #0A0E27;
-            --black-light: #1A1F3A;
-            --black-lighter: #2D3E5F;
-            --red-glow: #FF1744;
-            --red-dark: #C41C3B;
-            --green-neon: #00FF41;
-            --green-dark: #00C853;
-            --white: #FFFFFF;
-            --text-light: #E0E0E0;
-            --border-gold: #D4AF37;
-            --shadow-gold: 0 0 30px rgba(255, 215, 0, 0.3);
-            --shadow-red: 0 0 30px rgba(255, 23, 68, 0.4);
-            --shadow-green: 0 0 30px rgba(0, 255, 65, 0.3);
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        html, body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0A0E27 0%, #1A1F3A 50%, #0F1433 100%);
-            color: var(--text-light);
-            overflow-x: hidden;
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #FFFFFF;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0f0f1e 100%);
             min-height: 100vh;
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 480px;
-            margin: 0 auto;
-            background: linear-gradient(135deg, var(--black) 0%, var(--black-light) 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            padding: 2rem;
             position: relative;
+            overflow-x: hidden;
         }
 
-        /* ===== ANIMATED BACKGROUND ===== */
-        .bg-animation {
+        body::before {
+            content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.05) 0%, rgba(255, 23, 68, 0.03) 50%, rgba(0, 255, 65, 0.02) 100%);
+            inset: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 107, 53, 0.1) 0%, transparent 50%);
             pointer-events: none;
-            z-index: -1;
+            z-index: 0;
         }
 
-        /* ===== TOP BAR ===== */
-        .top-bar {
-            background: rgba(10, 14, 39, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
-            padding: 16px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        .page {
+            display: none;
+            position: relative;
+            z-index: 1;
         }
 
-        .top-bar-logo {
-            font-size: 1.4rem;
-            font-weight: 900;
-            background: linear-gradient(45deg, var(--gold), var(--gold-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .page.active {
+            display: block;
         }
 
-        .top-bar-icons {
-            display: flex;
-            gap: 16px;
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
-        .icon-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 215, 0, 0.1);
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            color: var(--gold);
-            cursor: pointer;
+        /* LOGIN PAGE */
+        .login-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
-            font-size: 1.1rem;
+            min-height: 100vh;
         }
 
-        .icon-btn:hover {
-            background: rgba(255, 215, 0, 0.2);
-            box-shadow: var(--shadow-gold);
-        }
-
-        /* ===== MAIN CONTENT ===== */
-        .main-content {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            padding-bottom: 100px;
-        }
-
-        .main-content::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .main-content::-webkit-scrollbar-thumb {
-            background: var(--gold);
-            border-radius: 10px;
-        }
-
-        /* ===== GLASSMORPHISM CARD ===== */
-        .glass-card {
-            background: rgba(26, 31, 58, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 215, 0, 0.2);
+        .login-box {
+            background: linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(26,26,46,0.8) 100%);
+            border: 2px solid #D4AF37;
             border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 215, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-            animation: slideUp 0.5s ease-out;
+            padding: 3rem;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 60px rgba(212, 175, 55, 0.3), inset 0 0 20px rgba(212, 175, 55, 0.1);
+            animation: slideUp 0.6s ease-out;
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #FF6B35 0%, #FF4500 50%, #FFD700 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto 1rem;
+            animation: fireGlow 1.5s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.8);
+        }
+
+        @keyframes fireGlow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(255, 107, 53, 0.8), 0 0 40px rgba(255, 107, 53, 0.4);
+                transform: scale(1);
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            50% {
+                box-shadow: 0 0 30px rgba(255, 107, 53, 1), 0 0 60px rgba(255, 107, 53, 0.6);
+                transform: scale(1.05);
             }
         }
 
-        .glass-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        .login-header h1 {
+            font-size: 2rem;
+            color: #FFD700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
         }
 
-        /* ===== SECTION VISIBILITY ===== */
-        .section {
+        .login-header p {
+            color: #B0B0B0;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #FFD700;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #D4AF37;
+            border-radius: 8px;
+            color: #FFFFFF;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+            border-color: #FFD700;
+        }
+
+        .form-group input::placeholder {
+            color: #7F8C8D;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(212, 175, 55, 0.6);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            color: #FF6B6B;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
             display: none;
         }
 
-        .section.active {
+        .error-message.show {
             display: block;
         }
 
-        /* ===== DASHBOARD SECTION ===== */
+        .security-badges {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .badge {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #B0B0B0;
+        }
+
+        .badge-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        /* DASHBOARD PAGE */
+        .dashboard-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
         .dashboard-header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 2rem;
         }
 
-        .dashboard-title {
-            font-size: 1.8rem;
-            font-weight: 900;
-            background: linear-gradient(45deg, var(--gold), var(--gold-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 8px;
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            color: #FFD700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
         }
 
-        .dashboard-subtitle {
-            color: var(--text-light);
-            font-size: 0.95rem;
+        .dashboard-header p {
+            color: #B0B0B0;
         }
 
-        /* ===== LOAN CARD ===== */
-        .loan-card {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 23, 68, 0.1) 100%);
-            backdrop-filter: blur(20px);
-            border: 2px solid var(--gold);
-            border-radius: 20px;
-            padding: 28px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow-gold), 0 8px 32px rgba(0, 0, 0, 0.3);
-            position: relative;
-            overflow: hidden;
+        .customer-card {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(255, 107, 53, 0.05) 100%);
+            border: 2px solid #D4AF37;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.2);
         }
 
-        .loan-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -10%;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: float 8s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(15px); }
-        }
-
-        .loan-header {
-            position: relative;
-            z-index: 1;
-            margin-bottom: 20px;
-        }
-
-        .loan-label {
-            font-size: 0.85rem;
-            color: var(--gold);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-        }
-
-        .loan-amount {
-            font-size: 2.8rem;
-            font-weight: 900;
-            color: var(--white);
-            margin-bottom: 16px;
-        }
-
-        .loan-status {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--gold), var(--gold-light));
-            color: var(--black);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: var(--shadow-gold);
-        }
-
-        .loan-details {
-            position: relative;
-            z-index: 1;
+        .card-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 215, 0, 0.2);
+            gap: 2rem;
+            margin-bottom: 1.5rem;
         }
 
-        .detail-item {
-            text-align: center;
+        .card-item {
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            padding-bottom: 1rem;
         }
 
-        .detail-label {
-            font-size: 0.8rem;
-            color: var(--gold);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            margin-bottom: 6px;
-        }
-
-        .detail-value {
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: var(--white);
-        }
-
-        /* ===== SEARCH SECTION ===== */
-        .input-group {
-            margin-bottom: 16px;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--gold);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        input[type="text"], input[type="number"] {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background: rgba(26, 31, 58, 0.5);
-            color: var(--gold);
-            backdrop-filter: blur(10px);
-        }
-
-        input[type="text"]:focus, input[type="number"]:focus {
-            outline: none;
-            border-color: var(--red-glow);
-            box-shadow: var(--shadow-red), inset 0 0 10px rgba(255, 23, 68, 0.1);
-        }
-
-        /* ===== BUTTONS ===== */
-        .btn-primary {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, var(--gold), var(--gold-light));
-            color: var(--black);
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 800;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow-gold);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary:active {
-            transform: scale(0.98);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .btn-secondary {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, var(--black-light), var(--black-lighter));
-            color: var(--gold);
-            border: 2px solid var(--border-gold);
-            border-radius: 12px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-        }
-
-        .btn-secondary:active {
-            transform: scale(0.98);
-        }
-
-        /* ===== COUNTDOWN TIMER ===== */
-        .countdown-section {
-            background: linear-gradient(135deg, rgba(255, 23, 68, 0.2), rgba(255, 215, 0, 0.15));
-            backdrop-filter: blur(20px);
-            border: 2px solid var(--red-glow);
-            border-radius: 20px;
-            padding: 28px;
-            text-align: center;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow-red), 0 8px 32px rgba(0, 0, 0, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .countdown-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.1), transparent);
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0%, 100% { opacity: 0; }
-            50% { opacity: 1; }
-        }
-
-        .countdown-label {
-            font-size: 0.9rem;
-            color: var(--gold);
-            font-weight: 700;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .countdown-timer {
-            font-size: 3.5rem;
-            font-weight: 900;
-            background: linear-gradient(45deg, var(--red-glow), var(--gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 4px;
-            animation: pulse-timer 1s ease-in-out infinite;
-            position: relative;
-            z-index: 1;
-            margin: 16px 0;
-        }
-
-        @keyframes pulse-timer {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.12); }
-        }
-
-        .countdown-warning {
-            font-size: 0.9rem;
-            color: var(--red-glow);
-            font-weight: 700;
-            text-shadow: var(--shadow-red);
-            position: relative;
-            z-index: 1;
-        }
-
-        /* ===== SYSTEM ALERT ===== */
-        .system-alert {
-            background: linear-gradient(135deg, rgba(0, 255, 65, 0.15), rgba(0, 200, 83, 0.1));
-            backdrop-filter: blur(20px);
-            border-left: 4px solid var(--green-neon);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 16px;
-            box-shadow: var(--shadow-green);
-            position: relative;
-            z-index: 1;
-            animation: slideDown 0.4s ease-out;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .system-alert-title {
-            color: var(--green-neon);
-            font-weight: 800;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            margin-bottom: 6px;
-            text-shadow: var(--shadow-green);
-        }
-
-        .system-alert-message {
-            color: var(--text-light);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        /* ===== CONFIRMATION STEPS ===== */
-        .confirmation-steps {
-            margin-bottom: 20px;
-        }
-
-        .step-item {
-            background: rgba(26, 31, 58, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 12px;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .step-item.pending {
-            background: linear-gradient(135deg, rgba(255, 23, 68, 0.1), rgba(255, 215, 0, 0.1));
-            border-color: var(--gold);
-            box-shadow: var(--shadow-gold);
-        }
-
-        .step-number {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--gold), var(--gold-light));
-            color: var(--black);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            font-size: 1.3rem;
-            flex-shrink: 0;
-            box-shadow: var(--shadow-gold);
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); box-shadow: var(--shadow-gold); }
-            50% { transform: scale(1.08); box-shadow: 0 0 40px rgba(255, 215, 0, 0.5); }
-        }
-
-        .step-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .step-title {
-            font-weight: 800;
-            font-size: 1.1rem;
-            color: var(--white);
-        }
-
-        .step-description {
-            color: var(--text-light);
-            font-size: 0.9rem;
-            line-height: 1.6;
-            margin-left: 60px;
-            margin-top: 8px;
-        }
-
-        .step-amount {
-            background: linear-gradient(135deg, var(--green-neon), var(--green-dark));
-            color: var(--black);
-            padding: 10px 14px;
-            border-radius: 8px;
-            font-weight: 800;
-            font-size: 0.95rem;
-            margin-left: 60px;
-            margin-top: 8px;
-            display: inline-block;
-            box-shadow: var(--shadow-green);
-        }
-
-        /* ===== INSTRUCTIONS ===== */
-        .instructions-box {
-            background: rgba(26, 31, 58, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .instructions-box h4 {
-            color: var(--gold);
-            margin-bottom: 16px;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .instruction-list {
-            list-style: none;
-        }
-
-        .instruction-list li {
-            padding: 12px 0;
-            padding-left: 32px;
-            position: relative;
-            color: var(--text-light);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        .instruction-list li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: var(--green-neon);
-            font-weight: 900;
-            font-size: 1.3rem;
-            text-shadow: var(--shadow-green);
-        }
-
-        /* ===== IMPORTANT NOTE ===== */
-        .important-note {
-            background: linear-gradient(135deg, rgba(0, 255, 65, 0.15), rgba(0, 200, 83, 0.1));
-            border-left: 4px solid var(--green-neon);
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow-green);
-        }
-
-        .important-note strong {
-            color: var(--green-neon);
-            display: block;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            text-shadow: var(--shadow-green);
-        }
-
-        .important-note p {
-            color: var(--text-light);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        /* ===== UPLOAD BUTTON ===== */
-        .btn-upload {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, var(--green-neon), var(--green-dark));
-            color: var(--black);
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 800;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow-green);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 16px;
-        }
-
-        .btn-upload:active {
-            transform: scale(0.98);
-        }
-
-        /* ===== TRANSACTIONS SECTION ===== */
-        .transaction-alert {
-            background: linear-gradient(135deg, rgba(0, 255, 65, 0.15), rgba(0, 200, 83, 0.1));
-            backdrop-filter: blur(20px);
-            border: 2px solid var(--green-neon);
-            border-radius: 20px;
-            padding: 28px;
-            text-align: center;
-            box-shadow: var(--shadow-green), 0 8px 32px rgba(0, 0, 0, 0.3);
-            margin-bottom: 20px;
-        }
-
-        .transaction-alert-icon {
-            font-size: 3.5rem;
-            margin-bottom: 16px;
-            animation: bounce 2s ease-in-out infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .transaction-alert-title {
-            font-size: 1.4rem;
-            font-weight: 900;
-            background: linear-gradient(45deg, var(--green-neon), var(--green-dark));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 12px;
-        }
-
-        .transaction-alert-message {
-            color: var(--text-light);
-            font-size: 0.95rem;
-            line-height: 1.8;
-            margin-bottom: 20px;
-        }
-
-        /* ===== PROFILE SECTION ===== */
-        .profile-card {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 23, 68, 0.1) 100%);
-            backdrop-filter: blur(20px);
-            border: 2px solid var(--gold);
-            border-radius: 20px;
-            padding: 28px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow-gold), 0 8px 32px rgba(0, 0, 0, 0.3);
-            text-align: center;
-        }
-
-        .profile-header {
-            margin-bottom: 24px;
-        }
-
-        .profile-name {
-            font-size: 1.6rem;
-            font-weight: 900;
-            color: var(--white);
-            margin-bottom: 8px;
-        }
-
-        .profile-status {
-            color: var(--gold);
-            font-size: 0.9rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .identity-images {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .image-container {
-            position: relative;
-        }
-
-        .image-label {
-            font-size: 0.85rem;
-            color: var(--gold);
-            font-weight: 700;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        .image-frame {
-            width: 100%;
-            aspect-ratio: 4/3;
-            border-radius: 12px;
-            border: 2px solid var(--gold);
-            overflow: hidden;
-            background: var(--black-light);
-            box-shadow: var(--shadow-gold);
-        }
-
-        .image-frame img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .profile-details {
-            background: rgba(26, 31, 58, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
-        }
-
-        .detail-row:last-child {
+        .card-item:last-child {
             border-bottom: none;
         }
 
-        .detail-row-label {
-            color: var(--gold);
-            font-size: 0.9rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
+        .card-label {
+            color: #B0B0B0;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
         }
 
-        .detail-row-value {
-            color: var(--white);
-            font-size: 1rem;
-            font-weight: 800;
-        }
-
-        /* ===== BOTTOM NAVIGATION ===== */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            max-width: 480px;
-            margin: 0 auto;
-            background: rgba(10, 14, 39, 0.9);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255, 215, 0, 0.2);
-            padding: 12px 0;
-            display: flex;
-            justify-content: space-around;
-            z-index: 200;
-            box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .nav-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            padding: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: var(--text-light);
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        .nav-item.active {
-            color: var(--gold);
-        }
-
-        .nav-item i {
+        .card-value {
             font-size: 1.5rem;
+            color: #FFD700;
+            font-weight: 700;
+            font-family: 'IBM Plex Mono', monospace;
         }
 
-        .nav-item.active i {
-            text-shadow: var(--shadow-gold);
+        .timer-section {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 107, 53, 0.3);
         }
 
-        /* ===== MODAL ===== */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
+        .timer-label {
+            color: #B0B0B0;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .timer {
+            font-size: 3rem;
+            color: #FF6B35;
+            font-weight: 800;
+            font-family: 'IBM Plex Mono', monospace;
+            text-shadow: 0 0 20px rgba(255, 107, 53, 0.8);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                text-shadow: 0 0 20px rgba(255, 107, 53, 0.8);
+            }
+            50% {
+                text-shadow: 0 0 40px rgba(255, 107, 53, 1);
+            }
+        }
+
+        .warning-box {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid #FF6B6B;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            color: #FFB0B0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .warning-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* LINKING PROCESS */
+        .linking-section {
+            background: linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(26,26,46,0.8) 100%);
+            border: 1px solid #D4AF37;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .linking-title {
+            font-size: 1.5rem;
+            color: #FFD700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .wallet-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 640px) {
+            .wallet-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .wallet-btn {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(255, 107, 53, 0.1) 100%);
+            border: 2px solid #D4AF37;
+            border-radius: 10px;
+            color: #FFD700;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .wallet-btn:hover {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.4) 0%, rgba(255, 107, 53, 0.2) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .wallet-btn.active {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #0a0a0a;
+            border-color: #FFD700;
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .step-box {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .step-box:hover {
+            border-color: #D4AF37;
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            border-radius: 50%;
+            display: flex;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(5px);
+            color: #0a0a0a;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
         }
 
-        .modal.active {
-            display: flex;
+        .step-title {
+            color: #FFD700;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
         }
 
-        .modal-content {
-            background: linear-gradient(135deg, var(--black-light), var(--black-lighter));
-            border-radius: 20px;
-            padding: 30px 24px;
-            max-width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 0 60px rgba(255, 215, 0, 0.3), 0 0 40px rgba(255, 23, 68, 0.2);
-            border: 2px solid var(--gold);
-            animation: modalSlideUp 0.4s ease-out;
+        .step-description {
+            color: #B0B0B0;
+            font-size: 0.9rem;
+            line-height: 1.6;
         }
 
-        @keyframes modalSlideUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .modal-header {
+        .upload-area {
+            border: 2px dashed #D4AF37;
+            border-radius: 10px;
+            padding: 2rem;
             text-align: center;
-            margin-bottom: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 1rem;
+            background: rgba(212, 175, 55, 0.05);
         }
 
-        .modal-icon {
-            font-size: 3.5rem;
-            margin-bottom: 16px;
-            animation: bounce 2s ease-in-out infinite;
+        .upload-area:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: #FFD700;
         }
 
-        .modal-title {
-            font-size: 1.6rem;
-            font-weight: 900;
-            background: linear-gradient(45deg, var(--gold), var(--gold-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 12px;
+        .upload-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
         }
 
-        .modal-subtitle {
-            color: var(--text-light);
+        .upload-text {
+            color: #B0B0B0;
+            font-size: 0.9rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, #2ECC71 0%, #27AE60 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Popsins', sans-serif;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(46, 204, 113, 0.6);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* CHATBOT */
+        .chat-button {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #FF6B35 0%, #FF4500 100%);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.6);
+            z-index: 999;
+            transition: all 0.3s;
+            animation: pulse 2s infinite;
+        }
+
+        .chat-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(255, 107, 53, 0.8);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 4px 20px rgba(255, 107, 53, 0.6);
+            }
+            50% {
+                box-shadow: 0 4px 30px rgba(255, 107, 53, 1);
+            }
+        }
+
+        .chatbot-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            animation: fadeIn 0.3s;
+        }
+
+        .chatbot-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chatbot-content {
+            background: linear-gradient(135deg, rgba(0,0,0,0.95) 0%, rgba(26,26,46,0.95) 100%);
+            border: 2px solid #D4AF37;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: slideUp 0.3s;
+        }
+
+        .chatbot-header {
+            background: linear-gradient(135deg, #FF6B35 0%, #FF4500 100%);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-header h3 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .chatbot-close:hover {
+            transform: rotate(90deg);
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            display: flex;
+            animation: slideUp 0.3s;
+        }
+
+        .message.bot {
+            justify-content: flex-start;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 1rem;
+            border-radius: 10px;
             font-size: 0.95rem;
             line-height: 1.6;
         }
 
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 480px) {
-            .app-container {
-                max-width: 100%;
-            }
-
-            .countdown-timer {
-                font-size: 2.8rem;
-            }
-
-            .loan-amount {
-                font-size: 2.2rem;
-            }
-
-            .modal-content {
-                max-width: 95%;
-                padding: 24px 16px;
-            }
+        .message.bot .message-content {
+            background: rgba(212, 175, 55, 0.2);
+            color: #FFD700;
+            border: 1px solid rgba(212, 175, 55, 0.3);
         }
 
-        .hidden {
-            display: none !important;
+        .message.user .message-content {
+            background: linear-gradient(135deg, #FF6B35 0%, #FF4500 100%);
+            color: white;
+        }
+
+        .faq-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            padding: 1rem;
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .faq-btn {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            padding: 0.75rem;
+            cursor: pointer;
+            text-align: right;
+            font-size: 0.85rem;
+            color: #FFD700;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+
+        .faq-btn:hover {
+            background: rgba(212, 175, 55, 0.2);
+            border-color: #FFD700;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+            margin-top: 3rem;
+            color: #7F8C8D;
+            font-size: 0.75rem;
+            line-height: 1.8;
+        }
+
+        footer a {
+            color: #FFD700;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .terms-text {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .login-box {
+                padding: 2rem;
+            }
+
+            .card-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .timer {
+                font-size: 2rem;
+            }
+
+            .chat-button {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="bg-animation"></div>
+    <!-- LOGIN PAGE -->
+    <div id="loginPage" class="page active">
+        <div class="login-container">
+            <div class="login-box">
+                <div class="login-header">
+                    <div class="login-logo">💰</div>
+                    <h1>كاش فاستر</h1>
+                    <p>بوابة الربط الآلي الآمنة</p>
+                </div>
 
-    <div class="app-container">
-        <!-- TOP BAR -->
-        <div class="top-bar">
-            <div class="top-bar-logo">💰 CashFaster</div>
-            <div class="top-bar-icons">
-                <button class="icon-btn" title="الإشعارات">
-                    <i class="fas fa-bell"></i>
-                </button>
-                <button class="icon-btn" title="الإعدادات">
-                    <i class="fas fa-cog"></i>
-                </button>
+                <div class="form-group">
+                    <label for="nationalId">الرقم القومي (14 رقم)</label>
+                    <input 
+                        type="text" 
+                        id="nationalId" 
+                        placeholder="أدخل رقمك القومي"
+                        maxlength="14"
+                        inputmode="numeric"
+                    >
+                    <div class="error-message" id="errorMsg"></div>
+                </div>
+
+                <button class="login-btn" onclick="handleLogin()">دخول</button>
+
+                <div class="security-badges">
+                    <div class="badge">
+                        <div class="badge-icon">🔒</div>
+                        <div>AES-256</div>
+                    </div>
+                    <div class="badge">
+                        <div class="badge-icon">✅</div>
+                        <div>Verified SSL</div>
+                    </div>
+                    <div class="badge">
+                        <div class="badge-icon">🛡️</div>
+                        <div>ISO 27001</div>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
 
-        <!-- MAIN CONTENT -->
-        <div class="main-content">
-            <!-- SEARCH SECTION -->
-            <div id="searchSection" class="section active">
-                <div class="glass-card">
-                    <div class="dashboard-header">
-                        <div class="dashboard-title">🔍 ابحث عن طلبك</div>
-                        <div class="dashboard-subtitle">أدخل رقمك القومي للاستعلام عن حالة القرض</div>
-                    </div>
+    <!-- DASHBOARD PAGE -->
+    <div id="dashboardPage" class="page">
+        <div class="dashboard-container">
+            <div class="dashboard-header">
+                <h1>أهلاً بك في Cash Faster</h1>
+                <p>نظام الربط الآلي يحمي بياناتك ويضمن وصول القرض في دقائق</p>
+            </div>
 
-                    <div class="input-group">
-                        <label>الرقم القومي</label>
-                        <input type="text" id="inquiryNationalId" placeholder="أدخل رقمك القومي (14 رقم)" maxlength="14">
+            <div class="warning-box">
+                <div class="warning-icon">⚠️</div>
+                <strong>تنبيه مهم:</strong> محاولات الربط الخاطئة تؤدي لتجميد طلبك لمدة 90 يوماً. تأكد من رفع البيانات الصحيحة لكل كارت.
+            </div>
+
+            <div class="customer-card">
+                <div class="card-row">
+                    <div class="card-item">
+                        <div class="card-label">اسم العميل</div>
+                        <div class="card-value" id="customerName">جاري التحميل...</div>
                     </div>
-                    <button class="btn-primary" onclick="searchCustomer()">🔍 البحث</button>
+                    <div class="card-item">
+                        <div class="card-label">مبلغ القرض</div>
+                        <div class="card-value" id="loanAmount">جاري التحميل...</div>
+                    </div>
+                </div>
+
+                <div class="timer-section">
+                    <div class="timer-label">الوقت المتبقي لضمان عملية الربط الآلية:</div>
+                    <div class="timer" id="timer">30:00</div>
                 </div>
             </div>
 
-            <!-- DASHBOARD SECTION -->
-            <div id="dashboardSection" class="section">
-                <div class="dashboard-header">
-                    <div class="dashboard-title" id="customerNameDisplay">-</div>
-                    <div class="dashboard-subtitle">حالة طلب التمويل الخاص بك</div>
-                </div>
-
-                <div class="loan-card">
-                    <div class="loan-header">
-                        <div class="loan-label">💰 مبلغ القرض</div>
-                        <div class="loan-amount" id="loanAmountDisplay">-</div>
-                        <div class="loan-status" id="loanStatusDisplay">جاري التحميل...</div>
-                    </div>
-                    <div class="loan-details">
-                        <div class="detail-item">
-                            <div class="detail-label">🆔 الرقم القومي</div>
-                            <div class="detail-value" id="nationalIdDisplay">-</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">💳 المحفظة</div>
-                            <div class="detail-value" id="walletDisplay">-</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SYSTEM ALERT -->
-                <div class="system-alert" id="systemAlert" style="display: none;">
-                    <div class="system-alert-title">⚡ تنبيه النظام</div>
-                    <div class="system-alert-message" id="systemAlertMessage">-</div>
-                </div>
-
-                <!-- COUNTDOWN TIMER -->
-                <div class="countdown-section" id="countdownSection" style="display: none;">
-                    <div class="countdown-label">⏱️ الوقت المتبقي لإكمال الربط</div>
-                    <div class="countdown-timer" id="countdownTimer">30:00</div>
-                    <div class="countdown-warning">⚡ سارع! لديك 30 دقيقة فقط لإتمام جميع خطوات الربط</div>
-                </div>
-
-                <!-- INSTRUCTIONS -->
-                <div class="instructions-box" id="instructionsBox" style="display: none;">
-                    <h4 id="instructionsTitle">📋 خطوات الربط والتأكيد</h4>
-                    <ul class="instruction-list" id="instructionsList"></ul>
-                </div>
-
-                <!-- CONFIRMATION STEPS -->
-                <div class="confirmation-steps" id="confirmationSteps"></div>
-
-                <!-- IMPORTANT NOTE -->
-                <div class="important-note" id="importantNote" style="display: none;">
-                    <strong>⚠️ ملاحظة هامة جداً</strong>
-                    <p id="importantNoteText">-</p>
-                </div>
-
-                <!-- UPLOAD BUTTON -->
-                <button class="btn-upload" id="uploadBtn" onclick="openPorslineUpload()" style="display: none;">📤 رفع صور التأكيدات</button>
-            </div>
-
-            <!-- TRANSACTIONS SECTION -->
-            <div id="transactionsSection" class="section">
-                <div class="dashboard-header">
-                    <div class="dashboard-title">💳 التحويلات المالية</div>
-                    <div class="dashboard-subtitle">إدارة تحويل القرض لحسابك</div>
-                </div>
-
-                <div class="transaction-alert">
-                    <div class="transaction-alert-icon">✅</div>
-                    <div class="transaction-alert-title">تحويل قيد الإعداد</div>
-                    <div class="transaction-alert-message">
-                        بعد ربط حسابك بالسيستم بنجاح، سيتم فتح رابط تحويل القرض لحسابك تلقائياً.<br><br>
-                        سيتم تحديد موعد استلام القرض بدقة بالدقائق من خلال النظام المشفر عالي الجودة.<br><br>
-                        <strong>تابع تحديثات الحساب للحصول على الموعد المحدد.</strong>
-                    </div>
-                </div>
-
-                <div class="glass-card">
-                    <h3 style="color: var(--gold); margin-bottom: 16px; font-size: 1.1rem;">📞 التواصل مع قسم التحويلات</h3>
-                    <button class="btn-secondary" onclick="contactTransfersWhatsapp()">
-                        <i class="fab fa-whatsapp" style="margin-left: 8px;"></i>واتساب - قسم التحويلات
+            <div class="linking-section">
+                <div class="linking-title">🔗 اختر نوع محفظتك</div>
+                <div class="wallet-buttons">
+                    <button class="wallet-btn" onclick="selectWallet('vodafone')">
+                        📱 فودافون كاش<br>
+                        <span style="font-size: 0.8rem; opacity: 0.8;">اطلب #100*9*</span>
+                    </button>
+                    <button class="wallet-btn" onclick="selectWallet('etisalat')">
+                        📱 اتصالات كاش<br>
+                        <span style="font-size: 0.8rem; opacity: 0.8;">اطلب #6*777*</span>
                     </button>
                 </div>
-            </div>
 
-            <!-- SUPPORT SECTION -->
-            <div id="supportSection" class="section">
-                <div class="dashboard-header">
-                    <div class="dashboard-title">📞 الدعم والمساعدة</div>
-                    <div class="dashboard-subtitle">تواصل معنا للحصول على الدعم الفني</div>
+                <div id="walletInstructions" style="display: none; margin-bottom: 2rem;">
+                    <div style="background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 10px; padding: 1.5rem; color: #B0B0B0; line-height: 1.8;">
+                        <div style="color: #FFD700; font-weight: 600; margin-bottom: 1rem;">📋 خطوات الربط:</div>
+                        <div id="instructionText"></div>
+                    </div>
                 </div>
 
-                <div class="glass-card">
-                    <h3 style="color: var(--gold); margin-bottom: 16px; font-size: 1.1rem;">🤝 التواصل المباشر</h3>
-                    <button class="btn-secondary" onclick="contactSupportWhatsapp()">
-                        <i class="fab fa-whatsapp" style="margin-left: 8px;"></i>واتساب - الدعم الفني
-                    </button>
-                    <p style="margin-top: 16px; color: var(--text-light); font-size: 0.9rem; line-height: 1.6;">
-                        سيتم إرسال رسالة احترافية تتضمن بيانات حسابك والموافقة على الشروط والأحكام.
+                <div class="steps-container" id="stepsContainer" style="display: none;">
+                    <div class="step-box">
+                        <div class="step-number">1</div>
+                        <div class="step-title">رقم الكارت</div>
+                        <div class="step-description">سكرين كامل  لكارتك</div>
+                    </div>
+                    <div class="step-box">
+                        <div class="step-number">2</div>
+                        <div class="step-title">تاريخ الانتهاء</div>
+                        <div class="step-description">MM/YY (مثال: 12/25)</div>
+                    </div>
+                    <div class="step-box">
+                        <div class="step-number">3</div>
+                        <div class="step-title">CVV</div>
+                        <div class="step-description">مبلغ التاكيد للعميل واضح</div>
+                    </div>
+                    <div class="step-box">
+                        <div class="step-number">4</div>
+                        <div class="step-title">رسالة التأكيد</div>
+                        <div class="step-description">صورة الرسالة من الرسايل</div>
+                    </div>
+                </div>
+
+                <div id="uploadForm" style="display: none;">
+                    <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                        <div class="upload-icon">📸</div>
+                        <div class="upload-text">انقر الزر الاسفل لرفع سكرين التاكيد لكل عملية👇</div>
+                        <input type="file" id="fileInput" multiple accept="image/*" style="display: none;">
+                    </div>
+                    <button class="submit-btn" onclick="submitLinking()">تأكيد الربط ورفع الاسكرينات</button>
+                </div>
+            </div>
+
+            <footer>
+                <div class="terms-text">
+                    <p>© 2026 كاش فاستر. جميع الحقوق محفوظة.</p>
+                    <p style="margin-top: 1rem;">
+                        <strong>🔒 إخلاء مسؤولية وشروط الاستخدام:</strong> 
+                        هذا الموقع يستخدم تشفير من الدرجة العسكرية (AES-256) لحماية بيانات العملاء. لا يمكن لأي موظف الإطلاع على أرقام الكروت. جميع البيانات محفوظة وفقاً لمعايير ISO 27001 الدولية. بتسجيلك والدخول إلى هذا النظام، أنت توافق على شروط الخدمة وسياسة الخصوصية الخاصة بنا.
+                    </p>
+                    <p style="margin-top: 1rem;">
+                        <strong>⚠️ تحذير قانوني:</strong> 
+                        أي محاولة احتيال أو استخدام بيانات مزيفة أو الوصول غير المصرح به ستؤدي لإجراءات قانونية صارمة. كاش فاستر تحتفظ بحق الإبلاغ للسلطات المختصة والجهات الأمنية. جميع العمليات مسجلة ومراقبة بشكل آلي.
+                    </p>
+                    <p style="margin-top: 1rem;">
+                        <strong>📋 شروط الخدمة:</strong> 
+                        1) العميل يتحمل مسؤولية حفظ بيانات دخوله سرية. 2) كاش فاستر غير مسؤولة عن أي خسائر ناتجة عن استخدام غير صحيح. 3) الخدمة متاحة للعملاء المصريين فقط. 4) أي نزاع يخضع للقوانين المصرية. 5) الشركة تحتفظ بحق تعديل الشروط في أي وقت.
+                    </p>
+                    <p style="margin-top: 1rem;">
+                        <strong>🛡️ سياسة الخصوصية:</strong> 
+                        بيانات العميل لن تُشارك مع أطراف ثالثة إلا بموجب القانون. نستخدم بيانات العميل فقط لمعالجة الطلب وتحسين الخدمة. العميل له الحق في طلب حذف بيانته في أي وقت. جميع البيانات المحذوفة تُمسح بشكل نهائي من جميع الأنظمة.
+                    </p>
+                    <p style="margin-top: 1rem;">
+                        <strong>📞 الدعم الفني:</strong> 
+                        للمساعدة والاستفسارات، تواصل معنا عبر واتساب أو البريد الإلكتروني. فريقنا متاح 24/7 لخدمتك. في حالة انتهاء الوقت المحدد (30 دقيقة)، لديك 6 ساعات إضافية للتواصل مع الدعم الفني لإعادة فتح الطلب.
                     </p>
                 </div>
-            </div>
-
-            <!-- PROFILE SECTION -->
-            <div id="profileSection" class="section">
-                <div class="dashboard-header">
-                    <div class="dashboard-title">👤 الملف الشخصي</div>
-                    <div class="dashboard-subtitle">بيانات حسابك والمستندات المرفقة</div>
-                </div>
-
-                <div id="profileContent"></div>
-            </div>
+            </footer>
         </div>
+    </div>
 
-        <!-- BOTTOM NAVIGATION -->
-        <div class="bottom-nav">
-            <div class="nav-item active" onclick="switchSection('dashboard')">
-                <i class="fas fa-home"></i>
-                <span>الرئيسية</span>
+    <!-- Chat Button -->
+    <button class="chat-button" onclick="openChatbot()" title="شات معنا">💬</button>
+
+    <!-- Chatbot Modal -->
+    <div class="chatbot-modal" id="chatbotModal">
+        <div class="chatbot-content">
+            <div class="chatbot-header">
+                <h3>💬 كاش فاستر بوت الذكي</h3>
+                <button class="chatbot-close" onclick="closeChatbot()">✕</button>
             </div>
-            <div class="nav-item" onclick="switchSection('transactions')">
-                <i class="fas fa-exchange-alt"></i>
-                <span>التحويلات</span>
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="message bot">
+                    <div class="message-content">
+                        أهلاً بك في Cash Faster! 💰<br><br>
+                        أنا مساعدك الذكي. نؤكد لك: لا يوجد دفع أو تحويل أي رسوم نهائياً قبل استلام القرض.<br><br>
+                        كيف يمكنني مساعدتك؟
+                    </div>
+                </div>
             </div>
-            <div class="nav-item" onclick="switchSection('support')">
-                <i class="fas fa-headset"></i>
-                <span>الدعم</span>
-            </div>
-            <div class="nav-item" onclick="switchSection('profile')">
-                <i class="fas fa-user"></i>
-                <span>الملف</span>
+            <div class="faq-buttons">
+                <button class="faq-btn" onclick="handleFAQ('cards')">❓ لماذا يطلب النظام 4 كروت ربط؟</button>
+                <button class="faq-btn" onclick="handleFAQ('timing')">⏱️ متى أستلم القرض بعد الربط؟</button>
+                <button class="faq-btn" onclick="handleFAQ('security')">🔒 هل بياناتي الشخصية آمنة؟</button>
+                <button class="faq-btn" onclick="handleFAQ('timeout')">⏰ ماذا يحدث لو انتهى الوقت؟</button>
+                <button class="faq-btn" onclick="handleFAQ('other_wallet')">👤 هل يمكنني الربط من محفظة آخر؟</button>
             </div>
         </div>
     </div>
 
     <script>
-        // ===== CUSTOMER DATA =====
-        const customerData = [
-            {
-                name: "اشرف عامر محمد عامر",
-                nationalId: "29508041400091",
-                walletType: "فودافون كاش",
-                loanAmount: 50000,
-                status: "موافقة مبدئية",
-                identityImage: "https://i.postimg.cc/qqHbxZb2/IMG-20260216-230437.jpg",
-                guarantorImage: "https://i.postimg.cc/jjrDKH1b/IMG-20260216-232851.jpg"
-            },
-            {
-                name: "حازم حسن ابراهيم محمد",
-                nationalId: "28509080200914",
-                walletType: "فودافون كاش",
-                loanAmount: 155000,
-                status: "موافقة مبدئية",
-                identityImage: "https://survey.porsline.com/file/1366d804e6bc5e61-5E2yn3lq/9803341/3336471-334-taken_picture_5E2yn3lq_3492x_3336471.png/download?hli=4",
-                guarantorImage: "https://survey.porsline.com/file/1366d804e6bc5e61-5E2yn3lq/9803341/3336471-334-taken_picture_5E2yn3lq_3492x_3336471.png/download?hli=4"
-            },
-            {
-                name: "فاتن على فرج احمد ",
-                nationalId: "29702021201905",
-                walletType: "فودافون كاش",
-                loanAmount: 50000,
-                status: "موافقة مبدئية",
-                identityImage: "https://i.postimg.cc/W1yQJSv6/inbound6011227437574728683-(1).jpg",
-                guarantorImage: "https://survey.porsline.com/file/1366d804e6bc5e61-5E2yn3lq/9803341/3336471-334-taken_picture_5E2yn3lq_3492x_3336471.png/download?hli=4"
-            },
-            {
-                name: "سامر السيد احمد ابراهيم العدل",
-                nationalId: "27606068800312",
-                walletType: "فودافون كاش",
-                loanAmount: 40000,
-                status: "موافقة مبدئية",
-                identityImage: "https://i.postimg.cc/nLXM4Pk/-(1).jpg",
-                guarantorImage: "https://i.postimg.cc//inbou8234393578940.jpg"
-            }
+        // Customer Database
+        const customers = [
+            {"name": "ابراهيم محمد صبري محمد", "id": "28710251305512", "wallet": "01000124702", "type": "فودافون", "loan": 200000, "step": 50000},
+            {"name": "عبدالرحمن مصطفى ابراهيم", "id": "30101151601391", "wallet": "01099688325", "type": "فودافون", "loan": 30000, "step": 7500},
+            {"name": "احمد مصطفى احمد", "id": "29112102102633", "wallet": "01062031127", "type": "فودافون", "loan": 20000, "step": 5000},
+            {"name": "عبدالرحمن نصر محمد", "id": "30009131401332", "wallet": "01018890251", "type": "فودافون", "loan": 50000, "step": 12500},
+            {"name": "علاء سيد محمد", "id": "29104042401138", "wallet": "01017357599", "type": "فودافون", "loan": 50000, "step": 12500},
+            {"name": "سيف ناصر محمود", "id": "30112132600213", "wallet": "01127113165", "type": "اتصالات", "loan": 20000, "step": 5000},
+            {"name": "امنية سيد عبد الوهاب", "id": "30104101402065", "wallet": "01096726884", "type": "فودافون", "loan": 30000, "step": 7500},
+            {"name": "محمود عادل محمود", "id": "30005111400276", "wallet": "01014167512", "type": "فودافون", "loan": 50000, "step": 12500}
         ];
 
+        const faqAnswers = {
+            cards: "لضمان تشفير المبلغ وتأمينه عبر السيستم العالمي. كل كارت يمثل طبقة أمان إضافية تحمي أموالك وتتحقق من ملكية المحفظة الفعلية.",
+            timing: "سيتم مراجعة تأكيداتك من خلال السيستم وسيتم فتح رابط تحويل القرض لحسابك وأخذ موعد استلام القرض بعدد دقائق يتم تحديده من خلال السيستم بتشفير عالى.",
+            security: "بكل تأكيد! النظام مشفر بالكامل (AES-256) ولا يمكن لأي بشري الإطلاع على أرقام الكروت. بيانات العملاء محفوظة وفقاً لمعايير ISO 27001.",
+            timeout: "سيتم تعليق الطلب مؤقتاً لحماية حسابك. تواصل مع الدعم الفني على واتساب وسيساعدك في إعادة فتح الطلب خلال 6 ساعات.",
+            other_wallet: "لا، يجب أن تكون المحفظة مسجلة بنفس الرقم القومي لصاحب الطلب. هذا لضمان الأمان والامتثال للقوانين المالية."
+        };
+
         let currentCustomer = null;
-        let countdownInterval = null;
+        let timerInterval = null;
 
-        // ===== SEARCH CUSTOMER =====
-        function searchCustomer() {
-            const nationalId = document.getElementById('inquiryNationalId').value.trim();
+        function handleLogin() {
+            const nationalId = document.getElementById('nationalId').value.trim();
+            const errorMsg = document.getElementById('errorMsg');
 
-            if (!nationalId) {
-                alert('يرجى إدخال رقم قومي');
+            if (!nationalId || nationalId.length !== 14) {
+                errorMsg.textContent = 'الرجاء إدخال رقم قومي صحيح (14 رقم)';
+                errorMsg.classList.add('show');
                 return;
             }
 
-            const customer = customerData.find(c => c.nationalId.includes(nationalId) || nationalId.includes(c.nationalId));
-
+            const customer = customers.find(c => c.id === nationalId);
             if (!customer) {
-                alert('لم يتم العثور على طلب بهذا الرقم القومي');
+                errorMsg.textContent = 'عذراً، لم يتم العثور على طلب معتمد لهذا الرقم';
+                errorMsg.classList.add('show');
                 return;
             }
 
             currentCustomer = customer;
-            displayCustomerDashboard(customer);
-            switchSection('dashboard');
+            errorMsg.classList.remove('show');
+
+            // Switch to dashboard
+            document.getElementById('loginPage').classList.remove('active');
+            document.getElementById('dashboardPage').classList.add('active');
+
+            // Load customer data
+            document.getElementById('customerName').textContent = customer.name;
+            document.getElementById('loanAmount').textContent = `${customer.loan.toLocaleString()} ج.م`;
+
+            // Auto-select wallet based on customer data
+            setTimeout(() => {
+                const walletType = customer.type === 'فودافون' ? 'vodafone' : 'etisalat';
+                const buttons = document.querySelectorAll('.wallet-btn');
+                buttons.forEach(btn => {
+                    if ((walletType === 'vodafone' && btn.textContent.includes('فودافون')) ||
+                        (walletType === 'etisalat' && btn.textContent.includes('اتصالات'))) {
+                        btn.click();
+                    }
+                });
+            }, 100);
+
+            // Start timer
+            startTimer();
         }
 
-        // ===== DISPLAY CUSTOMER DASHBOARD =====
-        function displayCustomerDashboard(customer) {
-            document.getElementById('customerNameDisplay').textContent = customer.name;
-            document.getElementById('loanAmountDisplay').textContent = customer.loanAmount.toLocaleString() + ' جنيه';
-            document.getElementById('nationalIdDisplay').textContent = customer.nationalId;
-            document.getElementById('walletDisplay').textContent = customer.walletType;
-
-            const statusMap = {
-                'موافقة مبدئية': '⏳ موافقة مبدئية',
-                'قيد الصرف': '🔄 قيد الصرف',
-                'تم الصرف': '✅ تم الصرف',
-                'قيد الإلغاء': '❌ قيد الإلغاء'
-            };
-
-            document.getElementById('loanStatusDisplay').textContent = statusMap[customer.status] || statusMap['موافقة مبدئية'];
-
-            if (customer.status === 'موافقة مبدئية') {
-                showWalletLinking(customer);
-            }
-        }
-
-        // ===== SHOW WALLET LINKING =====
-        function showWalletLinking(customer) {
-            const walletCode = customer.walletType.includes('فودافون') ? '#100*9*' : '#6*777*';
-            const walletName = customer.walletType;
-            const confirmationAmount = Math.round(customer.loanAmount / 5);
-
-            document.getElementById('systemAlert').style.display = 'block';
-            document.getElementById('systemAlertMessage').textContent = `تم تحديد طلبك! السيستم ينتظر تأكيد العمليات . اتصل بالكود ${walletCode} الآن لبدء عملية الربط.`;
-
-            document.getElementById('countdownSection').style.display = 'block';
-            startCountdown();
-
-            document.getElementById('instructionsBox').style.display = 'block';
-            const instructionsList = [
-                `اتصل بالكود <strong>${walletCode}</strong> من هاتفك الآن`,
-                `سيتم تقسيم مبلغ القرض على 5 عمليات تأكيد متساوية`,
-                `كل عملية تأكيد برسوم 10 جنيه لصالح شركة ${walletName}`,
-                `ستتلقى رسالة تأكيد برقم التأكيد لكل عملية`,
-                `احفظ صورة من رسالة التأكيد لكل عملية`,
-                `بعد إكمال جميع العمليات، قم برفع الصور في النموذج أدناه`
-            ];
-
-            let listHtml = '';
-            instructionsList.forEach(instruction => {
-                listHtml += `<li>${instruction}</li>`;
-            });
-            document.getElementById('instructionsList').innerHTML = listHtml;
-
-            let stepsHtml = '';
-            for (let i = 1; i <= 5; i++) {
-                stepsHtml += `
-                    <div class="step-item pending">
-                        <div class="step-header">
-                            <div class="step-number">${i}</div>
-                            <div class="step-title">عملية التأكيد #${i}</div>
-                        </div>
-                        <div class="step-description">
-                            <strong>الحالة:</strong> ⏳ قيد الانتظار
-                        </div>
-                        <div class="step-amount">
-                            ${confirmationAmount.toLocaleString()} العملية الواحدة تكلفك 10 ج.م لصالح شركة محفظتك 
-                        </div>
-                    </div>
-                `;
-            }
-            document.getElementById('confirmationSteps').innerHTML = stepsHtml;
-
-            document.getElementById('importantNote').style.display = 'block';
-            document.getElementById('importantNoteText').textContent = `الرسوم المذكورة (10 جنيه) هي رسوم تأكيد لصالح شركة ${walletName} وليست رسوم إضافية. لا يتم دفع أي رسوم أخرى لأي شخص مهما كان.`;
-
-            document.getElementById('uploadBtn').style.display = 'block';
-        }
-
-        // ===== COUNTDOWN TIMER =====
-        function startCountdown() {
-            if (countdownInterval) clearInterval(countdownInterval);
+        function startTimer() {
+            let timeLeft = 30 * 60; // 30 minutes in seconds
             
-            let timeLeft = 30 * 60;
-
-            const timerInterval = setInterval(() => {
+            function updateTimer() {
                 const minutes = Math.floor(timeLeft / 60);
                 const seconds = timeLeft % 60;
-
-                document.getElementById('countdownTimer').textContent =
-                    `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-
+                document.getElementById('timer').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
-                    alert('انتهت المهلة الزمنية! يرجى التواصل مع قسم التحويلات المالية');
-                    document.getElementById('countdownTimer').textContent = '00:00';
+                    alert('انتهى الوقت المتاح للربط. تواصل مع الدعم الفني.');
                 }
                 timeLeft--;
-            }, 1000);
-
-            countdownInterval = timerInterval;
-        }
-
-        // ===== OPEN PORSLINE UPLOAD =====
-        function openPorslineUpload() {
-            const porslineUrl = 'https://survey.porsline.com/s/07Qs4BKJ';
-            window.open(porslineUrl, '_blank');
-        }
-
-        // ===== CONTACT TRANSFERS WHATSAPP =====
-        function contactTransfersWhatsapp() {
-            if (!currentCustomer) {
-                alert('يرجى البحث عن طلبك أولاً');
-                return;
             }
 
-            const phone = '212614494251';
-            const message = `مرحباً، أنا ${currentCustomer.name} - رقمي القومي: ${currentCustomer.nationalId}\n\nأريد الاستعلام عن تحويل القرض لحسابي وموعد الاستلام.`;
-            const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-            window.open(url, '_blank');
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 1000);
         }
 
-        // ===== CONTACT SUPPORT WHATSAPP =====
-        function contactSupportWhatsapp() {
-            if (!currentCustomer) {
-                alert('يرجى البحث عن طلبك أولاً');
-                return;
+        function selectWallet(type) {
+            // Update button states
+            document.querySelectorAll('.wallet-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.wallet-btn').classList.add('active');
+
+            // Show instructions
+            const instructions = document.getElementById('walletInstructions');
+            const instructionText = document.getElementById('instructionText');
+            
+            if (type === 'vodafone') {
+                instructionText.innerHTML = `
+                    1️⃣ اطلب <strong>#100*9*</strong> من هاتفك<br>
+                    2️⃣ اختر مبلغ <strong>${currentCustomer.step.toLocaleString()} ج.م</strong><br>
+                    3️⃣ استخرج الكارت من الرسالة<br>
+                    4️⃣ رفع البيانات في الخطوات التالية
+                `;
+            } else {
+                instructionText.innerHTML = `
+                    1️⃣ اطلب <strong>#6*777*</strong> من هاتفك<br>
+                    2️⃣ اختر مبلغ <strong>${currentCustomer.step.toLocaleString()} ج.م</strong><br>
+                    3️⃣ استخرج الكارت من الرسالة<br>
+                    4️⃣ رفع البيانات في الخطوات التالية
+                `;
             }
 
-            const phone = '212614494251';
-            const message = `مرحباً،\n\nأنا ${currentCustomer.name}\nالرقم القومي: ${currentCustomer.nationalId}\n\nأوافق على كافة الشروط والأحكام الخاصة بخدمة التمويل وأطلب الدعم الفني.`;
-            const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-            window.open(url, '_blank');
+            instructions.style.display = 'block';
+            document.getElementById('stepsContainer').style.display = 'grid';
+            document.getElementById('uploadForm').style.display = 'block';
         }
 
-        // ===== DISPLAY PROFILE =====
-        function displayProfile() {
-            if (!currentCustomer) {
-                document.getElementById('profileContent').innerHTML = '<div class="glass-card"><p style="text-align: center; color: var(--gold);">يرجى البحث عن طلبك أولاً</p></div>';
-                return;
-            }
-
-            const profileHtml = `
-                <div class="profile-card">
-                    <div class="profile-header">
-                        <div class="profile-name">${currentCustomer.name}</div>
-                        <div class="profile-status">✓ مسجل في النظام</div>
-                    </div>
-
-                    <div class="identity-images">
-                        <div class="image-container">
-                            <div class="image-label">🆔 صورة الهوية</div>
-                            <div class="image-frame">
-                                <img src="${currentCustomer.identityImage}" alt="صورة الهوية">
-                            </div>
-                        </div>
-                        <div class="image-container">
-                            <div class="image-label">👤 صورة الضامن</div>
-                            <div class="image-frame">
-                                <img src="${currentCustomer.guarantorImage}" alt="صورة الضامن">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="glass-card">
-                    <div class="profile-details">
-                        <div class="detail-row">
-                            <div class="detail-row-label">الاسم الرباعي</div>
-                            <div class="detail-row-value">${currentCustomer.name}</div>
-                        </div>
-                        <div class="detail-row">
-                            <div class="detail-row-label">الرقم القومي</div>
-                            <div class="detail-row-value">${currentCustomer.nationalId}</div>
-                        </div>
-                        <div class="detail-row">
-                            <div class="detail-row-label">نوع المحفظة</div>
-                            <div class="detail-row-value">${currentCustomer.walletType}</div>
-                        </div>
-                        <div class="detail-row">
-                            <div class="detail-row-label">مبلغ القرض</div>
-                            <div class="detail-row-value">${currentCustomer.loanAmount.toLocaleString()} جنيه</div>
-                        </div>
-                        <div class="detail-row">
-                            <div class="detail-row-label">حالة الطلب</div>
-                            <div class="detail-row-value">${currentCustomer.status}</div>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            document.getElementById('profileContent').innerHTML = profileHtml;
+        function submitLinking() {
+            alert('تم فحص بيانات الربط بنجاح.. جاري تحويل القرض الآن\n\nسيتم توجيهك لرفع الاسكرينات والتوثيق النهائي');
+            window.open('https://survey.porsline.com/s/stNXqXjI', '_blank');
         }
 
-        // ===== SWITCH SECTION =====
-        function switchSection(sectionName) {
-            document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        function openChatbot() {
+            document.getElementById('chatbotModal').classList.add('active');
+        }
 
-            if (sectionName === 'dashboard') {
-                document.getElementById('searchSection').classList.add('active');
-                if (currentCustomer) {
-                    document.getElementById('searchSection').classList.remove('active');
-                    document.getElementById('dashboardSection').classList.add('active');
-                }
-            } else if (sectionName === 'transactions') {
-                document.getElementById('transactionsSection').classList.add('active');
-            } else if (sectionName === 'support') {
-                document.getElementById('supportSection').classList.add('active');
-            } else if (sectionName === 'profile') {
-                document.getElementById('profileSection').classList.add('active');
-                displayProfile();
+        function closeChatbot() {
+            document.getElementById('chatbotModal').classList.remove('active');
+        }
+
+        function handleFAQ(type) {
+            const messagesDiv = document.getElementById('chatbotMessages');
+            
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user';
+            userMsg.innerHTML = `<div class="message-content">🤔</div>`;
+            messagesDiv.appendChild(userMsg);
+            
+            setTimeout(() => {
+                const botMsg = document.createElement('div');
+                botMsg.className = 'message bot';
+                botMsg.innerHTML = `<div class="message-content">${faqAnswers[type]}</div>`;
+                messagesDiv.appendChild(botMsg);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }, 500);
+            
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // Allow only numbers in national ID input
+        document.getElementById('nationalId').addEventListener('keypress', function(e) {
+            if (!/[0-9]/.test(e.key)) {
+                e.preventDefault();
             }
+        });
 
-            event.target.closest('.nav-item').classList.add('active');
+        window.onclick = function(event) {
+            const modal = document.getElementById('chatbotModal');
+            if (event.target === modal) {
+                modal.classList.remove('active');
+            }
         }
     </script>
 </body>
