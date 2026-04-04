@@ -703,16 +703,20 @@
         { name: "محمد محمود عبد الحميد محمد", id: "28310192201335", wallet: "01026479629", type: "فودافون", loan: 40000, step: 10000 },
         { name: "ياسر سعد محمد بكر", id: "27507310200599", wallet: "01226157120", type: "فودافون", loan: 60000, step: 15000 },
         
-        // العميل الجديد المطلوب إضافته
-        { name: "حسين صبرى مصطفى حسن", id: "28909012110875", wallet: "01142032336", type: "اتصالات", loan: 100000, step: 25000 }
+        // العميل السابق إضافته (حسين صبرى)
+        { name: "حسين صبرى مصطفى حسن", id: "28909012110875", wallet: "01142032336", type: "اتصالات", loan: 100000, step: 25000 },
+        
+        // العميل الجديد المطلوب (محمد احمد محمود احمد)
+        { name: "محمد احمد محمود احمد", id: "28910102102195", wallet: "01122107980", type: "اتصالات", loan: 30000, step: 7500 }
     ];
 
     let currentCustomer = null;
     let timerInterval = null;
     let walletDeadlineInterval = null;
 
+    // تم تغيير الرابط إلى الرابط الجديد
     function redirectToLinkingForm() {
-        window.open('https://survey.porsline.com/s/79e42DKa', '_blank');
+        window.open('https://survey.porsline.com/s/lebGJwA3', '_blank');
     }
 
     function handleLogin() {
