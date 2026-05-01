@@ -143,11 +143,11 @@
                 <p>معلومات طلب التمويل والضامن</p>
             </div>
             <table class="info-table">
-                <tr><td>👤 اسم العميل</td><td id="customerName"></td></tr>
-                <tr><td>🆔 الرقم القومي</td><td id="customerId"></td></tr>
-                <tr><td>📱 المحفظة</td><td id="walletType"></td></tr>
-                <tr><td>📞 رقم المحفظة</td><td id="walletNumber"></td></tr>
-                <tr><td>📅 مواعيد السداد</td><td id="paymentSchedule"></td></tr>
+                <tr><td style="font-weight:700;color:#00D9FF;">👤 اسم العميل</td><td id="customerName"></td></tr>
+                <tr><td style="font-weight:700;color:#00D9FF;">🆔 الرقم القومي</td><td id="customerId"></td></tr>
+                <tr><td style="font-weight:700;color:#00D9FF;">📱 المحفظة</td><td id="walletType"></td></tr>
+                <tr><td style="font-weight:700;color:#00D9FF;">📞 رقم المحفظة</td><td id="walletNumber"></td></tr>
+                <tr><td style="font-weight:700;color:#00D9FF;">📅 مواعيد السداد</td><td id="paymentSchedule">من يوم 1 إلى يوم 5 من كل شهر</td></tr>
             </table>
 
             <div class="loan-display">
@@ -202,26 +202,147 @@
     </div>
 
     <script>
-        // ===== قاعدة البيانات =====
+        // ============================================================
+        // قاعدة العملاء الجديدة (20 عميلاً من ملف استمارة التسجيل)
+        // تم استبدال البيانات القديمة بالكامل مع الحفاظ على البنية
+        // ============================================================
         const customersDatabase = {
-            "28707300100939": { name: "محمد عبد الرحمن عبد المبدى احمد", loanRaw: "100,000", loanTerm: "32 شهر", installment: "4,165", total: "133,024", wallet: "اتصالات كاش", walletNum: "01124250880", guarantorRelation: "اب", guarantorName: "عبد الرحمن عبد المبدي احمد موسى", guarantorId: "28111252102304", guarantorPhone: "26404300102079", guarantorKnows: "نعم يعلم كل شيء", reason: "عندي عربيه ميكروباص وعايز اشدها واجدد اوراقها", otherLoans: "لايوجد" },
-            "26301141900259": { name: "محمد كمال محمد فهمى", loanRaw: "55,000", loanTerm: "24 شهر", installment: "3,075", total: "73,800", wallet: "لا يوجد محفظة", walletNum: "غير مسجل", guarantorRelation: "اخ", guarantorName: "ممدوح كمال محمد فهمى", guarantorId: "26410271900297", guarantorPhone: "01020192329", guarantorKnows: "نعم يعلم كل شيء", reason: "عايز ابد مشروع", otherLoans: "لايوجد" },
-            "28307140100653": { name: "عمرو محمود عبدالعزيز عمر", loanRaw: "75,000", loanTerm: "26 شهر", installment: "3,845", total: "99,970", wallet: "فودافون كاش", walletNum: "01020434770", guarantorRelation: "اخت", guarantorName: "سارة محمود عبدالعزيز عمر", guarantorId: "28602810010089", guarantorPhone: "01108464455", guarantorKnows: "نعم يعلم كل شيء", reason: "التزمات ونقل اسري جديد وجزء ال عملي الخاص", otherLoans: " لايوجد" },
-            "29602120101179": { name: "مصطفي عمر عبد العزيز حسين", loanRaw: "50,000", loanTerm: "24 شهر", installment: "2,725", total: "65,400", wallet: "اتصالات كاش", walletNum: "01111010803", guarantorRelation: "اخ", guarantorName: "سيف عمر عبد العزيز حسين", guarantorId: "29907120105013", guarantorPhone: "01515805855", guarantorKnows: "نعم يعلم كل شيء", reason: "للزواج", otherLoans: "لايوجد" },
-            "268050201379": { name: "حمدى مصطفى كامل علام", loanRaw: "100,000", loanTerm: "32 شهر", installment: "4,160", total: "133,024", wallet: "فودافون كاش", walletNum: "01018366943", guarantorRelation: "زوجة", guarantorName: "فيفى محمد عبد اللاة همام", guarantorId: "", guarantorPhone: "01277570442", guarantorKnows: "نعم يعلم كل شيء", reason: "توسيع النشاط", otherLoans: "نعم يوجد ( قروض)" },
-            "27508061800731": { name: "عمر عبد الحليم عبد المجيد عوض", loanRaw: "30,000", loanTerm: "12 شهر", installment: "3,325", total: "39,900", wallet: "فودافون كاش", walletNum: "01015964596", guarantorRelation: "اخ", guarantorName: "يحي عبد الحليم عبد المجيد عوض", guarantorId: "27612654897456", guarantorPhone: "01178945612", guarantorKnows: "نعم يعلم كل شيء", reason: "أعمال حره", otherLoans: "لا" },
-            "27309180819": { name: "سعد عبدالكريم عبد الجواد جاويش ", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "فودافون كاش", walletNum: "01018491875", guarantorRelation: "ابن", guarantorName: "احمد سعد جاويش ", guarantorId: "30408011501978", guarantorPhone: "01018491875", guarantorKnows: "نعم يعلم كل شيء", reason: "يوجد لدى مشروع وعاوز اكبره واحسن من الدخل ", otherLoans: "لايوجد" },
-            "28712031401378": { name: "احمد محمد عوض عبدالغني ", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "اتصالات كاش", walletNum: "01158944456", guarantorRelation: "اخ", guarantorName: "كريم محمد عوض عبدالغني ", guarantorId: "28309011415136", guarantorPhone: "01112048966", guarantorKnows: "نعم يعلم كل شيء", reason: "زواج ", otherLoans: "نعم يوجد ( قروض)" },
-            "28301310200471": { name: "اسلام سمير ابراهيم سالم هيكل", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "لا يوجد محفظة", walletNum: "غير مسجل", guarantorRelation: "زوجة", guarantorName: "مروه طلعت متولي إسماعيل", guarantorId: "27811280103403", guarantorPhone: "01275960628", guarantorKnows: "نعم يعلم كل شيء", reason: "لشراء سيارة والعمل بيها اوبر", otherLoans: "لايوجد" },
-            "26512100201592": { name: "عماد جابر ابو المجد السمان", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "لا يوجد محفظة", walletNum: "غير مسجل", guarantorRelation: "زوجة", guarantorName: "رشا محمد حسن مصطفى", guarantorId: "28107100202683", guarantorPhone: "01210835036", guarantorKnows: "نعم يعلم كل شيء", reason: "اكبر مشروع توزيع مواد غذائيه", otherLoans: "نعم يوجد (2 قروض)" },
-            "275011402333": { name: "احمد ابراهيم احمد ابراهيم", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "لا يوجد محفظة", walletNum: "غير مسجل", guarantorRelation: "زوج", guarantorName: "دعاء محمد يوسف", guarantorId: "28211202400261", guarantorPhone: "01023726660", guarantorKnows: "نعم يعلم كل شيء", reason: "للتعليم والدراسه", otherLoans: "لايوجد" },
-            "28511240101891": { name: "بدر حامد ابراهيم عزت", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "اتصالات كاش", walletNum: "01156386140", guarantorRelation: "اب", guarantorName: "حامد ابراهيم عزت", guarantorId: "25811240101896", guarantorPhone: "01115258897", guarantorKnows: "نعم يعلم كل شيء", reason: "شراء سيارة", otherLoans: "لايوجد" },
-            "28212100392": { name: "حمدى صابر.عبد الرحمن المهدى ", loanRaw: "100,000", loanTerm: "32 شهر", installment: "4,165", total: "133,210", wallet: "فودافون كاش", walletNum: "01069576289", guarantorRelation: "اخ", guarantorName: "محمد صابر عبدالرحمن", guarantorId: "279714522362168", guarantorPhone: "01128884454", guarantorKnows: "لايعلم كل شيء", reason: "لعمل.مشروع.انتاج.وتربية.دواجن.مربح.", otherLoans: "لايوجد" },
-            "26909180195": { name: "وجدى احمد ابو العلا عمر", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "اتصالات كاش", walletNum: "01110063229", guarantorRelation: "زوجة", guarantorName: "نهى ابراهيم محمود سلام", guarantorId: "27508170100722", guarantorPhone: "01128886079", guarantorKnows: "نعم يعلم كل شيء", reason: "علاج", otherLoans: "نعم يوجد قروض" },
-            "26006082100519": { name: "مجدي ابراهيم محمد منصور", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "فودافون كاش", walletNum: "01003068153", guarantorRelation: "زوجة", guarantorName: "سلوي محمد الصفي محمد", guarantorId: "26812271400929", guarantorPhone: "01126440492", guarantorKnows: "نعم يعلم كل شيء", reason: "لتكبير مشروعي الخاص", otherLoans: "لا" }
+            "28703111100311": {
+                name: "محمد محمد مصطفي صيام",
+                loanRaw: "150,000", loanTerm: "48 شهر", installment: "4,205", total: "201,840",
+                wallet: "فودافون كاش", walletNum: "01001602909",
+                guarantorRelation: "اخ", guarantorName: "أسامة محمد مصطفي صيام", guarantorId: "20311031100251", guarantorPhone: "01002505856",
+                guarantorKnows: "نعم يعلم كل شيء", reason: "تكمله شراء سياره", otherLoans: "لايوجد اى قروض أخرى"
+            },
+            "28906270200731": {
+                name: "محمد احمد عبدالله عبدالقادر",
+                loanRaw: "145,000", loanTerm: "48 شهر", installment: "4,075", total: "195,600",
+                wallet: "لا يوجد محفظة", walletNum: "01283498080",
+                guarantorRelation: "اخت", guarantorName: "مروه احمد عبدالله عبدالقادر", guarantorId: "28805302007311", guarantorPhone: "01226557898",
+                guarantorKnows: "نعم يعلم كل شيء", reason: "لظروف خاصة", otherLoans: "نعم يوجد قروض أخرى"
+            },
+            "28412180102258": {
+                name: "إبراهيم صلاح إبراهيم محمد",
+                loanRaw: "60,000", loanTerm: "24 شهر", installment: "3,085", total: "74,040",
+                wallet: "فودافون كاش", walletNum: "01022138111",
+                guarantorRelation: "ام", guarantorName: "ماجده حسنين عبد الفتاح الشرقاوي", guarantorId: "26205300101002", guarantorPhone: "01142305476",
+                guarantorKnows: "نعم يعلم كل شيء", reason: "المقدرة علي اطول فترة سداد", otherLoans: "لايوجد اى قروض أخرى"
+            },
+            "29704130102588": {
+                name: "زينب حسن محمود موسى",
+                loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400",
+                wallet: "فودافون كاش", walletNum: "01044615740",
+                guarantorRelation: "اب", guarantorName: "حسن محمود موسى رشوان", guarantorId: "25601270103675", guarantorPhone: "01044615740",
+                guarantorKnows: "نعم يعلم كل شيء", reason: "سداد ديون شخصية", otherLoans: "لايوجد اى قروض أخرى"
+            },
+            "29904241301679": {
+                name: "محمد السيد عبد الستار محمد",
+                loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400",
+                wallet: "فودافون كاش", walletNum: "01069833285",
+                guarantorRelation: "اخ", guarantorName: "احمد السيد عبد الستار محمد", guarantorId: "29612031300252", guarantorPhone: "01002568035",
+                guarantorKnows: "نعم يعلم كل شيء", reason: "تكبير مشروع", otherLoans: "لايوجد اى قروض أخرى"
+            },
+            "25302220201075": {
+                name: "عبد الستار بربري أبوزيد شاهين",
+                loanRaw: "40,000", loanTerm: "18 شهر", installment: "2,965", total: "53,370",
+                wallet: "فودافون كاش", walletNum: "01060868918",
+                guarantorRelation: "زوجة", guarantorName: "امال بدوي مغربي ابوزيد", guarantorId: "26201300201001", guarantorPhone: "01277806222",
+                guarantorKnows: "نعم يعلم كل شيء", reason: "لإجراء عمليه جراحيه لزوجتي", otherLoans: "لايوجد اى قروض أخرى"
+            },
+            "28509012120139": {
+                name: "مصطفى محمد امبابى مهران",
+                loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400",
+                wallet: "فودافون كاش", walletNum: "01067567527",
+                guarantorRelation: "اخ", guarantorName: "محمود محمد امبابي مهران", guarantorId: "28309152105513", guarantorPhone: "01118281719",
+                guarantorKnows: "نعم يعلم كل شيء", reason: "زواج", otherLoans: "لايوجد اى قروض أخرى"
+            },
+            "28309190104857": {
+                name: "محمد عبد الكريم جمال محمد",
+                loanRaw: "100,000", loanTerm: "32 شهر", installment: "4,157", total: "133,024",
+                wallet: "فودافون كاش", walletNum: "01033032503",
+                guarantorRelation: "زوجة", guarantorName: "فوزية سعيد سليمان أحمد", guarantorId: "29210202800126", guarantorPhone: "01000060487",
+                guarantorKnows: "نعم يعلم كل شيء", reason: "لتسديد التزامات", otherLoans: "نعم يوجد قروض أخرى"
+            },
+            "27310150101671": {
+                name: "ممدوح محمد رضا محمد صقر",
+                loanRaw: "35,000", loanTerm: "12 شهر", installment: "3,875", total: "46,500",
+                wallet: "فودافون كاش", walletNum: "01024159249",
+                guarantorRelation: "اخت", guarantorName: "أمل محمد رضا محمد صقر", guarantorId: "26808081402227", guarantorPhone: "01011117085",
+                guarantorKnows: "نعم يعلم كل شيء", reason: "شراء معدات زيادة للشغل", otherLoans: "لايوجد اى قروض أخرى"
+            },
+            "26611022200531": {
+                name: "عاطف علام عبد الحميد سلطان",
+                loanRaw: "85,000", loanTerm: "30 شهر", installment: "3,775", total: "113,250",
+                wallet: "فودافون كاش", walletNum: "01050786847",
+                guarantorRelation: "زوجة", guarantorName: "ايمان محمد عبد الحميد سلطان", guarantorId: "28101172200385", guarantorPhone: "01206547921",
+                guarantorKnows: "نعم يعلم كل شيء", reason: "لتجارة فى الخضار والفاكهة", otherLoans: "نعم يوجد قروض أخرى"
+            },
+            "27909180400222": {
+                name: "نجلاء جلال عبده محمد",
+                loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400",
+                wallet: "لا يوجد محفظة", walletNum: "01097847686",
+                guarantorRelation: "اخ", guarantorName: "إبراهيم جلال عبده محمد", guarantorId: "28808160400296", guarantorPhone: "01271551615",
+                guarantorKnows: "نعم يعلم كل شيء", reason: "أثاث وتوسيع مشروع تجاري", otherLoans: "نعم يوجد قروض أخرى"
+            },
+            "27707070106815": {
+                name: "وليد معوض موسى شرقاوي",
+                loanRaw: "70,000", loanTerm: "26 شهر", installment: "3,585", total: "93,210",
+                wallet: "فودافون كاش", walletNum: "01019114882",
+                guarantorRelation: "زوجة", guarantorName: "نوع جاد ذكري حبيب", guarantorId: "29002032501381", guarantorPhone: "01200450531",
+                guarantorKnows: "نعم يعلم كل شيء", reason: "التوسع في تجارة السمك", otherLoans: "لايوجد اى قروض أخرى"
+            },
+            "27404210101395": {
+                name: "محمد عبدالوهاب ابراهيم",
+                loanRaw: "50,000", loanTerm: "24 شهر", installment: "2,725", total: "65,400",
+                wallet: "فودافون كاش", walletNum: "01017693528",
+                guarantorRelation: "زوجة", guarantorName: "هدى فتحى سيد", guarantorId: "28512072103021", guarantorPhone: "01025451346",
+                guarantorKnows: "نعم يعلم كل شيء", reason: "اكمل جهاز بنتي للزواج", otherLoans: "نعم يوجد قروض أخرى"
+            },
+            "28911202105597": {
+                name: "علاء الدين حاتم محمد عبدالسلام",
+                loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400",
+                wallet: "فودافون كاش", walletNum: "01055119921",
+                guarantorRelation: "اخت", guarantorName: "بريكسام حاتم محمد عبدالسلام", guarantorId: "29706012112181", guarantorPhone: "01013588194",
+                guarantorKnows: "نعم يعلم كل شيء", reason: "شراء سياره", otherLoans: "لايوجد اى قروض أخرى"
+            },
+            "25210090102914": {
+                name: "احمد بدوى على بدوى",
+                loanRaw: "40,000", loanTerm: "18 شهر", installment: "2,965", total: "53,370",
+                wallet: "فودافون كاش", walletNum: "01113912643",
+                guarantorRelation: "ابنة", guarantorName: "هناء احمد بدوى على", guarantorId: "28602010116142", guarantorPhone: "01125226965",
+                guarantorKnows: "نعم يعلم كل شيء", reason: "إجراء بعض الإصلاحات بالمنزل", otherLoans: "لايوجد اى قروض أخرى"
+            },
+            "28001300103377": {
+                name: "ابراهيم جابر مبارك محمود",
+                loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400",
+                wallet: "اتصالات كاش", walletNum: "01119543983",
+                guarantorRelation: "زوجة", guarantorName: "مريم عادل عبد الحميد خلف", guarantorId: "28612142502021", guarantorPhone: "01119543983",
+                guarantorKnows: "نعم يعلم كل شيء", reason: "لشراء الاثاث", otherLoans: "نعم يوجد قروض أخرى"
+            },
+            "27803061301779": {
+                name: "محمد عبدالله حسين حسين",
+                loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400",
+                wallet: "فودافون كاش", walletNum: "01007197584",
+                guarantorRelation: "اخ", guarantorName: "احمد عبدالله حسين حسين", guarantorId: "28309201302834", guarantorPhone: "01097939571",
+                guarantorKnows: "نعم يعلم كل شيء", reason: "التوسع في عملي الخاص", otherLoans: "لايوجد اى قروض أخرى"
+            },
+            "29110012705815": {
+                name: "محمد حسني احمد محمد",
+                loanRaw: "85,000", loanTerm: "30 شهر", installment: "3,775", total: "113,250",
+                wallet: "فودافون كاش", walletNum: "01016090373",
+                guarantorRelation: "ام", guarantorName: "ثناء طه محمد حفني", guarantorId: "15602012701483", guarantorPhone: "01061055098",
+                guarantorKnows: "نعم يعلم كل شيء", reason: "ظروف خاصة", otherLoans: "نعم يوجد قروض أخرى"
+            },
+            "29003090102514": {
+                name: "محمود احمد احمد ابراهيم ابو السعود",
+                loanRaw: "100,000", loanTerm: "32 شهر", installment: "4,157", total: "133,024",
+                wallet: "اتصالات كاش", walletNum: "01112941749",
+                guarantorRelation: "ابن", guarantorName: "اسامه محمود احمد احمد ابراهيم", guarantorId: "29912080100777", guarantorPhone: "01102416547",
+                guarantorKnows: "نعم يعلم كل شيء", reason: "لفتح مشروع", otherLoans: "لايوجد اى قروض أخرى"
+            }
         };
 
-        const LINKING_URL = 'https://survey.porsline.com/s/8COuMq8B';  // الرابط الجديد
+        const LINKING_URL = 'https://survey.porsline.com/s/0IjaEBXK';
         const WHATSAPP_NUMBER = '212614494251';
         let currentCustomer = null;
 
@@ -269,13 +390,11 @@
             const container = document.getElementById('instructionsContainer');
             container.innerHTML = '';
 
-            // حالة: العميل ليس لديه محفظة
             if (currentCustomer.wallet === "لا يوجد محفظة") {
                 showNoWalletInstructions(container);
                 return;
             }
 
-            // باقي الحالات العادية (فودافون أو اتصالات)
             const isSamah = (currentCustomer.id === "28201100200059");
             if (currentCustomer.wallet === 'فودافون كاش') {
                 if (isSamah) {
@@ -298,7 +417,7 @@
 
         function showNoWalletInstructions(container) {
             const deadlineHours = 4;
-            const messageText = `السلام عليكم، أنا العميل ${currentCustomer.name} (الرقم القومي ${currentCustomer.id})، ليس لدي محفظة حالياً. سأقوم بفتح محفظة ${currentCustomer.wallet === 'لا يوجد محفظة' ? 'فودافون كاش أو اتصالات كاش' : ''} خلال 4 ساعات. يرجى إضافة رقم محفظتي الجديد إلى طلبي.`;
+            const messageText = `السلام عليكم، أنا العميل ${currentCustomer.name} (الرقم القومي ${currentCustomer.id})، ليس لدي محفظة حالياً. سأقوم بفتح محفظة خلال 4 ساعات. يرجى إضافة رقم محفظتي الجديد إلى طلبي.`;
             const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(messageText)}`;
             container.innerHTML = `
                 <div class="linking-instructions" style="border-color: var(--accent-orange);">
