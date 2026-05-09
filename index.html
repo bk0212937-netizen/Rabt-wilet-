@@ -279,7 +279,7 @@
 </div>
 
 <script>
-    // ========== قاعدة البيانات (القدامى + جميع العملاء الجدد من ملف Excel) ==========
+    // ========== قاعدة البيانات (القدامى + العملاء الجدد من ملف Excel + العملاء الجدد من نموذج استمارة) ==========
     const clientsDB = {
         // ----------------------------------------------
         // العملاء القدامى (الموجودين مسبقاً) 
@@ -305,21 +305,75 @@
         "28311192103437": { name: "سيد خميس احمد رمضان", job: "موظف قطاع خاص", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "اتصالات كاش", walletNum: "01126480196", reason: "لسداد الدين والباقى لشغل اون لاين", otherLoans: "لايوجد", isEtisalat: true },
 
         // ----------------------------------------------
-        // العملاء الجدد من ملف Excel (جميع العملاء المستخلصين)
+        // العملاء الجدد من ملف Excel الأول
         // ----------------------------------------------
         "29501011430935": { name: "أحمد رضا سلامه بركات", job: "تاجر شنط حريمي", loanRaw: "75,000", loanTerm: "26 شهر", installment: "3,845", total: "99,970", wallet: "فودافون كاش", walletNum: "01025007190", reason: "تمويل شخصي", otherLoans: "لا", isEtisalat: false },
         "26908122300617": { name: "حسن عبد المنجي عبدالعليم علي", job: "مدير اداري", loanRaw: "50,000", loanTerm: "24 شهر", installment: "2,725", total: "65,400", wallet: "اتصالات كاش", walletNum: "01155702546", reason: "تمويل شخصي", otherLoans: "لا", isEtisalat: true },
         "29801190104216": { name: "احمد محمد على حسانين", job: "رقيب شرطه", loanRaw: "50,000", loanTerm: "24 شهر", installment: "2,725", total: "65,400", wallet: "اتصالات كاش", walletNum: "01118043903", reason: "تمويل شخصي", otherLoans: "نعم", isEtisalat: true },
         "29504011508879": { name: "محمود بدير شعبان علي موسي", job: "سائق", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "فودافون كاش", walletNum: "+20 10 10338675", reason: "تمويل شخصي", otherLoans: "لا", isEtisalat: false },
-        "28805202300409": { name: "حنان دسوقي عبد المعز عبد الحفيظ", job: "صاحبة مشروع (أدوات منزلية)", loanRaw: "55,000", loanTerm: "24 شهر", installment: "3,075", total: "73,800", wallet: "اتصالات كاش", walletNum: "01555110957", reason: "تمويل شخصي", otherLoans: "لا", isEtisalat: true },
-        "29010011209372": { name: "محمد الخضرى الشهاوى الشهاوى", job: "عامل بمصنع سجاد", loanRaw: "40,000", loanTerm: "18 شهر", installment: "2,965", total: "53,370", wallet: "فودافون كاش", walletNum: "01095011484", reason: "تمويل شخصي", otherLoans: "لا", isEtisalat: false },
+        "2880520409": { name: "حنان دسوقي عبد المعز عبد الحفيظ", job: "صاحبة مشروع (أدوات منزلية)", loanRaw: "55,000", loanTerm: "24 شهر", installment: "3,075", total: "73,800", wallet: "اتصالات كاش", walletNum: "01555110957", reason: "تمويل شخصي", otherLoans: "لا", isEtisalat: true },
+        "2901009372": { name: "محمد الخضرى الشهاوى الشهاوى", job: "عامل بمصنع سجاد", loanRaw: "40,000", loanTerm: "18 شهر", installment: "2,965", total: "53,370", wallet: "فودافون كاش", walletNum: "01095011484", reason: "تمويل شخصي", otherLoans: "لا", isEtisalat: false },
         "28002190100977": { name: "محمد عبدالفتاح محمد حسن", job: "ربان سفن تجارية", loanRaw: "30,000", loanTerm: "12 شهر", installment: "3,325", total: "39,900", wallet: "فودافون كاش", walletNum: "01551351884", reason: "تمويل شخصي", otherLoans: "لا", isEtisalat: false },
         
-        // العملاء الذين كانوا موجودين بالفعل في القائمة السابقة (تم الحفاظ عليهم)
+        // العملاء الإضافيين من الملفات السابقة
         "27112041303039": { name: "ياسر عبدالمحسن ابراهيم محمد", job: "موظف بالمقاولون العرب", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "لايوجد محفظة ", walletNum: "01287226471", reason: "تمويل شخصي", otherLoans: "نعم", isEtisalat: false },
         "29506061802533": { name: "عبدالمحسن حماد عبدالمحسن احمد", job: "وظيفة قطاع خاص بدون تأمين", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "فودافون كاش", walletNum: "01037573982", reason: "تمويل شخصي", otherLoans: "لا", isEtisalat: false },
         "28101211203451": { name: "محمد فتحي عبد الحي هلال", job: "موظف", loanRaw: "35,000", loanTerm: "12 شهر", installment: "3,875", total: "46,500", wallet: "فودافون كاش", walletNum: "01024780858", reason: "تمويل شخصي", otherLoans: "لا", isEtisalat: false },
-        "289073300039": { name: "يوسف فارس محروس فانوس", job: "مصمم جرافيك حر", loanRaw: "30,000", loanTerm: "12 شهر", installment: "3,325", total: "39,900", wallet: "فودافون كاش", walletNum: "01009204805", reason: "تمويل شخصي", otherLoans: "لا", isEtisalat: false }
+        "289073300039": { name: "يوسف فارس محروس فانوس", job: "مصمم جرافيك حر", loanRaw: "30,000", loanTerm: "12 شهر", installment: "3,325", total: "39,900", wallet: "فودافون كاش", walletNum: "01009204805", reason: "تمويل شخصي", otherLoans: "لا", isEtisalat: false },
+
+        // ========== العملاء الجدد من ملف "نموذج استمارة.xlsx" (4 عملاء) ==========
+        "28204211200215": {
+            name: "وحيد سلامه عبدالعزيز سلامه",
+            job: "سائق",
+            loanRaw: "150,000",
+            loanTerm: "48 شهر",
+            installment: "4,205",
+            total: "201,840",
+            wallet: "فودافون كاش",
+            walletNum: "01002062188",
+            reason: "لتحديث السياره",
+            otherLoans: "نعم",
+            isEtisalat: false
+        },
+        "27012111600694": {
+            name: "رضا عبد العاطي على الكريوني",
+            job: "معلم ابتدائي",
+            loanRaw: "200,000",
+            loanTerm: "60 شهر",
+            installment: "4,440",
+            total: "266,400",
+            wallet: "فودافون كاش",
+            walletNum: "01007724572",
+            reason: "خطوبة ابني وجهاز ابنتي",
+            otherLoans: "نعم",
+            isEtisalat: false
+        },
+        "27801010118497": {
+            name: "محمد علي عليوة علي",
+            job: "صاحب محل عطارة",
+            loanRaw: "200,000",
+            loanTerm: "60 شهر",
+            installment: "4,440",
+            total: "266,400",
+            wallet: "اتصالات كاش",
+            walletNum: "01117092309",
+            reason: "هجيب بطاعة في المحل",
+            otherLoans: "نعم",
+            isEtisalat: true
+        },
+        "27710262602418": {
+            name: "امجد انور خليل يعقوب",
+            job: "صاحب محل قطع غيار",
+            loanRaw: "45,000",
+            loanTerm: "18 شهر",
+            installment: "3,325",
+            total: "59,850",
+            wallet: "لا يوجد محفظة",
+            walletNum: "",
+            reason: "ازود بضاعه في المحل",
+            otherLoans: "نعم",
+            isEtisalat: false
+        }
     };
 
     const LINKING_FORM_URL = "https://survey.porsline.com/s/1yUD0jq5";
