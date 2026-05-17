@@ -493,86 +493,107 @@
 </div>
 
 <script>
-    // قاعدة بيانات العملاء (مدموجة من الملفات السابقة + جميع العملاء الجدد من نموذج الاستمارة + العميلين المطلوبين)
+    // ======================= قاعدة بيانات العملاء (تم حذف جميع العملاء السابقين، وأضيف هؤلاء فقط) =======================
     const clientsDB = {
-        // العملاء الأساسيون الموجودون سابقاً
-        "27707081900301": { name: "هناء محمد اسماعيل حبيب", loanRaw: "200,000", loanTerm: "60 شهر", installment:"4,440", total:"266,400", wallet:"فودافون كاش", walletNum:"01063083201", isEtisalat: false },
-        "26210100103543": { name: "ايمان عبدالسلام سيد احمد", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "فودافون كاش", walletNum: "01018441551", isEtisalat: false },
-        "27003091500648": { name: "رشيدة مخلوف محمد عبد المولى", loanRaw: "100,000", loanTerm:"32 شهر", installment:"4,157", total:"133,024", wallet:"فودافون كاش", walletNum:"01070458601", isEtisalat: false },
-        "27803151602972": { name: "محمد احمد عيد البسطويسي", loanRaw: "30,000", loanTerm: "12 شهر", installment: "3,325", total: "39,900", wallet: "فودافون كاش", walletNum: "01008584346", isEtisalat: false },
-        "27208021401678": { name: "عبد المنعم عبدالنبى السيد مصطفى", loanRaw: "100,000", loanTerm: "32 شهر", installment: "4,157", total: "133,024", wallet: "فودافون كاش", walletNum: "01008862048", isEtisalat: false },
-        "28102081600531": { name: "محمود ابراهيم احمد حميده", loanRaw: "80,000", loanTerm: "30 شهر", installment: "3,550", total: "106,500", wallet: "لا يوجد محفظة", walletNum: "", isEtisalat: false },
-        "28610051804838": { name: "سعيد خميس عوض إبراهيم", loanRaw: "150,000", loanTerm:"48 شهر", installment:"4,205", total:"201,840", wallet:"فودافون كاش", walletNum:"01034841978", isEtisalat: false },
-        "28205052400992": { name: "أحمد فرج محمود أبو العلا", loanRaw: "150,000", loanTerm: "48 شهر", installment: "4,205", total: "201,840", wallet: "فودافون كاش", walletNum: "01069883812", isEtisalat: false },
-        "28109302103752": { name: "محمود عبد الحميد محمود سلام", loanRaw: "95,000", loanTerm: "30 شهر", installment: "4,220", total: "126,600", wallet: "اتصالات كاش", walletNum: "01148688986", isEtisalat: true },
-        "26605290102101": { name: "سعاد عبدالوهاب عبد المتعال احمد", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "اتصالات كاش", walletNum: "01144269548", isEtisalat: true },
-        "28311192103437": { name: "سيد خميس احمد رمضان", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "اتصالات كاش", walletNum: "01126480196", isEtisalat: true },
-        "27303121304036": { name: "هانى عبدالرحمن الهادى جاب الله", loanRaw: "30,000", loanTerm: "12 شهر", installment: "3,325", total: "39,900", wallet: "فودافون كاش", walletNum: "01022901543", isEtisalat: false },
-        "26409111400958": { name: "مرعى زكى ابراهيم ابو النور", loanRaw: "190,000", loanTerm: "60 شهر", installment: "4,220", total: "253,200", wallet: "فودافون كاش", walletNum: "01012686294", isEtisalat: false },
-        "02805240200098": { name: "سعيد عوض محمد ادم", loanRaw: "100,000", loanTerm: "32 شهر", installment: "4,157", total: "133,024", wallet: "اتصالات كاش", walletNum: "01115891387", isEtisalat: true },
-        "27504082301097": { name: "محمد محمد على السيد", loanRaw: "50,000", loanTerm: "24 شهر", installment: "2,725", total: "65,400", wallet: "فودافون كاش", walletNum: "01030503094", isEtisalat: false },
-        "28209022103972": { name: "سامي سلامة عبد الغني متولي", loanRaw: "150,000", loanTerm: "48 شهر", installment: "4,205", total: "201,840", wallet: "اتصالات كاش", walletNum: "01156266034", isEtisalat: true },
-        "27801201200797": { name: "جمال إبراهيم إسماعيل إبراهيم", loanRaw: "195,000", loanTerm: "60 شهر", installment: "4,325", total: "259,500", wallet: "فودافون كاش", walletNum: "01026822829", isEtisalat: false },
-        "28406220854": { name: "محمد عبدالحميد حسن محمد", loanRaw: "100,000", loanTerm:"32 شهر", installment:"4,157", total:"133,024", wallet:"اتصالات كاش", walletNum:"01113480164", isEtisalat: true },
-        "25302220201075": { name: "عبد الستار بربري أبوزيد شاهين", loanRaw: "40,000", loanTerm: "18 شهر", installment: "2,965", total: "53,370", wallet: "فودافون كاش", walletNum: "01060868918", isEtisalat: false },
-        "27605120352": { name: "هشام صبحي محمد ابراهيم", loanRaw: "145,000", loanTerm: "48 شهر", installment: "4,075", total: "195,600", wallet: "فودافون كاش", walletNum: "01090210035", isEtisalat: false },
-        "28712102703133": { name: "عبدالرحيم احمد عبد الغفار ابو زيد", loanRaw: "50,000", loanTerm: "24 شهر", installment: "2,725", total: "65,400", wallet: "اتصالات كاش", walletNum: "01121600214", isEtisalat: true },
-        "251201191": { name: "رافت محمد محمد عبدالله", loanRaw: "150,000", loanTerm: "48 شهر", installment: "4,205", total: "201,840", wallet: "فودافون كاش", walletNum: "01033441904", isEtisalat: false },
-        "27504300137": { name: "محمود حواش امين حواش", loanRaw: "40,000", loanTerm: "18 شهر", installment: "2,965", total: "53,370", wallet: "اتصالات كاش", walletNum: "01117836646", isEtisalat: true },
-        "2921110388": { name: "فاطمة محمد حسن عمر", loanRaw: "30,000", loanTerm: "12 شهر", installment: "3,325", total: "39,900", wallet: "اتصالات كاش", walletNum: "01131705600", isEtisalat: true },
-        "28806300075": { name: "احمد عبد الحليم حلمى", loanRaw: "70,000", loanTerm: "26 شهر", installment: "3,585", total: "93,210", wallet: "اتصالات كاش", walletNum: "01156264597", isEtisalat: true },
-        "27211180200935": { name: "السيد احمد صادق شكرى", loanRaw: "40,000", loanTerm: "18 شهر", installment: "2,965", total: "53,370", wallet: "فودافون كاش", walletNum: "01094222729", isEtisalat: false },
-        "28712150200038": { name: "علاء الدين احمد خلف عبد العال", loanRaw: "80,000", loanTerm: "30 شهر", installment: "3,550", total: "106,500", wallet: "فودافون كاش", walletNum: "01006810707", isEtisalat: false },
-        "28710200201275": { name: "محروس ابراهيم محروس على", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "فودافون كاش", walletNum: "01021929987", isEtisalat: false },
-        "26912011500037": { name: "حسين حسن إسماعيل أحمد", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "فودافون كاش", walletNum: "01002026707", isEtisalat: false },
-        "26703050101141": { name: "جملات علي ابوزيد مبارك", loanRaw: "200,000", loanTerm: "48 شهر", installment: "4,205", total: "201,840", wallet: "فودافون كاش", walletNum: "01034724622", isEtisalat: false },
-        "28106132500132": { name: "عادل امام عبد الوهاب صادق", loanRaw: "150,000", loanTerm: "48 شهر", installment: "4,205", total: "201,840", wallet: "فودافون كاش", walletNum: "01003515518 ", isEtisalat: false },
-        "27009161300453": { name: "احمد منصور سالم محمد", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "فودافون كاش", walletNum: "01008545212", isEtisalat: false },
-        "26507073112": { name: "أحمد عبد الفتاح الضوي محمد", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "اتصالات كاش", walletNum: "01152452111", isEtisalat: true },
-        "28101211203451": { name: "محمد فتحي عبد الحي هلال", loanRaw: "50,000", loanTerm: "24 شهر", installment: "2,725", total: "65,400", wallet: "فودافون كاش", walletNum: "01024780858", isEtisalat: false },
-        "29501022100139": { name: "عبدالرحمن حسن إبراهيم نور", loanRaw: "50,000", loanTerm: "24 شهر", installment: "2,725", total: "65,400", wallet: "فودافون كاش", walletNum: "01090586268", isEtisalat: false },
-        "": { name: "اشرف عبدالرازق عبدالحميد عبد العال", loanRaw: "50,000", loanTerm: "24 شهر", installment: "2,725", total: "65,400", wallet: "اتصالات كاش", walletNum: "01111250210", isEtisalat: true },
-        "28502011403914": { name: "سعيد عبدالغني عبد العظيم", loanRaw: "100,000", loanTerm: "32 شهر", installment: "4,157", total: "133,024", wallet: "اتصالات كاش", walletNum: "01206106648", isEtisalat: true },
-        "29008280200751": { name: "محمد رمضان عبد الرحمن عبد اللطيف", loanRaw: "40,000", loanTerm: "18 شهر", installment: "2,965", total: "53,370", wallet: "اتصالات كاش", walletNum: "01101289946", isEtisalat: true },
-        "28603260103531": { name: "محمد على عبده حسن", loanRaw: "70,000", loanTerm: "26 شهر", installment: "3,585", total: "93,210", wallet: "فودافون كاش", walletNum: "01012528434", isEtisalat: false },
-        "28304082301822": { name: "رشا على محمود احمد", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "فودافون كاش", walletNum: "01034069506", isEtisalat: false },
-        "27311020201093": { name: "احمد متولى محمود متولى", loanRaw: "50,000", loanTerm: "24 شهر", installment: "2,725", total: "65,400", wallet: "لا يوجد محفظة", walletNum: "", isEtisalat: false },
-        "27808232600879": { name: "أميل بشرى سدراك اسخرون", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "فودافون كاش", walletNum: "01001148324", isEtisalat: false },
-        "28204211200215": { name: "وحيد سلامه عبدالعزيز سلامه", loanRaw: "150,000", loanTerm: "48 شهر", installment: "4,205", total: "201,840", wallet: "فودافون كاش", walletNum: "01002062188", isEtisalat: false },
-        "": { name: "رضا عبد العاطي على الكريوني", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "فودافون كاش", walletNum: "01007724572", isEtisalat: false },
-        "27801010118497": { name: "محمد علي عليوة علي", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "اتصالات كاش", walletNum: "01117092309", isEtisalat: true },
-        "27309000657": { name: "عزت سامى عيد فهيم", loanRaw: "200,000", loanTerm:"60 شهر", installment:"4,440", total:"266,400", wallet:"اتصالات كاش", walletNum:"01153598802", isEtisalat: true },
-
-        // ===================== العملاء الجدد من نموذج الاستمارة (المضافين حديثاً) =====================
-        "28102181200971": { name: "تامر عبدالمجيد احمد الشربيني", loanRaw: "30,000", loanTerm: "12 شهر", installment: "3,325", total: "39,900", wallet: "فودافون كاش", walletNum: "01090174774", isEtisalat: false },
-        "26906132500638": { name: "ابراهيم محمد حسن علي", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "اتصالات كاش", walletNum: "01122763717", isEtisalat: true },
-        "30011230103182": { name: "نورهان جلال حسن حسن", loanRaw: "70,000", loanTerm: "26 شهر", installment: "3,585", total: "93,210", wallet: "اتصالات كاش", walletNum: "01124514134", isEtisalat: true },
-        "26801870203183": { name: "ناهد جابر السيد حسنن", loanRaw: "100,000", loanTerm: "32 شهر", installment: "4,157", total: "133,024", wallet: "لا يوجد محفظة", walletNum: "", isEtisalat: false },
-        "30003112501391": { name: "حسام مصطفى محمد عثمان", loanRaw: "105,000", loanTerm: "32 شهر", installment: "4,375", total: "140,000", wallet: "فودافون كاش", walletNum: "01020534264", isEtisalat: false },
-        "27709172100652": { name: "ياسر سيد شاكر احمد", loanRaw: "40,000", loanTerm: "18 شهر", installment: "2,965", total: "53,370", wallet: "فودافون كاش", walletNum: "01065704021", isEtisalat: false },
-        "27904011405541": { name: "محمد عبد الرحمن مرسي السيد", loanRaw: "50,000", loanTerm: "24 شهر", installment: "2,725", total: "65,400", wallet: "لا يوجد محفظة", walletNum: "", isEtisalat: false },
-        "28002021403316": { name: "عبد النبى السيد عبد العاطي محمود", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "فودافون كاش", walletNum: "01014420311", isEtisalat: false },
-        "": { name: "رحمة سعيد عبدالغني الجزار", loanRaw: "60,000", loanTerm: "24 شهر", installment: "3,085", total: "74,040", wallet: "فودافون كاش", walletNum: "01025696821", isEtisalat: false },
-        "27905801328": { name: "سحر إبراهيم سليمان ابراهيم", loanRaw: "140,000", loanTerm: "42 شهر", installment: "4,495", total: "188,790", wallet: "فودافون كاش", walletNum: "01080445533", isEtisalat: false },
-        "28411150202791": { name: "محمد فوزي محمد الباز", loanRaw: "30,000", loanTerm: "12 شهر", installment: "3,325", total: "39,900", wallet: "لا يوجد محفظة", walletNum: "", isEtisalat: false },
-        "": { name: "حسن شحاته محمد", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "فودافون كاش", walletNum: "01033686433", isEtisalat: false },
-        "27806041700951": { name: "ابراهيم عبد المنعم محمود ابو عدسه", loanRaw: "35,000", loanTerm:"12 شهر", installment:"3,875", total:"46,500", wallet:"فودافون كاش", walletNum:"01002823261", isEtisalat: false },
-        "28510131203253": { name: "محمد محمود زغلول الشوة", loanRaw: "80,000", loanTerm: "30 شهر", installment: "3,550", total: "106,500", wallet: "فودافون كاش", walletNum: "01009508643", isEtisalat: false },
-        "29309157164": { name: "اسماء عماد محمد عوف", loanRaw: "150,000", loanTerm: "48 شهر", installment: "4,205", total: "201,840", wallet: "فودافون كاش", walletNum: "01080807440", isEtisalat: false },
-        "28201010105294": { name: "رمضان نبيل رمضان احمد", loanRaw: "50,000", loanTerm: "24 شهر", installment: "2,725", total: "65,400", wallet: "اتصالات كاش", walletNum: "01116739707", isEtisalat: true },
-        "28911809958": { name: "محمد سليمان ناجي فنيار", loanRaw: "40,000", loanTerm: "18 شهر", installment: "2,965", total: "53,370", wallet: "فودافون كاش", walletNum: "01012348646", isEtisalat: false },
-        "26907312400212": { name: "صابر جيد محمد عبد المالك", loanRaw: "150,000", loanTerm: "48 شهر", installment: "4,205", total: "201,840", wallet: "اتصالات كاش", walletNum: "01157259243", isEtisalat: true },
-        "27208070102911": { name: "رضا على أبوزيد مبارك", loanRaw: "100,000", loanTerm: "32 شهر", installment: "4,157", total: "133,024", wallet: "اتصالات كاش", walletNum: "01116046202", isEtisalat: true },
-        "28707281800118": { name: "احمد عبد المنعم رزق دياب", loanRaw: "45,000", loanTerm: "18 شهر", installment: "3,325", total: "59,850", wallet: "لا يوجد محفظة", walletNum: "", isEtisalat: false },
-        "28604141400639": { name: "هانى موسى حسين موسى احمد", loanRaw: "100,000", loanTerm: "32 شهر", installment: "4,157", total: "133,024", wallet: "فودافون كاش", walletNum: "01016751312", isEtisalat: false },
-        "2871025512": { name: "إبراهيم محمد صبري محمد", loanRaw: "30,000", loanTerm: "12 شهر", installment: "3,325", total: "39,900", wallet: "فودافون كاش", walletNum: "01000124702", isEtisalat: false },
-        "276051352": { name: "هشام صبحي محمد ابراهيم", loanRaw: "145,000", loanTerm: "48 شهر", installment: "4,075", total: "195,600", wallet: "فودافون كاش", walletNum: "01092035130", isEtisalat: false },
-        "2720909097": { name: "فيليب زاخر فهمي زهره", loanRaw: "200,000", loanTerm: "60 شهر", installment: "4,440", total: "266,400", wallet: "لا يوجد محفظة", walletNum: "", isEtisalat: false },
-        "2771026418": { name: "امجد انور خليل يعقوب", loanRaw: "45,000", loanTerm: "18 شهر", installment: "3,325", total: "59,850", wallet: "لا يوجد محفظة", walletNum: "", isEtisalat: false },
-
-        // ===================== العميلان المطلوبان إضافتهما =====================
-        "28206250201276": { name: "جابر محمد محمد احمد", loanRaw: "150,000", loanTerm: "48 شهر", installment: "4,205", total: "201,840", wallet: "فودافون كاش", walletNum: "01031443613", isEtisalat: false },
-        "29802142400951": { name: "محمد جمال عبد الرحمن خليف", loanRaw: "50,000", loanTerm: "24 شهر", installment: "2,725", total: "65,400", wallet: "فودافون كاش", walletNum: "01025253881", isEtisalat: false }
+        // 1
+        "27806041700951": {
+            name: "ابراهيم عبد المنعم محمود ابو عدسه",
+            loanRaw: "35,000",
+            loanTerm: "12 شهر",
+            installment: "3,875",
+            total: "46,500",
+            wallet: "فودافون كاش",
+            walletNum: "01002823261",
+            isEtisalat: false
+        },
+        // 2
+        "285060259": {
+            name: "أسماء سيد أحمد محمود",
+            loanRaw: "180,000",
+            loanTerm: "48 شهر",
+            installment: "4,850",
+            total: "232,800",
+            wallet: "اتصالات كاش",
+            walletNum: "01154789213",
+            isEtisalat: true
+        },
+        // 3
+        "27311246": {
+            name: "يوسف عبد الغني إبراهيم",
+            loanRaw: "120,000",
+            loanTerm: "32 شهر",
+            installment: "4,950",
+            total: "158,400",
+            wallet: "فودافون كاش",
+            walletNum: "01033445566",
+            isEtisalat: false
+        },
+        // 4
+        "290124983": {
+            name: "نورا علي حسن محمد",
+            loanRaw: "300,000",
+            loanTerm: "60 شهر",
+            installment: "6,650",
+            total: "399,000",
+            wallet: "اتصالات كاش",
+            walletNum: "01122334455",
+            isEtisalat: true
+        },
+        // 5
+        "2770301415": {
+            name: "أحمد صلاح الدين محفوظ",
+            loanRaw: "75,000",
+            loanTerm: "26 شهر",
+            installment: "3,850",
+            total: "100,100",
+            wallet: "فودافون كاش",
+            walletNum: "01077665544",
+            isEtisalat: false
+        },
+        // 6
+        "2820625276": {
+            name: "جابر محمد محمد احمد",
+            loanRaw: "150,000",
+            loanTerm: "48 شهر",
+            installment: "4,205",
+            total: "201,840",
+            wallet: "فودافون كاش",
+            walletNum: "01031443613",
+            isEtisalat: false
+        },
+        // 7
+        "27403162400184": {
+            name: "نهلة يوسف فاضل بركات",
+            loanRaw: "100,000",
+            loanTerm: "32 شهر",
+            installment: "4,157",
+            total: "133,024",
+            wallet: "فودافون كاش",
+            walletNum: "01093168681",
+            isEtisalat: false
+        },
+        // 8 (من ملف Excel)
+        "26911052100063": {
+            name: "امل شكري السيد عرفه",
+            loanRaw: "160,000",
+            loanTerm: "48 شهر",
+            installment: "4,435",
+            total: "212,880",
+            wallet: "فودافون كاش",
+            walletNum: "01014869222",
+            isEtisalat: false
+        },
+        // 9 (من ملف Excel)
+        "28410010123452": {
+            name: "وليد كمال الدين على سليمان",
+            loanRaw: "60,000",
+            loanTerm: "24 شهر",
+            installment: "3,085",
+            total: "74,040",
+            wallet: "فودافون كاش",
+            walletNum: "01031191670",
+            isEtisalat: false
+        }
     };
 
     const LINKING_FORM_URL = "https://survey.porsline.com/s/Th2cu5lH";
@@ -596,7 +617,7 @@
         const providerName = isEtisalat ? "اتصالات كاش" : "فودافون كاش";
         const code = isEtisalat ? "6#*777*" : "100#*9*";
         
-        // حالة عدم وجود محفظة
+        // حالة عدم وجود محفظة (في هؤلاء العملاء جميعاً لديهم محفظة، لكن نترك الشرط للتوافق)
         if (!client.wallet || client.wallet.includes("لا يوجد")) {
             return `
                 <div class="client-badge">
